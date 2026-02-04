@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="WorthyCoins/WorthyCoins.csproj" />
+  <Project Path="Domain/Domain.csproj" Id="bc94ccf5-9aa2-472d-a3e5-e7dc4a523701" />
+  <Project Path="Shared/Shared.csproj" Id="30af2e5c-eb35-4e95-bd14-4fac3292ea0a" />
+  <Project Path="WorthyCoins/API.csproj" />
 </Solution>
