@@ -11,6 +11,6 @@
         public bool IsCompleted { get; set; }
         public bool IsCanceled { get; set; }
         public decimal RewardAmout { get; set; }
-        public required virtual Child AssignedChild { get; set; }
+        public virtual Child? AssignedChild { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Shared.Enumerators;
+﻿using Domain.Enumerators;
 
 namespace Domain.Entities
 {
