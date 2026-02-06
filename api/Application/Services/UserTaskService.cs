@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs;
+using Application.Interfaces;
 using Domain.Entities;
 
 namespace Application.Services
@@ -12,30 +13,22 @@ namespace Application.Services
             _context = context;
         }
 
-        public void CreateTaskAsync()
+        public async Task CreateUserTaskAsync(CreateUserTaskRequestDto request)
         {
-            var child = new Child
+            var entity = new UserTask
             {
-                Name = "João Teste",
-                DateOfBirth = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc),
-                TotalCoins = 0
+                Title = request.Title,
+                Description = request.Description,
+                CreationDate = DateTime.UtcNow,
+                DueDate = request.DueDate,
+                AssignedChildId = request.AssignedChildId,
+                IsCompleted = false,
+                IsCanceled = false,
+                RewardAmout = request.RewardAmout
             };
 
-            _context.Children.Add(child);
-            _context.SaveChanges();
-
-            var task = new UserTask
-            {
-                Title = "Arrumar o quarto",
-                Description = "Guardar brinquedos e organizar a cama",
-                RewardAmout = 10.00m,
-                DueDate = DateTime.UtcNow.AddDays(2),
-                AssignedChildId = child.Id
-                // CreationDate, IsCompleted e IsCanceled vêm do default
-            };
-
-            _context.UserTasks.Add(task);
-            _context.SaveChanges();
+            await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
