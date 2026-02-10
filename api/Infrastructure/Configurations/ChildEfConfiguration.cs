@@ -10,10 +10,8 @@ namespace Infrastructure.Configurations
         {
             builder.ToTable("Child");
 
-            // Primary Key
             builder.HasKey(t => t.Id);
 
-            // Properties
             builder.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -25,7 +23,6 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasColumnType("numeric(10,2)")
                 .HasDefaultValue(0);
-
         }
     }
 }

@@ -10,39 +10,36 @@ namespace Infrastructure.Configurations
         {
             builder.ToTable("UserTask");
 
-            // Primary Key
-            builder.HasKey(t => t.Id);
+            builder.HasKey(x => x.Id);
 
-            // Properties
-            builder.Property(t => t.Title)
+            builder.Property(x => x.Title)
                 .IsRequired()
                 .HasMaxLength(150);
 
-            builder.Property(t => t.Description)
+            builder.Property(x => x.Description)
                 .HasMaxLength(500);
 
-            builder.Property(t => t.CreationDate)
+            builder.Property(x => x.CreationDate)
                 .IsRequired()
                 .HasDefaultValueSql("now()");
 
-            builder.Property(t => t.DueDate);
+            builder.Property(x => x.DueDate);
 
-            builder.Property(t => t.IsCompleted)
+            builder.Property(x => x.IsCompleted)
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder.Property(t => t.IsCanceled)
+            builder.Property(x => x.IsCanceled)
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder.Property(t => t.RewardAmout)
+            builder.Property(x => x.RewardAmout)
                 .IsRequired()
                 .HasColumnType("numeric(10,2)");
 
-            // Relationships
-            builder.HasOne(t => t.AssignedChild)
-                .WithMany(c => c.Tasks)
-                .HasForeignKey(t => t.AssignedChildId)
+            builder.HasOne(x => x.AssignedChild)
+                .WithMany(x => x.Tasks)
+                .HasForeignKey(x => x.AssignedChildId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
