@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.Requests
 {
     public class CreateUserTaskRequestDto
     {
@@ -6,6 +6,6 @@
         public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
         public int AssignedChildId { get; set; }
-        public decimal RewardAmout { get; set; }
+        public decimal RewardAmount { get; set; }
     }
 }

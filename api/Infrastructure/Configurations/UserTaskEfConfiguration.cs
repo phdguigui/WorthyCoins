@@ -33,7 +33,7 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder.Property(x => x.RewardAmout)
+            builder.Property(x => x.RewardAmount)
                 .IsRequired()
                 .HasColumnType("numeric(10,2)");
 

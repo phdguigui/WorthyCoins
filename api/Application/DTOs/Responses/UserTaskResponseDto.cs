@@ -1,6 +1,13 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.DTOs.Responses
 {
-    public class UserTask
+    public class UserTaskResponseDto
     {
         public int Id { get; set; }
         public required string Title { get; set; }
