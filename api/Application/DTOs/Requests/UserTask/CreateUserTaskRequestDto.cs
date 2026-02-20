@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.Requests
+﻿namespace Application.DTOs.Requests.UserTask
 {
     public class CreateUserTaskRequestDto
     {

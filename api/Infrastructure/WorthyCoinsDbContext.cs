@@ -15,4 +15,5 @@ public class WorthyCoinsDbContext : DbContext
 
     public DbSet<UserTask> UserTasks { get; set; }
     public DbSet<Child> Children { get; set; }
+    public DbSet<Parent> Parents { get; set; }
 }

@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Requests;
-using Application.DTOs.Responses;
+﻿using Application.DTOs.Requests.UserTask;
+using Application.DTOs.Responses.UserTask;
 
 namespace Application.Interfaces
 {
