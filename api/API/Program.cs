@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserTaskService, UserTaskService>();
+builder.Services.AddScoped<IParentService, ParentService>();
+builder.Services.AddScoped<IChildService, ChildService>();
 
 builder.Services.AddDbContext<WorthyCoinsDbContext>(options =>
     options.UseNpgsql(

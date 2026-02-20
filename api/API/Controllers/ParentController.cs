@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Requests.Parent;
-using Application.DTOs.Responses.UserTask;
+using Application.DTOs.Responses.Parent;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserTaskResponseDto>> Create(CreateParentRequestDto request)
+        public async Task<ActionResult<ParentResponseDto>> Create(CreateParentRequestDto request)
         {
             var response = await _service.CreateParentAsync(request);
 
@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserTaskResponseDto>> Update(UpdateParentRequestDto request)
+        public async Task<ActionResult<ParentResponseDto>> Update(UpdateParentRequestDto request)
         {
             var response = await _service.UpdateParentAsync(request);
             return Ok(response);
