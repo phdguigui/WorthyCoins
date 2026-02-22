@@ -1,9 +1,4 @@
-﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.DTOs.Responses.Child;
 
 namespace Application.DTOs.Responses.Parent
 {
@@ -12,6 +7,6 @@ namespace Application.DTOs.Responses.Parent
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
-        public virtual ICollection<Child>? Children { get; set; }
+        public virtual ICollection<ChildResponseDto>? Children { get; set; }
     }
 }

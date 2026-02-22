@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Responses.Child;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,6 @@ namespace Application.DTOs.Responses.UserTask
         public bool IsCompleted { get; set; }
         public bool IsCanceled { get; set; }
         public decimal RewardAmount { get; set; }
-        public virtual Child? AssignedChild { get; set; }
+        public virtual ChildResponseDto? AssignedChild { get; set; }
     }
 }
