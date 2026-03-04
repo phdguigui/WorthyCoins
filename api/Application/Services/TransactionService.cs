@@ -1,25 +1,23 @@
 ﻿using Application.DTOs.Responses.Transaction;
 using Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Application.Interfaces.Repositories;
 
 namespace Application.Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly WorthyCoinsDbContext _context;
-        public TransactionService(WorthyCoinsDbContext context)
+        private readonly ITransactionRepository _repository;
+
+        public TransactionService(ITransactionRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
+
         public async Task<List<TransactionResponseDto>> GetTransactionsAsync(int parentId)
         {
-            var entity = await _context.Transactions
-                .AsNoTracking()
-                .Include(x => x.Child)
-                .Where(x => x.Child.ParentId == parentId)
-                .ToListAsync();
+            var entities = await _repository.GetByParentIdAsync(parentId);
 
-            return entity.Select(x => new TransactionResponseDto
+            return entities.Select(x => new TransactionResponseDto
             {
                 Id = x.Id,
                 TransactionType = x.TransactionType,

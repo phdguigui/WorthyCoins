@@ -1,18 +1,18 @@
 ﻿using Application.DTOs.Requests.UserTask;
 using Application.DTOs.Responses.UserTask;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
     public class UserTaskService : IUserTaskService
     {
-        private readonly WorthyCoinsDbContext _context;
+        private readonly IUserTaskRepository _repository;
 
-        public UserTaskService(WorthyCoinsDbContext context)
+        public UserTaskService(IUserTaskRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<UserTaskResponseDto> CreateUserTaskAsync(CreateUserTaskRequestDto request)
@@ -29,78 +29,34 @@ namespace Application.Services
                 RewardAmount = request.RewardAmount
             };
 
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            entity = await _repository.AddAsync(entity);
 
-            var response = new UserTaskResponseDto
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                Description = entity.Description,
-                CreationDate = entity.CreationDate,
-                DueDate = entity.DueDate,
-                AssignedChildId = entity.AssignedChildId,
-                IsCompleted = entity.IsCompleted,
-                IsCanceled = entity.IsCanceled,
-                RewardAmount = entity.RewardAmount
-            };
-
-            return response;
+            return MapToDto(entity);
         }
 
         public async Task<List<UserTaskResponseDto>> GetByChildId(GetUserTaskByChildIdRequestDto request)
         {
-            return await _context.UserTasks
-                .AsNoTracking()
-                .Where(x => x.AssignedChildId == request.ChildId)
-                .Select(task => new UserTaskResponseDto
-                {
-                    Id = task.Id,
-                    Title = task.Title,
-                    Description = task.Description,
-                    CreationDate = task.CreationDate,
-                    DueDate = task.DueDate,
-                    AssignedChildId = task.AssignedChildId,
-                    IsCompleted = task.IsCompleted,
-                    IsCanceled = task.IsCanceled,
-                    RewardAmount = task.RewardAmount
-                })
-                .ToListAsync();
+            var entities = await _repository.GetByChildIdAsync(request.ChildId);
+
+            return entities.Select(MapToDto).ToList();
         }
 
         public async Task<List<UserTaskResponseDto>> GetByParentId(GetUserTaskByParentIdRequestDto request)
         {
-            return await _context.UserTasks
-                .AsNoTracking()
-                .Include(x => x.AssignedChild)
-                .ThenInclude(x => x!.Parent)
-                .Where(x => x.AssignedChild!.ParentId == request.ParentId)
-                .Select(task => new UserTaskResponseDto
-                {
-                    Id = task.Id,
-                    Title = task.Title,
-                    Description = task.Description,
-                    CreationDate = task.CreationDate,
-                    DueDate = task.DueDate,
-                    AssignedChildId = task.AssignedChildId,
-                    IsCompleted = task.IsCompleted,
-                    IsCanceled = task.IsCanceled,
-                    RewardAmount = task.RewardAmount
-                })
-                .ToListAsync();
+            var entities = await _repository.GetByParentIdAsync(request.ParentId);
+
+            return entities.Select(MapToDto).ToList();
         }
 
         public async Task<UserTaskResponseDto> Update(UpdateUserTaskRequestDto request)
         {
-            var userTask = await _context.UserTasks
-                .FirstOrDefaultAsync(x => x.Id == request.UserTaskId) 
-                ?? 
-                throw new Exception($"UserTask com ID {request.UserTaskId} não encontrada.");
+            var userTask = await _repository.GetByIdAsync(request.UserTaskId)
+                ?? throw new Exception($"UserTask com ID {request.UserTaskId} não encontrada.");
 
-            if (request.Title != null)
+            if (!string.IsNullOrWhiteSpace(request.Title))
                 userTask.Title = request.Title;
 
-            if (request.Description != null)
+            if (!string.IsNullOrWhiteSpace(request.Description))
                 userTask.Description = request.Description;
 
             if (request.DueDate.HasValue)
@@ -112,35 +68,33 @@ namespace Application.Services
             if (request.RewardAmount.HasValue)
                 userTask.RewardAmount = request.RewardAmount.Value;
 
-            _context.UserTasks.Update(userTask);
-            await _context.SaveChangesAsync();
+            userTask = await _repository.UpdateAsync(userTask);
 
-            var response = new UserTaskResponseDto
-            {
-                Id = userTask.Id,
-                Title = userTask.Title,
-                Description = userTask.Description,
-                CreationDate = userTask.CreationDate,
-                DueDate = userTask.DueDate,
-                AssignedChildId = userTask.AssignedChildId,
-                IsCompleted = userTask.IsCompleted,
-                IsCanceled = userTask.IsCanceled,
-                RewardAmount = userTask.RewardAmount
-            };
-
-            return response;
+            return MapToDto(userTask);
         }
 
         public async Task Delete(int userTaskId)
         {
-            var rowsAffected = await _context.UserTasks
-                .Where(x => x.Id == userTaskId)
-                .ExecuteDeleteAsync();
+            var rowsAffected = await _repository.DeleteAsync(userTaskId);
 
             if (rowsAffected == 0)
-            {
                 throw new Exception($"UserTask com ID {userTaskId} não encontrada.");
-            }
+        }
+
+        private static UserTaskResponseDto MapToDto(UserTask entity)
+        {
+            return new UserTaskResponseDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                CreationDate = entity.CreationDate,
+                DueDate = entity.DueDate,
+                AssignedChildId = entity.AssignedChildId,
+                IsCompleted = entity.IsCompleted,
+                IsCanceled = entity.IsCanceled,
+                RewardAmount = entity.RewardAmount
+            };
         }
     }
 }

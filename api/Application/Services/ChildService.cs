@@ -1,18 +1,18 @@
 ﻿using Application.DTOs.Requests.Child;
 using Application.DTOs.Responses.Child;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
     public class ChildService : IChildService
     {
-        private readonly WorthyCoinsDbContext _context;
+        private readonly IChildRepository _repository;
 
-        public ChildService(WorthyCoinsDbContext context)
+        public ChildService(IChildRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ChildResponseDto> CreateChildAsync(CreateChildRequestDto request)
@@ -25,67 +25,61 @@ namespace Application.Services
                 ParentId = request.ParentId
             };
 
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            var child = await _repository.AddAsync(entity);
 
-            var response = new ChildResponseDto
+            return new ChildResponseDto
             {
-                Id = entity.Id,
-                Name = entity.Name,
-                DateOfBirth = entity.DateOfBirth,
-                TotalCoins = 0,
+                Id = child.Id,
+                Name = child.Name,
+                DateOfBirth = child.DateOfBirth,
+                TotalCoins = child.TotalCoins
             };
-
-            return response;
         }
 
         public async Task<ChildResponseDto> GetChildByIdAsync(int childId)
         {
-            var response = await _context.Children
-                .Where(c => c.Id == childId)
-                .Select(c => new ChildResponseDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    DateOfBirth = c.DateOfBirth,
-                    TotalCoins = c.TotalCoins
-                })
-                .FirstOrDefaultAsync();
+            var child = await _repository.GetByIdAsync(childId)
+                ?? throw new KeyNotFoundException($"Child with ID {childId} not found.");
 
-            return response ?? throw new KeyNotFoundException($"Child with ID {childId} not found.");
+            return new ChildResponseDto
+            {
+                Id = child.Id,
+                Name = child.Name,
+                DateOfBirth = child.DateOfBirth,
+                TotalCoins = child.TotalCoins
+            };
         }
 
         public async Task<List<ChildResponseDto>> GetChildrenByParentIdAsync(int parentId)
         {
-            var response = await _context.Children
-                .Where(c => c.ParentId == parentId)
-                .Select(c => new ChildResponseDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    DateOfBirth = c.DateOfBirth,
-                    TotalCoins = c.TotalCoins
-                })
-                .ToListAsync();
+            var children = await _repository.GetByParentIdAsync(parentId);
 
-            return response ?? throw new KeyNotFoundException($"No children found for Parent with ID {parentId}.");
+            if (children == null || !children.Any())
+                throw new KeyNotFoundException($"No children found for Parent with ID {parentId}.");
+
+            return children.Select(c => new ChildResponseDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                DateOfBirth = c.DateOfBirth,
+                TotalCoins = c.TotalCoins
+            }).ToList();
         }
 
         public async Task<ChildResponseDto> UpdateChildAsync(UpdateChildRequestDto request)
         {
-            var child = await _context.Children
-                .FirstOrDefaultAsync(x => x.Id == request.Id)
+            var child = await _repository.GetByIdAsync(request.Id)
                 ??
                 throw new Exception($"Child com ID {request.Id} não encontrado.");
 
+            // Fix these comparisons
             if (request.Name != child.Name)
                 child.Name = request.Name;
 
             if (request.DateOfBirth != child.DateOfBirth)
                 child.DateOfBirth = request.DateOfBirth;
 
-            _context.Children.Update(child);
-            await _context.SaveChangesAsync();
+            child = await _repository.UpdateAsync(child);
 
             var response = new ChildResponseDto
             {
@@ -99,9 +93,7 @@ namespace Application.Services
 
         public async Task DeleteChildAsync(int childId)
         {
-            var rowsAffected = await _context.Children
-                .Where(x => x.Id == childId)
-                .ExecuteDeleteAsync();
+            var rowsAffected = await _repository.DeleteAsync(childId);
 
             if (rowsAffected == 0)
             {

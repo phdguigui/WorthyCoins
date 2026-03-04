@@ -1,18 +1,18 @@
 ﻿using Application.DTOs.Requests.Parent;
 using Application.DTOs.Responses.Parent;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
     public class ParentService : IParentService
     {
-        private readonly WorthyCoinsDbContext _context;
+        private readonly IParentRepository _repository;
 
-        public ParentService(WorthyCoinsDbContext context)
+        public ParentService(IParentRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ParentResponseDto> CreateParentAsync(CreateParentRequestDto request)
@@ -23,8 +23,7 @@ namespace Application.Services
                 Name = request.Name
             };
 
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            entity = await _repository.AddAsync(entity);
 
             var response = new ParentResponseDto
             {
@@ -38,19 +37,16 @@ namespace Application.Services
 
         public async Task<ParentResponseDto> UpdateParentAsync(UpdateParentRequestDto request)
         {
-            var parent = await _context.Parents
-                .FirstOrDefaultAsync(x => x.Id == request.Id)
-                ??
-                throw new Exception($"Parent com ID {request.Id} não encontrado.");
+            var parent = await _repository.GetByIdAsync(request.Id)
+                ?? throw new Exception($"Parent com ID {request.Id} não encontrado.");
 
-            if (request.Email != null)
+            if (!string.IsNullOrWhiteSpace(request.Email))
                 parent.Email = request.Email;
 
-            if (request.Name != null)
+            if (!string.IsNullOrWhiteSpace(request.Name))
                 parent.Name = request.Name;
 
-            _context.Parents.Update(parent);
-            await _context.SaveChangesAsync();
+            parent = await _repository.UpdateAsync(parent);
 
             var response = new ParentResponseDto
             {
@@ -64,13 +60,11 @@ namespace Application.Services
 
         public async Task DeleteParentAsync(int parentId)
         {
-            var rowsAffected = await _context.Parents
-                .Where(x => x.Id == parentId)
-                .ExecuteDeleteAsync();
+            var rowsAffected = await _repository.DeleteAsync(parentId);
 
             if (rowsAffected == 0)
             {
-                throw new Exception($"Parent com ID {parentId} não encontrada.");
+                throw new Exception($"Parent com ID {parentId} não encontrado.");
             }
         }
     }
