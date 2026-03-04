@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\WorthyCoins.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\WorthyCoins.Infrastructure.csproj" />
+    <ProjectReference Include="..\WorthyCoins.Application\WorthyCoins.Application.csproj" />
+    <ProjectReference Include="..\WorthyCoins.Infrastructure\WorthyCoins.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
