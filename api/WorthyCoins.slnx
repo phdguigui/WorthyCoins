@@ -1,6 +1,6 @@
 <Solution>
-  <Project Path="API/API.csproj" />
-  <Project Path="Application/Application.csproj" Id="d5c89cb4-9ad7-464c-90d2-cbb9de4722e6" />
-  <Project Path="Domain/Domain.csproj" Id="bc94ccf5-9aa2-472d-a3e5-e7dc4a523701" />
-  <Project Path="Infrastructure/Infrastructure.csproj" Id="e3ffecd9-2244-44e0-b6e8-2f170127f461" />
+  <Project Path="API/WorthyCoins.API.csproj" />
+  <Project Path="Application/WorthyCoins.Application.csproj" Id="d5c89cb4-9ad7-464c-90d2-cbb9de4722e6" />
+  <Project Path="Domain/WorthyCoins.Domain.csproj" Id="bc94ccf5-9aa2-472d-a3e5-e7dc4a523701" />
+  <Project Path="Infrastructure/WorthyCoins.Infrastructure.csproj" Id="e3ffecd9-2244-44e0-b6e8-2f170127f461" />
 </Solution>
