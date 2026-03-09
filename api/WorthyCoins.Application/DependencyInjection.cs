@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<IUserTaskService, UserTaskService>();
         services.AddScoped<IParentService, ParentService>();
         services.AddScoped<IChildService, ChildService>();
+        services.AddScoped<ITransactionService, TransactionService>();
 
         return services;
     }
