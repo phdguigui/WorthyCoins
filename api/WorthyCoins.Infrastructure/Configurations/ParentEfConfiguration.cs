@@ -1,6 +1,7 @@
 ﻿using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WorthyCoins.Infrastructure.Identity;
 
 namespace WorthyCoins.Infrastructure.Configurations
 {
@@ -16,9 +17,11 @@ namespace WorthyCoins.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(x => x.Email)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder
+                .HasOne<User>()
+                .WithOne()
+                .HasForeignKey<Parent>(x => x.UserId)
+                .HasPrincipalKey<User>(x => x.Id);
 
             builder.HasMany(x => x.Children)
                 .WithOne(x => x.Parent)

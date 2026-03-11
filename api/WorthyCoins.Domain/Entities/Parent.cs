@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public required string Email { get; set; }
-        public virtual ICollection<Child>? Children { get; set; }
+        public required string UserId { get; set; }
+        public ICollection<Child> Children { get; set; } = [];
     }
 }
