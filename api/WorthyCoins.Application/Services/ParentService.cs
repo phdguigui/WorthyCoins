@@ -6,68 +6,54 @@ using WorthyCoins.Domain.Entities;
 
 namespace WorthyCoins.Application.Services
 {
-    public class ParentService : IParentService
+    public class ParentService(IParentRepository repository, IUserRepository userRepository) : IParentService
     {
-        private readonly IParentRepository _repository;
-
-        public ParentService(IParentRepository repository)
-        {
-            _repository = repository;
-        }
+        private readonly IParentRepository _repository = repository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         public async Task<ParentResponseDto> CreateParentAsync(CreateParentRequestDto request)
         {
-            //var entity = new Parent
-            //{
-            //    Email = request.Email,
-            //    Name = request.Name
-            //};
+            var userId = await _userRepository.CreateUserAsync(request.Email, request.Password, request.Name);
+            var entity = new Parent
+            {
+                Name = request.Name,
+                UserId = userId,
+            };
 
-            //entity = await _repository.AddAsync(entity);
+            entity = await _repository.AddAsync(entity);
 
-            //var response = new ParentResponseDto
-            //{
-            //    Id = entity.Id,
-            //    Email = entity.Email,
-            //    Name = entity.Name
-            //};
+            var response = new ParentResponseDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                UserId = entity.UserId,
+            };
 
-            //return response;
-            return null;
+            return response;
         }
 
         public async Task<ParentResponseDto> UpdateParentAsync(UpdateParentRequestDto request)
         {
-            //var parent = await _repository.GetByIdAsync(request.Id)
-            //    ?? throw new Exception($"Parent com ID {request.Id} não encontrado.");
+            var entity = await _repository.GetByIdAsync(request.Id) ?? throw new Exception("Parent not found");
+            entity.Name = request.Name;
 
-            //if (!string.IsNullOrWhiteSpace(request.Email))
-            //    parent.Email = request.Email;
+            entity = await _repository.UpdateAsync(entity);
 
-            //if (!string.IsNullOrWhiteSpace(request.Name))
-            //    parent.Name = request.Name;
+            var response = new ParentResponseDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                UserId = entity.UserId
+            };
 
-            //parent = await _repository.UpdateAsync(parent);
-
-            //var response = new ParentResponseDto
-            //{
-            //    Id = parent.Id,
-            //    Email = parent.Email,
-            //    Name = parent.Name
-            //};
-
-            //return response;
-            return null;
+            return response;
         }
 
-        public async Task DeleteParentAsync(int parentId)
+        public async Task DeleteParentAsync(int id)
         {
-            var rowsAffected = await _repository.DeleteAsync(parentId);
-
-            if (rowsAffected == 0)
-            {
-                throw new Exception($"Parent com ID {parentId} não encontrado.");
-            }
+            var entity = await _repository.GetByIdAsync(id) ?? throw new Exception("Parent not found");
+            await _repository.DeleteAsync(id);
+            await _userRepository.DeleteUserAsync(entity.UserId);
         }
     }
 }
