@@ -12,12 +12,11 @@ namespace WorthyCoins.Infrastructure.Identity.Services
         public async Task<string?> LoginUserAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, password))
-            {
-                return null;
-            }
 
-            return _tokenService.Generate();
+            if (user == null || !await _userManager.CheckPasswordAsync(user, password))
+                return null;
+
+            return _tokenService.Generate(user);
         }
     }
 }

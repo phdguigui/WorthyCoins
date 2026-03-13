@@ -14,7 +14,7 @@ namespace WorthyCoins.API.Controllers
         [Route("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var token = _service.LoginUserAsync(request.Email, request.Password);
+            var token = await _service.LoginUserAsync(request.Email, request.Password);
 
             if (token == null) {
                 return Unauthorized();
