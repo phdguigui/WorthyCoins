@@ -29,7 +29,7 @@ namespace WorthyCoins.API.Controllers
         [Route("test")]
         public ActionResult Test()
         {
-            var teste = HttpContext;
+            var teste = User.Claims.FirstOrDefault(x => x.Type == "name")?.Value;
             return Ok("Teste");
         }
     }
