@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WorthyCoins.Domain.Entities;
-using WorthyCoins.Infrastructure.Identity;
+using WorthyCoins.Infrastructure.Identity.Models;
 
 public class WorthyCoinsDbContext : IdentityDbContext<User>
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using WorthyCoins.Application.Interfaces.Repositories;
-using WorthyCoins.Infrastructure.Identity;
+using WorthyCoins.Infrastructure.Identity.Models;
 
 namespace WorthyCoins.Infrastructure.Repositories
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WorthyCoins.Infrastructure.Identity;
+using WorthyCoins.Infrastructure.Identity.Models;
 
 namespace WorthyCoins.Infrastructure.Configurations.Identity
 {

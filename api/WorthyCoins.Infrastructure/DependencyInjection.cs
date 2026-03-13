@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Application.Interfaces.Repositories;
+using WorthyCoins.Infrastructure.Identity.Services;
 using WorthyCoins.Infrastructure.Repositories;
 
 namespace WorthyCoins.Infrastructure;
@@ -22,6 +24,8 @@ public static class DependencyInjection
         services.AddScoped<IParentRepository, ParentRepository>();
         services.AddScoped<IChildRepository, ChildRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<TokenService>();
 
         return services;
     }

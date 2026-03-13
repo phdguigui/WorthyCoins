@@ -1,6 +1,6 @@
 using WorthyCoins.Application;
 using WorthyCoins.Infrastructure;
-using WorthyCoins.Infrastructure.Identity;
+using WorthyCoins.Infrastructure.Identity.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
