@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IChildRepository, ChildRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<TokenService>();
 
         return services;
