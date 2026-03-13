@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WorthyCoins.Application.DTOs.Requests.Authentication;
 using WorthyCoins.Application.Interfaces;
 
@@ -20,7 +21,16 @@ namespace WorthyCoins.API.Controllers
                 return Unauthorized();
             }
 
-            return Ok(token);
+            return Ok(new { token });
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("test")]
+        public ActionResult Test()
+        {
+            var teste = HttpContext;
+            return Ok("Teste");
         }
     }
 }
