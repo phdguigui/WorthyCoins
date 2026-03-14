@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Infrastructure.Identity.Models;
+using WorthyCoins.Infrastructure.Identity.Services;
 
 namespace WorthyCoins.Infrastructure.Repositories
 {
-    public class UserRepository(UserManager<User> userManager) : IUserRepository
+    public class UserRepository(UserManager<User> userManager, TokenService tokenService) : IUserRepository
     {
         private readonly UserManager<User> _userManager = userManager;
+        private readonly TokenService _tokenService = tokenService;
 
-        public async Task<string> CreateUserAsync(string email, string password, string name)
+        public async Task<(string userId, string token)> CreateUserAsync(string email, string password, string name)
         {
             var user = new User
             {
@@ -23,7 +25,9 @@ namespace WorthyCoins.Infrastructure.Repositories
                 throw new Exception("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
             }
 
-            return user.Id;
+            var token = _tokenService.Generate(user);
+
+            return (user.Id, token);
         }
 
         public async Task DeleteUserAsync(string userId)

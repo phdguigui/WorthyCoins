@@ -13,7 +13,7 @@ namespace WorthyCoins.Application.Services
 
         public async Task<ParentResponseDto> CreateParentAsync(CreateParentRequestDto request)
         {
-            var userId = await _userRepository.CreateUserAsync(request.Email, request.Password, request.Name);
+            var (userId, token) = await _userRepository.CreateUserAsync(request.Email, request.Password, request.Name);
             var entity = new Parent
             {
                 Name = request.Name,
@@ -27,6 +27,7 @@ namespace WorthyCoins.Application.Services
                 Id = entity.Id,
                 Name = entity.Name,
                 UserId = entity.UserId,
+                Token = token
             };
 
             return response;
