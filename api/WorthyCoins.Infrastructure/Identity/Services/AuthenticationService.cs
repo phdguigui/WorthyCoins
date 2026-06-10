@@ -18,5 +18,23 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             return _tokenService.Generate(user);
         }
+
+        public async Task<string?> RegisterUserAsync(string email, string password)
+        {
+            var user = new User
+            {
+                UserName = email,
+                Email = email
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (result.Succeeded)
+            {
+                return _tokenService.Generate(user);
+            }
+
+            return null;
+        }
     }
 }

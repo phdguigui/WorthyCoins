@@ -24,6 +24,19 @@ namespace WorthyCoins.API.Controllers
             return Ok(new { token });
         }
 
+        [HttpPost]
+        [Route("register")]
+        public async Task<ActionResult> Register([FromBody] RegisterRequestDto request)
+        {
+            var token = await _service.RegisterUserAsync(request.Email, request.Password);
+
+            if (token == null) {
+                return BadRequest("User registration failed.");
+            }
+
+            return Ok(new { token });
+        }
+
         [HttpGet]
         [Authorize]
         [Route("test")]
