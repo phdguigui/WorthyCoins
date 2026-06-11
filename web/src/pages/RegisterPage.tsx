@@ -29,9 +29,15 @@ export function RegisterPage() {
       setPassword("");
       setConfirmPassword("");
     } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message ||
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
+        err.message ||
+        "An error occurred during registration";
+
       setMessage({
         type: "error",
-        text: err.message || "An error occurred during registration",
+        text: errorMessage,
       });
     } finally {
       setIsLoading(false);
