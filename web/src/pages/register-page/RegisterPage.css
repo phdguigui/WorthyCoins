@@ -42,14 +42,27 @@
   border: 1px solid #80808050;
   border-radius: 5px;
   width: 100%;
+  padding: 0px 5px;
+}
+
+.form-group input:focus {
+  border-color: #2bb332;
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #2bb332;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 15px;
+}
+
+.submit-button:hover {
+  background-color: #27a02d;
+}
+
+.submit-button:active {
+  background-color: #218f26;
 }
