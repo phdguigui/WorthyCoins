@@ -14,7 +14,7 @@ export function RegisterPage() {
     e.preventDefault();
 
     try {
-      const response = await registerUser(email, password);
+      const response = await registerUser(firstName, lastName, email, password);
     } catch (e: any) {}
   };
 
