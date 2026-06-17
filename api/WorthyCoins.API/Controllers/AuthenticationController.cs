@@ -17,7 +17,7 @@ namespace WorthyCoins.API.Controllers
         {
             var token = await _service.LoginUserAsync(request.Email, request.Password);
 
-            if (token == null) {
+            if (!token.Success) {
                 return Unauthorized();
             }
 
@@ -30,7 +30,7 @@ namespace WorthyCoins.API.Controllers
         {
             var token = await _service.RegisterUserAsync(request.Email, request.Password);
 
-            if (token == null) {
+            if (!token.Success) {
                 return BadRequest("User registration failed.");
             }
 

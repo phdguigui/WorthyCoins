@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PasswordMissingUpperCase" xml:space="preserve">
+  <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <value>E-mail ou senha incorretos.</value>
+  </data>
+  <data name="PASSWORD_MISSING" xml:space="preserve">
+    <value>Senha não informada.</value>
+  </data>
+  <data name="PASSWORD_MISSING_UPPER_CASE" xml:space="preserve">
     <value>A senha deve conter pelo menos uma letra maiúscula.</value>
+  </data>
+  <data name="USER_CREATION_FAILED" xml:space="preserve">
+    <value>Falha ao criar usuário.</value>
   </data>
 </root>
