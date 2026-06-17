@@ -22,7 +22,7 @@ namespace WorthyCoins.Infrastructure.Identity.Services
             return Result<string>.Ok(_tokenService.Generate(user));
         }
 
-        public async Task<Result<string>> RegisterUserAsync(string email, string password)
+        public async Task<Result<string>> RegisterUserAsync(string email, string password, string firstName, string lastName)
         {
             if (string.IsNullOrWhiteSpace(password))
             {
@@ -36,8 +36,8 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             var user = new User
             {
-                UserName = email,
-                Email = email
+                UserName = $"{firstName} {lastName}",
+                Email = email,
             };
 
             var result = await _userManager.CreateAsync(user, password);
