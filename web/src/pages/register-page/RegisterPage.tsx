@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
 import "./RegisterPage.css";
 import { Link } from "react-router-dom";
@@ -15,7 +16,17 @@ export function RegisterPage() {
 
     try {
       const response = await registerUser(firstName, lastName, email, password);
-    } catch (e: any) {}
+      const token = response.data.token.data;
+      if (token) {
+        Cookies.set("token", token, {
+          expires: 7,
+          secure: true,
+          sameSite: "Strict",
+        });
+      }
+    } catch (e: any) {
+      console.error(e);
+    }
   };
 
   return (
