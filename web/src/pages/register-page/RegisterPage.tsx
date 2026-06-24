@@ -2,9 +2,10 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
 import "./RegisterPage.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function RegisterPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,6 +25,7 @@ export function RegisterPage() {
           sameSite: "Strict",
         });
       }
+      navigate("/");
     } catch (e: any) {
       console.error(e);
     }
