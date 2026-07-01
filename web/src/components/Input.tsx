@@ -1,23 +1,34 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  error?: string;
 }
 
-export function TextInput({ label, id, ...props }: InputProps) {
-  return (
-    <>
-      {label && <label htmlFor={id}>{label}</label>}
-      <input type="text" id={id} {...props} />
-    </>
-  );
-}
+export const TextInput = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, id, error, ...props }, ref) => {
+    return (
+      <>
+        {label && <label htmlFor={id}>{label}</label>}
+        <input type="text" id={id} ref={ref} {...props} />
+        {error && <span className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{error}</span>}
+      </>
+    );
+  }
+);
 
-export function PasswordInput({ label, id, ...props }: InputProps) {
-  return (
-    <>
-      {label && <label htmlFor={id}>{label ?? "Password"}</label>}
-      <input type="password" id={id} {...props} />
-    </>
-  );
-}
+TextInput.displayName = "TextInput";
+
+export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, id, error, ...props }, ref) => {
+    return (
+      <>
+        {label && <label htmlFor={id}>{label ?? "Password"}</label>}
+        <input type="password" id={id} ref={ref} {...props} />
+        {error && <span className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{error}</span>}
+      </>
+    );
+  }
+);
+
+PasswordInput.displayName = "PasswordInput";

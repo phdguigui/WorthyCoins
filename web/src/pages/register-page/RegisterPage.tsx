@@ -1,23 +1,45 @@
-import { useState } from "react";
 import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
 import "./RegisterPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput, PasswordInput } from "../../components/Input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const registerSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type RegisterInput = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: RegisterInput) => {
     try {
-      const response = await registerUser(firstName, lastName, email, password);
+      const response = await registerUser(
+        data.firstName,
+        data.lastName,
+        data.email,
+        data.password,
+      );
       const token = response.data.token.data;
       if (token) {
         Cookies.set("token", token, {
@@ -38,50 +60,45 @@ export function RegisterPage() {
         <img className="logo" src="/logo.png" alt="logo" />
         <p>Register</p>
       </div>
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <TextInput
             label="First Name"
             id="first-name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
+            error={errors.firstName?.message}
+            {...register("firstName")}
           />
         </div>
         <div className="form-group">
           <TextInput
             label="Last Name"
             id="last-name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
+            error={errors.lastName?.message}
+            {...register("lastName")}
           />
         </div>
         <div className="form-group">
           <TextInput
             label="Email"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            error={errors.email?.message}
+            {...register("email")}
           />
         </div>
         <div className="form-group">
           <PasswordInput
             label="Password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            error={errors.password?.message}
+            {...register("password")}
           />
         </div>
         <div className="form-group">
           <PasswordInput
             label="Confirm password"
             id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+            error={errors.confirmPassword?.message}
+            {...register("confirmPassword")}
           />
         </div>
         <div className="form-group">
