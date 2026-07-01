@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
 import "./RegisterPage.css";
 import { Link, useNavigate } from "react-router-dom";
+import { TextInput, PasswordInput } from "../../components/Input";
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -39,9 +40,8 @@ export function RegisterPage() {
       </div>
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="first-name">First Name</label>
-          <input
-            type="text"
+          <TextInput
+            label="First Name"
             id="first-name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -49,9 +49,8 @@ export function RegisterPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="last-name">Last Name</label>
-          <input
-            type="text"
+          <TextInput
+            label="Last Name"
             id="last-name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -59,9 +58,8 @@ export function RegisterPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
+          <TextInput
+            label="Email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -69,9 +67,8 @@ export function RegisterPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
+          <PasswordInput
+            label="Password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -79,9 +76,8 @@ export function RegisterPage() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="confirm-password">Confirm password</label>
-          <input
-            type="password"
+          <PasswordInput
+            label="Confirm password"
             id="confirm-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

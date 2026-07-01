@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TextInput, PasswordInput } from "../../components/Input";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -12,16 +13,14 @@ export function LoginPage() {
           console.log(username, password);
         }}
       >
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
+        <TextInput
+          label="Username"
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
+        <PasswordInput
+          label="Password"
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
