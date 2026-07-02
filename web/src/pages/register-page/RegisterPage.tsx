@@ -66,6 +66,7 @@ export function RegisterPage() {
             label="First Name"
             id="first-name"
             error={errors.firstName?.message}
+            required
             {...register("firstName")}
           />
         </div>
@@ -74,6 +75,7 @@ export function RegisterPage() {
             label="Last Name"
             id="last-name"
             error={errors.lastName?.message}
+            required
             {...register("lastName")}
           />
         </div>
@@ -82,6 +84,7 @@ export function RegisterPage() {
             label="Email"
             id="email"
             error={errors.email?.message}
+            required
             {...register("email")}
           />
         </div>
@@ -90,6 +93,7 @@ export function RegisterPage() {
             label="Password"
             id="password"
             error={errors.password?.message}
+            required
             {...register("password")}
           />
         </div>
@@ -98,6 +102,7 @@ export function RegisterPage() {
             label="Confirm password"
             id="confirm-password"
             error={errors.confirmPassword?.message}
+            required
             {...register("confirmPassword")}
           />
         </div>
