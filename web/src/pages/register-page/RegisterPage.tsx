@@ -39,6 +39,7 @@ export function RegisterPage() {
         data.lastName,
         data.email,
         data.password,
+        data.confirmPassword,
       );
       const token = response.data.token.data;
       if (token) {

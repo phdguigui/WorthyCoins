@@ -5,6 +5,7 @@ export async function registerUser(
   lastName: string,
   email: string,
   password: string,
+  confirmPassword: string,
 ) {
   try {
     let response = await apiClient.post("/authentication/register", {
@@ -12,6 +13,7 @@ export async function registerUser(
       lastName,
       email,
       password,
+      confirmPassword,
     });
     return response;
   } catch (error: any) {
