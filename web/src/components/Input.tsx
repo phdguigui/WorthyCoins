@@ -17,7 +17,16 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
             )}
           </label>
         )}
-        <input type="text" id={id} ref={ref} {...props} />
+        <input
+          style={{
+            borderColor: error ? "red" : "",
+            backgroundColor: error ? "#ffe6e6a9" : "",
+          }}
+          type="text"
+          id={id}
+          ref={ref}
+          {...props}
+        />
         {error && (
           <span
             className="error-message"
@@ -45,7 +54,16 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
             )}
           </label>
         )}
-        <input type="password" id={id} ref={ref} {...props} />
+        <input
+          style={{
+            borderColor: error ? "red" : "",
+            backgroundColor: error ? "#ffe6e6a9" : "",
+          }}
+          type="password"
+          id={id}
+          ref={ref}
+          {...props}
+        />
         {error && (
           <span
             className="error-message"
