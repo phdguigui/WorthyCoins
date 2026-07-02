@@ -1,40 +1,53 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using WorthyCoins.Application.DTOs.Requests.Authentication;
 using WorthyCoins.Application.Interfaces;
+using WorthyCoins.API.Resources.Errors;
 
 namespace WorthyCoins.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticationController(IAuthenticationService service) : ControllerBase
+    public class AuthenticationController(IAuthenticationService service, IStringLocalizer<Error> localizer) : ControllerBase
     {
         private readonly IAuthenticationService _service = service;
+        private readonly IStringLocalizer<Error> _localizer = localizer;
 
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var token = await _service.LoginUserAsync(request.Email, request.Password);
+            var result = await _service.LoginUserAsync(request.Email, request.Password);
 
-            if (!token.Success) {
-                return Unauthorized();
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return Unauthorized(result);
             }
 
-            return Ok(new { token });
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult> Register([FromBody] RegisterRequestDto request)
         {
-            var token = await _service.RegisterUserAsync(request.Email, request.Password, request.FirstName, request.LastName);
+            var result = await _service
+                .RegisterUserAsync(
+                    request.Email, 
+                    request.Password, 
+                    request.FirstName, 
+                    request.LastName,
+                    request.ConfirmPassword);
 
-            if (!token.Success) {
-                return BadRequest("User registration failed.");
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
             }
 
-            return Ok(new { token });
+            return Ok(result);
         }
 
         [HttpGet]

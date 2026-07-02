@@ -129,6 +129,54 @@
     <value>The password must contain at least one upper case letter.</value>
     <comment>The password must contain at least one upper case letter.</comment>
   </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>The password must contain at least one upper case letter.</value>
+    <comment>The password must contain at least one upper case letter.</comment>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+    <value>The password must contain at least one digit.</value>
+    <comment>The password must contain at least one digit.</comment>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>The password must contain at least one lower case letter.</value>
+    <comment>The password must contain at least one lower case letter.</comment>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>The password must contain at least one non-alphanumeric character.</value>
+    <comment>The password must contain at least one non-alphanumeric character.</comment>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>The password must contain enough unique characters.</value>
+    <comment>The password must contain enough unique characters.</comment>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+    <value>The password is too short.</value>
+    <comment>The password is too short.</comment>
+  </data>
+  <data name="EMAIL_MISSING" xml:space="preserve">
+    <value>E-mail not informed.</value>
+    <comment>E-mail not informed.</comment>
+  </data>
+  <data name="EMAIL_INVALID" xml:space="preserve">
+    <value>Invalid e-mail.</value>
+    <comment>Invalid e-mail.</comment>
+  </data>
+  <data name="FIRST_NAME_MISSING" xml:space="preserve">
+    <value>First name not informed.</value>
+    <comment>First name not informed.</comment>
+  </data>
+  <data name="LAST_NAME_MISSING" xml:space="preserve">
+    <value>Last name not informed.</value>
+    <comment>Last name not informed.</comment>
+  </data>
+  <data name="CONFIRM_PASSWORD_MISSING" xml:space="preserve">
+    <value>Confirm password not informed.</value>
+    <comment>Confirm password not informed.</comment>
+  </data>
+  <data name="PASSWORDS_DO_NOT_MATCH" xml:space="preserve">
+    <value>Passwords do not match.</value>
+    <comment>Passwords do not match.</comment>
+  </data>
   <data name="USER_CREATION_FAILED" xml:space="preserve">
     <value>Fail while creating the user.</value>
     <comment>Fail while creating the user.</comment>

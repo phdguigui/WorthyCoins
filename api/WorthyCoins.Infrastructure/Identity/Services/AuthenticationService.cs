@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using WorthyCoins.Application.Commons.Errors;
 using WorthyCoins.Application.Commons.Results;
 using WorthyCoins.Application.Interfaces;
@@ -22,16 +23,20 @@ namespace WorthyCoins.Infrastructure.Identity.Services
             return Result<string>.Ok(_tokenService.Generate(user));
         }
 
-        public async Task<Result<string>> RegisterUserAsync(string email, string password, string firstName, string lastName)
+        public async Task<Result<string>> RegisterUserAsync(string email, string password, string firstName, string lastName, string confirmPassword)
         {
-            if (string.IsNullOrWhiteSpace(password))
+            var isUsernamesValid = ValidateUsernames(firstName, lastName, email);
+
+            if (!isUsernamesValid.Success)
             {
-                return Result<string>.Fail(ErrorCodes.PasswordMissing);
+                return isUsernamesValid;
             }
 
-            if (!password.Any(char.IsUpper))
+            var isPasswordValid = await ValidatePasswordAsync(password, confirmPassword);
+
+            if (!isPasswordValid.Success)
             {
-                return Result<string>.Fail(ErrorCodes.PasswordMissingUpperCase);
+                return isPasswordValid;
             }
 
             var user = new User
@@ -48,6 +53,71 @@ namespace WorthyCoins.Infrastructure.Identity.Services
             }
 
             return Result<string>.Fail(ErrorCodes.UserCreationFailed);
+        }
+
+        private static Result<string> ValidateUsernames(string firstName, string lastName, string email)
+        {
+            if (string.IsNullOrWhiteSpace(firstName))
+            {
+                return Result<string>.Fail(ErrorCodes.FirstNameMissing);
+            }
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                return Result<string>.Fail(ErrorCodes.LastNameMissing);
+            }
+
+            var isEmailValid = ValidateEmail(email);
+
+            if (!isEmailValid.Success)
+            {
+                return isEmailValid;
+            }
+
+            return Result<string>.Ok("Usernames are valid");
+        }
+
+        private static Result<string> ValidateEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return Result<string>.Fail(ErrorCodes.EmailMissing);
+            }
+
+            var emailAttribute = new EmailAddressAttribute();
+
+            if (!emailAttribute.IsValid(email))
+            {
+                return Result<string>.Fail(ErrorCodes.EmailInvalid);
+            }
+
+            return Result<string>.Ok("Email is valid");
+        }
+
+        private async Task<Result<string>> ValidatePasswordAsync(string password, string confirmPassword)
+        {
+            if (string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                return Result<string>.Fail(ErrorCodes.ConfirmPasswordMissing);
+            }
+
+            if (password != confirmPassword)
+            {
+                return Result<string>.Fail(ErrorCodes.PasswordsDoNotMatch);
+            }
+
+            var user = new User();
+
+            foreach (var passwordValidator in _userManager.PasswordValidators)
+            {
+                var validationResult = await passwordValidator.ValidateAsync(_userManager, user, password);
+
+                if (!validationResult.Succeeded)
+                {
+                    return Result<string>.Fail(validationResult.Errors.First().Code);
+                }
+            }
+
+            return Result<string>.Ok("Password is valid");
         }
     }
 }

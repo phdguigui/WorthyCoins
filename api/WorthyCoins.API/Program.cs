@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.Text;
 using WorthyCoins.Application;
 using WorthyCoins.Infrastructure;
@@ -8,6 +10,7 @@ using WorthyCoins.Infrastructure.Identity.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddLocalization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -45,6 +48,14 @@ builder.Services
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("pt-BR") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 app.UseCors("AllowAll");
 
