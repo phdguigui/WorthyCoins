@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import "./Input.css";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -12,26 +13,19 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label htmlFor={id}>
             {label}
-            {required && (
-              <span style={{ color: "red", marginLeft: "2px" }}>*</span>
-            )}
+            {required && <span className="required-asterisk">*</span>}
           </label>
         )}
         <input
-          style={{
-            borderColor: error ? "red" : "",
-            backgroundColor: error ? "#ffe6e6a9" : "",
-          }}
+          className={error ? "input-error" : ""}
           type="text"
           id={id}
           ref={ref}
+          required={required}
           {...props}
         />
         {error && (
-          <span
-            className="error-message"
-            style={{ color: "red", fontSize: "12px", marginTop: "4px" }}
-          >
+          <span className="error-message">
             {error}
           </span>
         )}
@@ -49,26 +43,19 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label htmlFor={id}>
             {label ?? "Password"}
-            {required && (
-              <span style={{ color: "red", marginLeft: "2px" }}>*</span>
-            )}
+            {required && <span className="required-asterisk">*</span>}
           </label>
         )}
         <input
-          style={{
-            borderColor: error ? "red" : "",
-            backgroundColor: error ? "#ffe6e6a9" : "",
-          }}
+          className={error ? "input-error" : ""}
           type="password"
           id={id}
           ref={ref}
+          required={required}
           {...props}
         />
         {error && (
-          <span
-            className="error-message"
-            style={{ color: "red", fontSize: "12px", marginTop: "4px" }}
-          >
+          <span className="error-message">
             {error}
           </span>
         )}

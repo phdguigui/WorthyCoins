@@ -1,0 +1,15 @@
+.required-asterisk {
+  color: red;
+  margin-left: 2px;
+}
+
+.input-error {
+  border-color: red !important;
+  background-color: #ffe6e6a9 !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
