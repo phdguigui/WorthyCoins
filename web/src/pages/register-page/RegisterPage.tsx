@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
-import "./RegisterPage.css";
+import styles from "./RegisterPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput, PasswordInput } from "../../components/Input";
 import { useForm } from "react-hook-form";
@@ -63,13 +63,13 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="form-container">
-      <div className="logo-container">
-        <img className="logo" src="/logo.png" alt="logo" />
+    <div className={styles.formContainer}>
+      <div className={styles.logoContainer}>
+        <img className={styles.logo} src="/logo.png" alt="logo" />
         <p>Register</p>
       </div>
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formGroup}>
           <TextInput
             label="First Name"
             id="first-name"
@@ -78,7 +78,7 @@ export function RegisterPage() {
             {...register("firstName")}
           />
         </div>
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <TextInput
             label="Last Name"
             id="last-name"
@@ -87,7 +87,7 @@ export function RegisterPage() {
             {...register("lastName")}
           />
         </div>
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <TextInput
             label="Email"
             id="email"
@@ -96,7 +96,7 @@ export function RegisterPage() {
             {...register("email")}
           />
         </div>
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <PasswordInput
             label="Password"
             id="password"
@@ -105,7 +105,7 @@ export function RegisterPage() {
             {...register("password")}
           />
         </div>
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <PasswordInput
             label="Confirm password"
             id="confirm-password"
@@ -114,8 +114,8 @@ export function RegisterPage() {
             {...register("confirmPassword")}
           />
         </div>
-        <div className="form-group">
-          <button className="submit-button" type="submit">
+        <div className={styles.formGroup}>
+          <button className={styles.submitButton} type="submit">
             Register
           </button>
         </div>
