@@ -41,7 +41,7 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             var user = new User
             {
-                UserName = $"{firstName} {lastName}",
+                UserName = $"{firstName.Replace(" ", "")}{lastName.Replace(" ", "")}",
                 Email = email,
             };
 
