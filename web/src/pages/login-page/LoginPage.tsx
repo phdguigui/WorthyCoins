@@ -27,7 +27,6 @@ export function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
     try {
       const response = await loginUser(data.email, data.password);
-      console.log("reponse", response.data.data);
       const token = response.data.data;
       if (token) {
         Cookies.set("token", token, {
