@@ -36,9 +36,7 @@ export function LoginPage() {
         });
       }
       navigate("/");
-    } catch (e: any) {
-      console.error(e);
-    }
+    } catch (e: any) {}
   };
 
   return (

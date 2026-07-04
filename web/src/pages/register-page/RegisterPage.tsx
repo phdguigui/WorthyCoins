@@ -6,6 +6,8 @@ import { TextInput, PasswordInput } from "../../components/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import toast from "react-hot-toast";
+import { ToastContent } from "../../components/ToastContent";
 
 const registerSchema = z
   .object({
@@ -62,8 +64,13 @@ export function RegisterPage() {
       }
       navigate("/");
     } catch (e: any) {
-      console.error(e);
-      if (e.errorCode === "EMAIL_ALREADY_EXISTS") {
+      const errorMessage =
+        e?.message || "Registration failed. Please try again.";
+      toast.error(
+        <ToastContent title="Erro no Cadastro" description={errorMessage} />,
+      );
+
+      if (e?.errorCode === "EMAIL_ALREADY_EXISTS") {
         setError(
           "email",
           {
@@ -72,6 +79,7 @@ export function RegisterPage() {
           },
           { shouldFocus: true },
         );
+        return;
       }
     }
   };

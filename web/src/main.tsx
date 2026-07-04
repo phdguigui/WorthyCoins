@@ -7,9 +7,11 @@ import { RegisterPage } from "./pages/register-page/RegisterPage.tsx";
 import { HomePage } from "./pages/home-page/HomePage.tsx";
 import { ProtectedRoute } from "./layout-pages/ProtectedRoute.tsx";
 import { PublicRoute } from "./layout-pages/PublicRoute.tsx";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <Toaster position="top-right" reverseOrder={false} />
     <BrowserRouter>
       <Routes>
         <Route element={<PublicRoute />}>
