@@ -181,4 +181,8 @@
     <value>Fail while creating the user.</value>
     <comment>Fail while creating the user.</comment>
   </data>
+  <data name="EMAIL_ALREADY_EXISTS" xml:space="preserve">
+    <value>This e-mail is already being used.</value>
+    <comment>This e-mail is already being used.</comment>
+  </data>
 </root>

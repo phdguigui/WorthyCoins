@@ -12,5 +12,6 @@
         public const string EmailInvalid = "EMAIL_INVALID";
         public const string ConfirmPasswordMissing = "CONFIRM_PASSWORD_MISSING";
         public const string PasswordsDoNotMatch = "PASSWORDS_DO_NOT_MATCH";
+        public const string EmailAlreadyExists = "EMAIL_ALREADY_EXISTS";
     }
 }

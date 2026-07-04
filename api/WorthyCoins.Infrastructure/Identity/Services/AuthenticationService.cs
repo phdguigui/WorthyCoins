@@ -41,7 +41,9 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             var user = new User
             {
-                UserName = $"{firstName.Replace(" ", "")}{lastName.Replace(" ", "")}",
+                UserName = email.ToLower(),
+                FirstName = firstName,
+                LastName = lastName,
                 Email = email,
             };
 
@@ -51,6 +53,9 @@ namespace WorthyCoins.Infrastructure.Identity.Services
             {
                 return Result<string>.Ok(_tokenService.Generate(user));
             }
+
+            if (result.Errors.Select(x => x.Code).Contains("DuplicateUserName"))
+                return Result<string>.Fail(ErrorCodes.EmailAlreadyExists);
 
             return Result<string>.Fail(ErrorCodes.UserCreationFailed);
         }

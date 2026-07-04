@@ -165,4 +165,7 @@
   <data name="USER_CREATION_FAILED" xml:space="preserve">
     <value>Falha ao criar usuário.</value>
   </data>
+  <data name="EMAIL_ALREADY_EXISTS" xml:space="preserve">
+    <value>Esse e-mail já está sendo utilizado.</value>
+  </data>
 </root>
