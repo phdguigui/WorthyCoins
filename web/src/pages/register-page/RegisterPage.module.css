@@ -65,3 +65,13 @@
 .submitButton:active {
   background-color: #218f26;
 }
+
+.loginInsteadLink {
+  color: #2bb332;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.loginInsteadLink:hover {
+  color: #27a02d;
+}

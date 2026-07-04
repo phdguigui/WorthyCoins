@@ -3,7 +3,7 @@ import "./Input.css";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  error?: string;
+  error?: React.ReactNode;
 }
 
 export const TextInput = forwardRef<HTMLInputElement, InputProps>(
@@ -21,14 +21,9 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
           type="text"
           id={id}
           ref={ref}
-          required={required}
           {...props}
         />
-        {error && (
-          <span className="error-message">
-            {error}
-          </span>
-        )}
+        {error && <span className="error-message">{error}</span>}
       </>
     );
   },
@@ -51,14 +46,9 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
           type="password"
           id={id}
           ref={ref}
-          required={required}
           {...props}
         />
-        {error && (
-          <span className="error-message">
-            {error}
-          </span>
-        )}
+        {error && <span className="error-message">{error}</span>}
       </>
     );
   },

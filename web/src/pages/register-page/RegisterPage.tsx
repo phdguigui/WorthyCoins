@@ -19,7 +19,10 @@ const registerSchema = z
       .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
       .regex(/[a-z]/, "Password must contain at least one lowercase letter")
       .regex(/[0-9]/, "Password must contain at least one number")
-      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
+      .regex(
+        /[^a-zA-Z0-9]/,
+        "Password must contain at least one special character",
+      ),
     confirmPassword: z.string().trim().min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -34,6 +37,7 @@ export function RegisterPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -59,6 +63,16 @@ export function RegisterPage() {
       navigate("/");
     } catch (e: any) {
       console.error(e);
+      if (e.errorCode === "EMAIL_ALREADY_EXISTS") {
+        setError(
+          "email",
+          {
+            type: "manual",
+            message: "Email already registered.",
+          },
+          { shouldFocus: true },
+        );
+      }
     }
   };
 
@@ -91,7 +105,18 @@ export function RegisterPage() {
           <TextInput
             label="Email"
             id="email"
-            error={errors.email?.message}
+            error={
+              errors.email?.message ? (
+                <span>
+                  {errors.email.message}{" "}
+                  {errors.email.type === "manual" && (
+                    <Link to="/login" className={styles.loginInsteadLink}>
+                      Login instead.
+                    </Link>
+                  )}
+                </span>
+              ) : undefined
+            }
             required
             {...register("email")}
           />
