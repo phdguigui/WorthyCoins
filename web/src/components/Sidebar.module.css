@@ -1,0 +1,54 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 2px;
+  margin: 5px;
+  border: 1px solid #80808080;
+  border-radius: 10px;
+  width: 3vw;
+}
+
+.logoIcon {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.savings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  background-color: #f7c646;
+  border-radius: 50%;
+  padding: 7px;
+}
+
+.navigation {
+  color: #566474;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+  gap: 25px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-top: auto;
+  color: #566474;
+}
+
+.user {
+  border-radius: 50%;
+  background-color: #f7c646;
+  width: 30px;
+  height: 30px;
+}
