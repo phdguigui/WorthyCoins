@@ -25,14 +25,32 @@ export function Sidebar() {
         <Coins size={20} strokeWidth={1.5} />
       </div>
       <div className={styles.navigation}>
-        <Home size={20} strokeWidth={1.8} />
-        <ListChecks size={20} strokeWidth={1.8} />
-        <Baby size={20} strokeWidth={1.8} />
-        <Gift size={20} strokeWidth={1.8} />
+        <div className={styles.navItem}>
+          <Home size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Início</span>
+        </div>
+        <div className={styles.navItem}>
+          <ListChecks size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Tarefas</span>
+        </div>
+        <div className={styles.navItem}>
+          <Baby size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Crianças</span>
+        </div>
+        <div className={styles.navItem}>
+          <Gift size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Prêmios</span>
+        </div>
       </div>
       <div className={styles.footer}>
-        <Settings size={20} strokeWidth={1.8} />
-        <Bell size={20} strokeWidth={1.8} />
+        <div className={styles.navItem}>
+          <Settings size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Configurações</span>
+        </div>
+        <div className={styles.navItem}>
+          <Bell size={20} strokeWidth={1.8} />
+          <span className={styles.label}>Notificações</span>
+        </div>
         <div className={styles.user}></div>
       </div>
     </aside>

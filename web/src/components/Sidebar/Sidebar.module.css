@@ -8,12 +8,33 @@
   border: 1px solid #80808080;
   border-radius: 10px;
   width: 3vw;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar:hover {
+  width: 10vw;
+  .label {
+    display: flex;
+  }
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: 0.3s ease;
 }
 
 .logoIcon {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+.label {
+  display: none;
 }
 
 .savings {

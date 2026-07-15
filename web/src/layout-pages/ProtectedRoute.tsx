@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Cookies from "js-cookie";
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar } from "../components/Sidebar/Sidebar";
 
 export function ProtectedRoute() {
   const token = Cookies.get("token");
@@ -18,4 +18,3 @@ export function ProtectedRoute() {
     </div>
   );
 }
-
