@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { loginUser } from "../../api/LoginApi";
 import styles from "./LoginPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { TextInput, PasswordInput } from "../../components/Input";
+import { TextInput, PasswordInput } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

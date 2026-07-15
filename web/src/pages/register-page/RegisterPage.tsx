@@ -2,12 +2,12 @@ import Cookies from "js-cookie";
 import { registerUser } from "../../api/RegisterApi";
 import styles from "./RegisterPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { TextInput, PasswordInput } from "../../components/Input";
+import { TextInput, PasswordInput } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { ToastContent } from "../../components/ToastContent";
+import { ToastContent } from "../../components/Toast/ToastContent";
 
 const registerSchema = z
   .object({
