@@ -10,21 +10,44 @@
   width: 3vw;
   transition: width 0.3s ease;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .sidebar:hover {
   width: 10vw;
-  .label {
-    display: flex;
-  }
+}
+
+.sidebar:hover .label {
+  opacity: 1;
+  max-width: 100%;
+  margin-left: 8px;
 }
 
 .navItem {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  transition: 0.3s ease;
+  justify-content: flex-start;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 8px 0;
+  padding-left: calc(50% - 10px);
+  transition:
+    padding-left 0.3s ease,
+    background-color 0.2s ease;
+}
+
+.navItem svg {
+  flex-shrink: 0;
+}
+
+.navItem:hover {
+  background-color: #e2e8f0;
+}
+
+.sidebar:hover .navItem {
+  padding-left: 12px;
 }
 
 .logoIcon {
@@ -34,7 +57,15 @@
 }
 
 .label {
-  display: none;
+  color: #1f2937;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s ease,
+    max-width 0.3s ease,
+    margin-left 0.3s ease;
 }
 
 .savings {
@@ -55,16 +86,18 @@
   align-items: center;
   margin-top: 150px;
   gap: 25px;
+  width: 100%;
 }
 
 .footer {
+  color: #566474;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 25px;
   margin-top: auto;
-  color: #566474;
+  gap: 25px;
+  width: 100%;
 }
 
 .user {

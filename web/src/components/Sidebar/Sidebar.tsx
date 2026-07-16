@@ -45,7 +45,7 @@ export function Sidebar() {
       <div className={styles.footer}>
         <div className={styles.navItem}>
           <Settings size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Configurações</span>
+          <span className={styles.label}>Conexões</span>
         </div>
         <div className={styles.navItem}>
           <Bell size={20} strokeWidth={1.8} />
