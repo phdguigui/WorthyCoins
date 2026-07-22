@@ -6,6 +6,8 @@ import { TextInput, PasswordInput } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import toast from "react-hot-toast";
+import { ToastContent } from "../../components/Toast/ToastContent";
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
@@ -36,7 +38,12 @@ export function LoginPage() {
         });
       }
       navigate("/");
-    } catch (e: any) {}
+    } catch (e: any) {
+      const errorMessage = e?.message || "Login failed. Please try again.";
+      toast.error(
+        <ToastContent title="Erro no Login" description={errorMessage} />,
+      );
+    }
   };
 
   return (
