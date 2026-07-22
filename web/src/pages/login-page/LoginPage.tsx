@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { loginUser } from "../../api/LoginApi";
 import styles from "./LoginPage.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { TextInput, PasswordInput } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,12 +18,19 @@ type LoginInput = z.infer<typeof loginSchema>;
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const emailParam = searchParams.get("email") || "";
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: emailParam,
+      password: "",
+    },
   });
 
   const onSubmit = async (data: LoginInput) => {

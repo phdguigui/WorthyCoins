@@ -40,6 +40,7 @@ export function RegisterPage() {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -118,7 +119,10 @@ export function RegisterPage() {
                 <span>
                   {errors.email.message}{" "}
                   {errors.email.type === "manual" && (
-                    <Link to="/login" className={styles.loginInsteadLink}>
+                    <Link
+                      to={`/login?email=${watch("email")}`}
+                      className={styles.loginInsteadLink}
+                    >
                       Login instead.
                     </Link>
                   )}
