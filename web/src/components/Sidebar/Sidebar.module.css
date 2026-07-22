@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 2px;
+  padding: 20px 5px;
   margin: 5px;
   border: 1px solid #80808080;
   border-radius: 10px;
@@ -71,20 +71,119 @@
     margin-left 0.3s ease;
 }
 
-.savings {
+.savingsIcon {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
   background-color: #f7c646;
   border-radius: 50%;
   padding: 7px;
   transition: transform 0.5s ease;
+  width: 20px;
+  height: 20px;
 }
 
-.sidebar:hover .savings {
+.sidebar:hover .savingsIcon {
   transform: rotate(360deg);
   transition: transform 0.5s ease;
+}
+
+.savingsContainer {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  transition:
+    background-color 0.3s ease,
+    width 0.5s ease,
+    padding 0.3s ease,
+    height 0.3s ease;
+}
+
+.sidebar:hover .savingsContainer {
+  background-color: #351f0f;
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+}
+
+.totalWorthyCoinsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.totalWorthyCoinsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar:hover .totalWorthyCoinsHeader {
+  justify-content: space-between;
+}
+
+.totalWorthyCoinsLabel {
+  color: white;
+  font-size: 20px;
+  opacity: 0;
+  max-width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s ease,
+    max-width 0.3s ease,
+    margin-left 0.3s ease;
+}
+
+.sidebar:hover .totalWorthyCoinsLabel {
+  opacity: 1;
+  max-width: 100px;
+  margin-left: 5px;
+}
+
+.totalWorthyCoinsValueContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.3s ease,
+    max-height 0.3s ease,
+    margin-top 0.3s ease;
+}
+
+.sidebar:hover .totalWorthyCoinsValueContainer {
+  opacity: 1;
+  max-height: 40px;
+  margin-top: 4px;
+}
+
+.totalWorthyCoinsValue {
+  display: inline;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.totalWorthyCoinsCurrency {
+  display: inline;
+  color: #f7c646;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .navigation {

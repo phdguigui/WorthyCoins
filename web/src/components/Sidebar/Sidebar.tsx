@@ -21,8 +21,19 @@ export function Sidebar() {
           height={35}
         />
       </div>
-      <div className={styles.savings}>
-        <Coins size={20} strokeWidth={1.5} />
+      <div className={styles.savingsContainer}>
+        <div className={styles.totalWorthyCoinsContainer}>
+          <div className={styles.totalWorthyCoinsHeader}>
+            <span className={styles.totalWorthyCoinsLabel}>Total</span>
+            <div className={styles.savingsIcon}>
+              <Coins size={20} strokeWidth={1.5} />
+            </div>
+          </div>
+          <div className={styles.totalWorthyCoinsValueContainer}>
+            <span className={styles.totalWorthyCoinsValue}>257</span>
+            <span className={styles.totalWorthyCoinsCurrency}>WC</span>
+          </div>
+        </div>
       </div>
       <div className={styles.navigation}>
         <div className={styles.navItem}>
