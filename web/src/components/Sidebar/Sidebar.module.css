@@ -44,6 +44,12 @@
 
 .navItem:hover {
   background-color: #e2e8f0;
+  color: green;
+}
+
+.navItem:hover .label {
+  color: green;
+  font-weight: 500;
 }
 
 .sidebar:hover .navItem {
@@ -128,7 +134,7 @@
 }
 
 .sidebar:hover .savingsContainer {
-  background-color: #351f0f;
+  background-color: #218f26;
   width: 100%;
   height: 80px;
   padding: 10px;
@@ -222,7 +228,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 125px;
-  gap: 25px;
+  gap: 10px;
   width: 100%;
 }
 
@@ -233,7 +239,7 @@
   justify-content: center;
   align-items: center;
   margin-top: auto;
-  gap: 25px;
+  gap: 10px;
   width: 100%;
 }
 
