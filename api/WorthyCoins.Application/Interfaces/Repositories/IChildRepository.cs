@@ -1,9 +1,4 @@
 ﻿using WorthyCoins.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorthyCoins.Application.Interfaces.Repositories
 {
@@ -14,5 +9,7 @@ namespace WorthyCoins.Application.Interfaces.Repositories
         public Task<List<Child>> GetByParentIdAsync(int id);
         public Task<Child> UpdateAsync(Child entity);
         public Task<int> DeleteAsync(int id);
+
+        public Task<decimal> GetChildrenTotalBalanceAsync(int parentId);
     }
 }

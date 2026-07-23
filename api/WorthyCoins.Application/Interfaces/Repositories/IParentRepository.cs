@@ -8,5 +8,6 @@ namespace WorthyCoins.Application.Interfaces.Repositories
         Task<Parent?> GetByIdAsync(int id);
         Task<Parent> UpdateAsync(Parent entity);
         Task<int> DeleteAsync(int id);
+        Task<Parent?> GetByUserIdAsync(string userId);
     }
 }

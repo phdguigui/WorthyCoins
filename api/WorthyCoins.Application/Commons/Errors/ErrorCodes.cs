@@ -2,6 +2,8 @@
 {
     public static class ErrorCodes
     {
+        public const string UserNotFound = "USER_NOT_FOUND";
+        public const string ParentNotFound = "PARENT_NOT_FOUND";
         public const string PasswordMissingUpperCase = "PASSWORD_MISSING_UPPER_CASE";
         public const string InvalidCredentials = "INVALID_CREDENTIALS";
         public const string PasswordMissing = "PASSWORD_MISSING";

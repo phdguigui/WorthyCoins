@@ -10,6 +10,13 @@ namespace WorthyCoins.Infrastructure.Repositories
         private readonly UserManager<User> _userManager = userManager;
         private readonly TokenService _tokenService = tokenService;
 
+        public async Task<(string? firstName, string? lastName)> GetUserNamesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return (user?.FirstName, user?.LastName);
+        }
+
         public async Task<(string userId, string token)> CreateUserAsync(string email, string password, string name)
         {
             var user = new User

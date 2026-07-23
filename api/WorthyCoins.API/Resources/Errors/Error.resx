@@ -185,4 +185,12 @@
     <value>This e-mail is already being used.</value>
     <comment>This e-mail is already being used.</comment>
   </data>
+  <data name="USER_NOT_FOUND" xml:space="preserve">
+    <value>User not found.</value>
+    <comment>User not found.</comment>
+  </data>
+  <data name="PARENT_NOT_FOUND" xml:space="preserve">
+    <value>Parent not found.</value>
+    <comment>Parent not found.</comment>
+  </data>
 </root>

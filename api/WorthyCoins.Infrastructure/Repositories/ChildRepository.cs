@@ -46,5 +46,12 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
         }
+
+        public async Task<decimal> GetChildrenTotalBalanceAsync(int parentId)
+        {
+            return await _context.Children
+                .Where(c => c.ParentId == parentId)
+                .SumAsync(c => c.TotalCoins);
+        }
     }
 }

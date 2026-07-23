@@ -39,5 +39,11 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
         }
+
+        public async Task<Parent?> GetByUserIdAsync(string userId)
+        {
+            return await _context.Parents
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+        }
     }
 }
