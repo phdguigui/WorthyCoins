@@ -21,6 +21,7 @@ export function Sidebar() {
             width={35}
             height={35}
           />
+          <span>WorthyCoins</span>
         </div>
         <div className={styles.savingsContainer}>
           <div className={styles.totalWorthyCoinsContainer}>
