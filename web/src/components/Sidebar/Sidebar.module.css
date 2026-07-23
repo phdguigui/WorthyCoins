@@ -8,13 +8,17 @@
   border: 1px solid #80808080;
   border-radius: 10px;
   width: 3vw;
-  transition: width 0.3s ease;
+  min-width: 55px;
+  transition:
+    width 0.3s ease,
+    min-width 0.3s ease;
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .sidebar:hover {
   width: 10vw;
+  min-width: 180px;
 }
 
 .sidebar:hover .label {
@@ -243,12 +247,47 @@
   width: 100%;
 }
 
+.userSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+}
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    width 0.5s ease,
+    padding 0.3s ease;
+}
+
+.sidebar:hover .userContainer {
+  background-color: #e2e8f0;
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  justify-content: flex-start;
+}
+
 .user {
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   background-color: #f7c646;
+  flex-shrink: 0;
 }
 
 .avatar {
@@ -258,6 +297,93 @@
 
 .user,
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
+}
+
+.userLetters {
+  font-size: 12px;
+  font-weight: bold;
+  color: #1f2937;
+  text-transform: uppercase;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s ease,
+    max-width 0.3s ease,
+    margin-left 0.3s ease;
+}
+
+.sidebar:hover .userInfo {
+  opacity: 1;
+  max-width: 130px;
+  margin-left: 8px;
+  flex-grow: 1;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
+.viewProfile {
+  font-size: 10px;
+  color: #6b7280;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  padding: 4px;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #566474;
+  border-radius: 6px;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.3s ease,
+    max-width 0.3s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    margin-left 0.3s ease;
+  margin-left: 0;
+  flex-shrink: 0;
+  z-index: 999;
+}
+
+.logoutButton:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.sidebar:hover .logoutButton {
+  opacity: 1;
+  max-width: 32px;
+  margin-left: 4px;
 }

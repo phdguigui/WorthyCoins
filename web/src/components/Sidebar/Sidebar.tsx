@@ -7,21 +7,25 @@ import {
   Gift,
   Settings,
   Bell,
+  DoorOpen,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
 import { getTokenData } from "../../utils/auth";
 import { createClient } from "@supabase/supabase-js";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export function Sidebar() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+  const navigate = useNavigate();
 
   const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
+    import.meta.env.VITE_SUPABASE_ANON_KEY,
   );
 
   useEffect(() => {
@@ -39,6 +43,12 @@ export function Sidebar() {
       setTotalBalance(res.data.totalBalance);
     });
   }, []);
+
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    Cookies.remove("token");
+    navigate("/login");
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -97,21 +107,35 @@ export function Sidebar() {
           <Bell size={20} strokeWidth={1.8} />
           <span className={styles.label}>Notificações</span>
         </div>
-        <div className={styles.user}>
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              width={30}
-              height={30}
-              alt="avatar"
-              className={styles.avatar}
-            />
-          ) : (
-            <div className={styles.userLetters}>
-              {firstName[0]}
-              {lastName[0]}
+        <div
+          className={styles.userSection}
+          onClick={() => navigate("/profile")}
+        >
+          <div className={styles.userContainer}>
+            <div className={styles.user}>
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="avatar" className={styles.avatar} />
+              ) : (
+                <div className={styles.userLetters}>
+                  {(firstName && firstName[0]) || ""}
+                  {(lastName && lastName[0]) || ""}
+                </div>
+              )}
             </div>
-          )}
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>
+                {firstName} {lastName}
+              </span>
+              <span className={styles.viewProfile}>Ver perfil</span>
+            </div>
+            <button
+              className={styles.logoutButton}
+              onClick={handleLogout}
+              title="Sair"
+            >
+              <DoorOpen size={16} strokeWidth={1.8} />
+            </button>
+          </div>
         </div>
       </div>
     </aside>
