@@ -12,26 +12,28 @@ import styles from "./Sidebar.module.css";
 export function Sidebar() {
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.logoIcon}>
-        <img
-          className={styles.logo}
-          src="/logo.png"
-          alt="logo-icon"
-          width={35}
-          height={35}
-        />
-      </div>
-      <div className={styles.savingsContainer}>
-        <div className={styles.totalWorthyCoinsContainer}>
-          <div className={styles.totalWorthyCoinsHeader}>
-            <span className={styles.totalWorthyCoinsLabel}>Total</span>
-            <div className={styles.savingsIcon}>
-              <Coins size={20} strokeWidth={1.5} />
+      <div className={styles.topSection}>
+        <div className={styles.logoIcon}>
+          <img
+            className={styles.logo}
+            src="/logo.png"
+            alt="logo-icon"
+            width={35}
+            height={35}
+          />
+        </div>
+        <div className={styles.savingsContainer}>
+          <div className={styles.totalWorthyCoinsContainer}>
+            <div className={styles.totalWorthyCoinsHeader}>
+              <span className={styles.totalWorthyCoinsLabel}>Total</span>
+              <div className={styles.savingsIcon}>
+                <Coins size={20} strokeWidth={1.5} />
+              </div>
             </div>
-          </div>
-          <div className={styles.totalWorthyCoinsValueContainer}>
-            <span className={styles.totalWorthyCoinsValue}>257</span>
-            <span className={styles.totalWorthyCoinsCurrency}>WC</span>
+            <div className={styles.totalWorthyCoinsValueContainer}>
+              <span className={styles.totalWorthyCoinsValue}>257</span>
+              <span className={styles.totalWorthyCoinsCurrency}>WC</span>
+            </div>
           </div>
         </div>
       </div>
