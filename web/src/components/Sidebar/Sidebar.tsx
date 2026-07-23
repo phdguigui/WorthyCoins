@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Coins,
   Home,
@@ -8,8 +9,26 @@ import {
   Bell,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
+import { getSidebarInformation } from "../../api/GeneralInformationApi";
+import { getTokenData } from "../../utils/auth";
 
 export function Sidebar() {
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+
+  useEffect(() => {
+    const userInfo = getTokenData();
+
+    getSidebarInformation(userInfo?.sub!).then((res) => {
+      setFirstName(res.data.firstName);
+      setLastName(res.data.lastName);
+      setTotalBalance(res.data.totalBalance);
+      setAvatarUrl(res.data.avatarUrl);
+    });
+  }, []);
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.topSection}>
@@ -32,7 +51,9 @@ export function Sidebar() {
               </div>
             </div>
             <div className={styles.totalWorthyCoinsValueContainer}>
-              <span className={styles.totalWorthyCoinsValue}>257</span>
+              <span className={styles.totalWorthyCoinsValue}>
+                {totalBalance}
+              </span>
               <span className={styles.totalWorthyCoinsCurrency}>WC</span>
             </div>
           </div>
@@ -59,13 +80,19 @@ export function Sidebar() {
       <div className={styles.footer}>
         <div className={styles.navItem}>
           <Settings size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Conexões</span>
+          <span className={styles.label}>Configurações</span>
         </div>
         <div className={styles.navItem}>
           <Bell size={20} strokeWidth={1.8} />
           <span className={styles.label}>Notificações</span>
         </div>
-        <div className={styles.user}></div>
+        <div className={styles.user}>
+          {avatarUrl && <img src={avatarUrl} alt="avatar" />}
+          <span>
+            {firstName[0]}
+            {lastName[0]}
+          </span>
+        </div>
       </div>
     </aside>
   );

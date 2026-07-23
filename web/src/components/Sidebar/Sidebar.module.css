@@ -68,7 +68,7 @@
 }
 
 .sidebar:hover .logoIcon {
-  gap: 4px;
+  gap: 8px;
 }
 
 .logoIcon span {
@@ -244,6 +244,9 @@
 }
 
 .user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   background-color: #f7c646;
   width: 30px;
