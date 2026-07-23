@@ -81,11 +81,11 @@ export function Sidebar() {
         </div>
       </div>
       <div className={styles.navigation}>
-        <div className={styles.navItem}>
+        <div className={styles.navItem} onClick={() => navigate("/")}>
           <Home size={20} strokeWidth={1.8} />
           <span className={styles.label}>Início</span>
         </div>
-        <div className={styles.navItem}>
+        <div className={styles.navItem} onClick={() => navigate("/tasks")}>
           <ListChecks size={20} strokeWidth={1.8} />
           <span className={styles.label}>Tarefas</span>
         </div>

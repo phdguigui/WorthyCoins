@@ -8,6 +8,7 @@ import { HomePage } from "./pages/home-page/HomePage.tsx";
 import { ProtectedRoute } from "./layout-pages/ProtectedRoute.tsx";
 import { PublicRoute } from "./layout-pages/PublicRoute.tsx";
 import { Toaster } from "react-hot-toast";
+import { TaskPage } from "./pages/task-page/TaskPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/tasks" element={<TaskPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
