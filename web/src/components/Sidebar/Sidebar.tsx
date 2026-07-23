@@ -11,6 +11,7 @@ import {
 import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
 import { getTokenData } from "../../utils/auth";
+import { createClient } from "@supabase/supabase-js";
 
 export function Sidebar() {
   const [firstName, setFirstName] = useState<string>("");
@@ -18,14 +19,24 @@ export function Sidebar() {
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
 
+  const supabase = createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_ANON_KEY
+  );
+
   useEffect(() => {
     const userInfo = getTokenData();
+
+    const { data: avatarData } = supabase.storage
+      .from("Profile images")
+      .getPublicUrl(`${userInfo?.sub}.jpeg`);
+
+    setAvatarUrl(avatarData.publicUrl);
 
     getSidebarInformation(userInfo?.sub!).then((res) => {
       setFirstName(res.data.firstName);
       setLastName(res.data.lastName);
       setTotalBalance(res.data.totalBalance);
-      setAvatarUrl(res.data.avatarUrl);
     });
   }, []);
 
@@ -87,11 +98,20 @@ export function Sidebar() {
           <span className={styles.label}>Notificações</span>
         </div>
         <div className={styles.user}>
-          {avatarUrl && <img src={avatarUrl} alt="avatar" />}
-          <span>
-            {firstName[0]}
-            {lastName[0]}
-          </span>
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              width={30}
+              height={30}
+              alt="avatar"
+              className={styles.avatar}
+            />
+          ) : (
+            <div className={styles.userLetters}>
+              {firstName[0]}
+              {lastName[0]}
+            </div>
+          )}
         </div>
       </div>
     </aside>
