@@ -2,15 +2,17 @@
 using System.ComponentModel.DataAnnotations;
 using WorthyCoins.Application.Commons.Errors;
 using WorthyCoins.Application.Commons.Results;
+using WorthyCoins.Application.DTOs.Requests.Parent;
 using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Infrastructure.Identity.Models;
 
 namespace WorthyCoins.Infrastructure.Identity.Services
 {
-    public class AuthenticationService(UserManager<User> userManager, TokenService tokenService) : IAuthenticationService
+    public class AuthenticationService(UserManager<User> userManager, TokenService tokenService, IParentService parentService) : IAuthenticationService
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly TokenService _tokenService = tokenService;
+        private readonly IParentService _parentService = parentService;
 
         public async Task<Result<string>> LoginUserAsync(string email, string password)
         {
@@ -51,8 +53,14 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             if (result.Succeeded)
             {
+                await _parentService.CreateParentAsync(
+                    new CreateParentRequestDto 
+                    { 
+                        Name = $"{user.FirstName} {user.LastName}", 
+                        UserId = user.Id 
+                    });
                 return Result<string>.Ok(_tokenService.Generate(user));
-            }
+            } 
 
             if (result.Errors.Select(x => x.Code).Contains("DuplicateUserName"))
                 return Result<string>.Fail(ErrorCodes.EmailAlreadyExists);

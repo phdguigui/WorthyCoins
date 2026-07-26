@@ -21,7 +21,7 @@ namespace WorthyCoins.API.Controllers
             if (!result.Success)
             {
                 result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
-                return Unauthorized(result);
+                return BadRequest(result);
             }
 
             return Ok(result);
