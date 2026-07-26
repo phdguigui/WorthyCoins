@@ -55,7 +55,7 @@ export function RegisterPage() {
         data.password,
         data.confirmPassword,
       );
-      const token = response.data.token.data;
+      const token = response.data.data;
       if (token) {
         Cookies.set("token", token, {
           expires: 7,
