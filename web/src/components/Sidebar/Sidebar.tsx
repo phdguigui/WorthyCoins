@@ -12,7 +12,6 @@ import {
 import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
 import { getTokenData } from "../../utils/auth";
-import { createClient } from "@supabase/supabase-js";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -21,28 +20,27 @@ export function Sidebar() {
   const [lastName, setLastName] = useState<string>("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
+  const [hasImageError, setHasImageError] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY,
-  );
 
   useEffect(() => {
     const userInfo = getTokenData();
 
-    const { data: avatarData } = supabase.storage
-      .from("Profile images")
-      .getPublicUrl(`${userInfo?.sub}.jpeg`);
+    if (userInfo?.sub) {
+      const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/Profile%20images/${userInfo.sub}.jpeg`;
+      setAvatarUrl(publicUrl);
 
-    setAvatarUrl(avatarData.publicUrl);
-
-    getSidebarInformation(userInfo?.sub!).then((res) => {
-      setFirstName(res.data.firstName);
-      setLastName(res.data.lastName);
-      setTotalBalance(res.data.totalBalance);
-    });
+      getSidebarInformation(userInfo.sub).then((res) => {
+        setFirstName(res.data.firstName);
+        setLastName(res.data.lastName);
+        setTotalBalance(res.data.totalBalance);
+      });
+    }
   }, []);
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [avatarUrl]);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -113,8 +111,13 @@ export function Sidebar() {
         >
           <div className={styles.userContainer}>
             <div className={styles.user}>
-              {avatarUrl ? (
-                <img src={avatarUrl} alt="avatar" className={styles.avatar} />
+              {avatarUrl && !hasImageError ? (
+                <img
+                  src={avatarUrl}
+                  alt="avatar"
+                  className={styles.avatar}
+                  onError={() => setHasImageError(true)}
+                />
               ) : (
                 <div className={styles.userLetters}>
                   {(firstName && firstName[0]) || ""}
