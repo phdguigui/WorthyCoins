@@ -1,5 +1,6 @@
+import { MoreOptions } from "../MoreOptions/MoreOptions";
 import styles from "./Task.module.css";
-import { Coins, Star, EllipsisVertical } from "lucide-react";
+import { Coins, Star } from "lucide-react";
 
 export function Task() {
   return (
@@ -25,7 +26,7 @@ export function Task() {
         <span>5.00</span>
       </div>
       <div className={styles.moreOptions}>
-        <EllipsisVertical size={20} strokeWidth={1.5} />
+        <MoreOptions />
       </div>
     </div>
   );
