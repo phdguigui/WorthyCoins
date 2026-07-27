@@ -24,8 +24,6 @@ namespace WorthyCoins.Application.Services
                 CreationDate = DateTime.UtcNow,
                 DueDate = request.DueDate,
                 AssignedChildId = request.AssignedChildId,
-                IsCompleted = false,
-                IsCanceled = false,
                 RewardAmount = request.RewardAmount
             };
 
@@ -91,8 +89,6 @@ namespace WorthyCoins.Application.Services
                 CreationDate = entity.CreationDate,
                 DueDate = entity.DueDate,
                 AssignedChildId = entity.AssignedChildId,
-                IsCompleted = entity.IsCompleted,
-                IsCanceled = entity.IsCanceled,
                 RewardAmount = entity.RewardAmount
             };
         }

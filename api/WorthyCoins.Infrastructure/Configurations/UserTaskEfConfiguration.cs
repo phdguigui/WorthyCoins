@@ -1,6 +1,7 @@
 ﻿using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WorthyCoins.Domain.Enumerators;
 
 namespace WorthyCoins.Infrastructure.Configurations
 {
@@ -25,13 +26,10 @@ namespace WorthyCoins.Infrastructure.Configurations
 
             builder.Property(x => x.DueDate);
 
-            builder.Property(x => x.IsCompleted)
+            builder.Property(x => x.Status)
                 .IsRequired()
-                .HasDefaultValue(false);
-
-            builder.Property(x => x.IsCanceled)
-                .IsRequired()
-                .HasDefaultValue(false);
+                .HasDefaultValue(UserTaskStatusEnum.NotStarted)
+                .HasConversion<int>();
 
             builder.Property(x => x.RewardAmount)
                 .IsRequired()
