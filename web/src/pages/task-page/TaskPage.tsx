@@ -7,10 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/Select/Select";
+import { DatePicker } from "../../components/DatePicker/DatePicker";
+import { ptBR } from "date-fns/locale";
 
 export function TaskPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedChild, setSelectedChild] = useState("all");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
   const categories = [
     { id: "all", label: "All" },
@@ -52,21 +55,30 @@ export function TaskPage() {
               {category.label}
             </div>
           ))}
-        </div>
-        <div className={styles.childrenFilter}>
-          <span className={styles.filterLabel}>Child:</span>
-          <Select value={selectedChild} onValueChange={setSelectedChild}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a child" />
-            </SelectTrigger>
-            <SelectContent>
-              {childrenOptions.map((child) => (
-                <SelectItem key={child.id} value={child.id}>
-                  {child.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+
+          <div className={styles.childrenFilter}>
+            <Select value={selectedChild} onValueChange={setSelectedChild}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a child" />
+              </SelectTrigger>
+              <SelectContent>
+                {childrenOptions.map((child) => (
+                  <SelectItem key={child.id} value={child.id}>
+                    {child.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className={styles.dateFilter}>
+            <DatePicker
+              date={selectedDate}
+              setDate={setSelectedDate}
+              placeholder="Filtrar por data"
+              locale={ptBR}
+            />
+          </div>
         </div>
       </div>
     </div>

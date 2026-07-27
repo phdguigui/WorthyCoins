@@ -1,0 +1,78 @@
+.calendar {
+  --rdp-cell-size: 38px;
+  --rdp-accent-color: #218f26; /* Primary brand green */
+  --rdp-accent-color-foreground: #ffffff;
+  --rdp-background-color: #f1f5f9;
+  --rdp-outline: 2px solid rgba(33, 143, 38, 0.5);
+  font-family: inherit;
+  padding: 4px;
+}
+
+.calendar :global(.rdp) {
+  margin: 0;
+}
+
+/* Day buttons compatibility for react-day-picker v8 and v9 */
+.calendar :global(.rdp-day),
+.calendar :global(.rdp-day_button) {
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.calendar :global(.rdp-day:hover),
+.calendar :global(.rdp-day_button:hover) {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Today highlight */
+.calendar :global(.rdp-day_today),
+.calendar :global(.rdp-today .rdp-day),
+.calendar :global(.rdp-today .rdp-day_button) {
+  border: 1px solid #218f26 !important;
+  font-weight: 700;
+}
+
+/* Selected state overrides */
+.calendar :global(.rdp-day_selected),
+.calendar :global(.rdp-selected .rdp-day),
+.calendar :global(.rdp-selected .rdp-day_button) {
+  background-color: #218f26 !important;
+  color: #ffffff !important;
+}
+
+.calendar :global(.rdp-day_selected:hover),
+.calendar :global(.rdp-selected .rdp-day:hover),
+.calendar :global(.rdp-selected .rdp-day_button:hover) {
+  background-color: #1e7d22 !important;
+  color: #ffffff !important;
+}
+
+/* Chevron navigation styling */
+.calendar :global(.rdp-chevron) {
+  fill: #64748b;
+}
+
+/* Caption styling (e.g. Month Year title) */
+.calendar :global(.rdp-month_caption) {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  padding: 0 4px;
+}
+
+/* Navigation button tweak */
+.calendar :global(.rdp-button_next),
+.calendar :global(.rdp-button_previous) {
+  border-radius: 6px;
+  transition: background-color 0.15s;
+}
+
+.calendar :global(.rdp-button_next:hover),
+.calendar :global(.rdp-button_previous:hover) {
+  background-color: #f1f5f9;
+}

@@ -1,0 +1,45 @@
+.trigger {
+  display: inline-flex;
+  height: 40px;
+  min-width: 240px;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  text-align: left;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trigger:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.trigger:focus-visible,
+.trigger:focus {
+  border-color: #218f26;
+  box-shadow: 0 0 0 2px rgba(33, 143, 38, 0.2);
+}
+
+.placeholder {
+  color: #64748b;
+}
+
+.icon {
+  margin-right: 8px;
+  color: #64748b;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.content {
+  padding: 0; /* Let Calendar handle its own padding */
+}
