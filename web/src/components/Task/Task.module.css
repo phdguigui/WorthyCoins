@@ -1,0 +1,76 @@
+.mainContainer {
+  background-color: #ffff;
+  width: 100%;
+  padding: 20px;
+  border-radius: 24px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  box-sizing: border-box;
+  box-shadow:
+    0 0 0 1px #00000008,
+    0 2px 4px #0000000d,
+    0 12px 24px #00000008;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #daf5dd;
+  height: 45px;
+  width: 45px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-right: auto;
+}
+
+.taskName {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.taskDescription {
+  color: #65758b;
+  font-size: 14px;
+}
+
+.furtherInformations {
+  color: #65758b;
+  font-size: 14px;
+  display: flex;
+  gap: 15px;
+}
+
+.reward {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 25px;
+  border-radius: 20px;
+  background-color: #f7c646;
+  color: #612d05;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.moreOptions {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  cursor: pointer;
+}
