@@ -10,6 +10,7 @@ import {
 import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
+import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 
 export function TaskPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -32,15 +33,12 @@ export function TaskPage() {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.header}>
-        <div className={styles.headerTitles}>
-          <p className={styles.mainTitle}>Quest Board</p>
-          <p className={styles.subtitle}>
-            Create and manage tasks for your children.
-          </p>
-        </div>
-        <button className={styles.createTaskButton}>+ New Task</button>
-      </div>
+      <HeaderPage
+        title="Quest Board"
+        description="Create and manage tasks for your children."
+        buttonText="+ New Task"
+        buttonAction={() => {}}
+      />
       <div className={styles.filters}>
         <div className={styles.categories}>
           {categories.map((category) => (

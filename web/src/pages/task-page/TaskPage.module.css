@@ -9,35 +9,6 @@
   gap: 20px;
 }
 
-.mainTitle {
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.subtitle {
-  font-size: 16px;
-  font-weight: normal;
-  color: #6b7280;
-}
-
-.header {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.createTaskButton {
-  border: none;
-  background-color: #218f26;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 16px;
-}
-
 .filters {
   width: 100%;
   display: flex;
