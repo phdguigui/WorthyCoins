@@ -9,6 +9,7 @@ import {
 } from "../../components/Select/Select";
 import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
+import { Task } from "../../components/Task/Task";
 
 export function TaskPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -55,32 +56,32 @@ export function TaskPage() {
               {category.label}
             </div>
           ))}
+        </div>
+        <div className={styles.childrenFilter}>
+          <Select value={selectedChild} onValueChange={setSelectedChild}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a child" />
+            </SelectTrigger>
+            <SelectContent>
+              {childrenOptions.map((child) => (
+                <SelectItem key={child.id} value={child.id}>
+                  {child.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          <div className={styles.childrenFilter}>
-            <Select value={selectedChild} onValueChange={setSelectedChild}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a child" />
-              </SelectTrigger>
-              <SelectContent>
-                {childrenOptions.map((child) => (
-                  <SelectItem key={child.id} value={child.id}>
-                    {child.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className={styles.dateFilter}>
-            <DatePicker
-              date={selectedDate}
-              setDate={setSelectedDate}
-              placeholder="Filtrar por data"
-              locale={ptBR}
-            />
-          </div>
+        <div className={styles.dateFilter}>
+          <DatePicker
+            date={selectedDate}
+            setDate={setSelectedDate}
+            placeholder="Filtrar por data"
+            locale={ptBR}
+          />
         </div>
       </div>
+      <Task />
     </div>
   );
 }
