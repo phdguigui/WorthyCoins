@@ -1,0 +1,136 @@
+.trigger {
+  display: inline-flex;
+  height: 40px;
+  width: 180px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trigger:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.trigger:focus-visible,
+.trigger:focus {
+  border-color: #218f26;
+  box-shadow: 0 0 0 2px rgba(33, 143, 38, 0.2);
+}
+
+.trigger[data-placeholder] {
+  color: #64748b;
+}
+
+.chevron {
+  color: #64748b;
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+}
+
+.trigger[data-state="open"] .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  position: relative;
+  z-index: 50;
+  min-width: 180px;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  animation: slideIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.popperContent {
+  max-height: 300px;
+  width: var(--radix-select-trigger-width);
+}
+
+.viewport {
+  padding: 4px;
+}
+
+.popperViewport {
+  height: var(--radix-select-content-available-height);
+  min-height: 100%;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: 4px;
+  padding: 8px 8px 8px 32px;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.item[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Radix uses custom attribute data-highlighted when item is hovered or focused via keyboard */
+.item[data-highlighted] {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.itemIndicatorContainer {
+  position: absolute;
+  left: 8px;
+  display: flex;
+  height: 14px;
+  width: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkIcon {
+  color: #218f26; /* Primary brand color matching WorthyCoins */
+}
+
+.label {
+  padding: 6px 8px 6px 32px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.separator {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 4px -4px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
