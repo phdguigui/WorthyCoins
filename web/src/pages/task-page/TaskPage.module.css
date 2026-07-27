@@ -1,0 +1,80 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 200px;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+.mainTitle {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: normal;
+  color: #6b7280;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.createTaskButton {
+  border: none;
+  background-color: #218f26;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.filters {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.categories {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.childrenFilter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filterLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.filterCategory {
+  background-color: #f1f5f9;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.filterCategorySelected {
+  background-color: #218f26;
+  color: white;
+}
