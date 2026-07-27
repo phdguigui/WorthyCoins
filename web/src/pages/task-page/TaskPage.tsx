@@ -11,6 +11,7 @@ import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
+import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
 
 export function TaskPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -18,11 +19,11 @@ export function TaskPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
   const categories = [
-    { id: "all", label: "All" },
-    { id: "pending", label: "Pending" },
-    { id: "completed", label: "Completed" },
-    { id: "approved", label: "Approved" },
-    { id: "overdue", label: "Overdue" },
+    { value: "all", label: "All" },
+    { value: "pending", label: "Pending" },
+    { value: "completed", label: "Completed" },
+    { value: "approved", label: "Approved" },
+    { value: "overdue", label: "Overdue" },
   ];
 
   const childrenOptions = [
@@ -40,21 +41,11 @@ export function TaskPage() {
         buttonAction={() => {}}
       />
       <div className={styles.filters}>
-        <div className={styles.categories}>
-          {categories.map((category) => (
-            <div
-              key={category.id}
-              className={`${styles.filterCategory} ${
-                selectedCategory === category.id
-                  ? styles.filterCategorySelected
-                  : ""
-              }`}
-              onClick={() => setSelectedCategory(category.id)}
-            >
-              {category.label}
-            </div>
-          ))}
-        </div>
+        <CategoriesFilter
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
         <div className={styles.childrenFilter}>
           <Select value={selectedChild} onValueChange={setSelectedChild}>
             <SelectTrigger>
