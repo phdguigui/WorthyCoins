@@ -1,3 +1,4 @@
+import { CreateEntityButton } from "../CreateEntityButton/CreateEntityButton";
 import styles from "./HeaderPage.module.css";
 
 interface HeaderPageProps {
@@ -20,9 +21,10 @@ export function HeaderPage({
         <p className={styles.subtitle}>{description}</p>
       </div>
       {buttonText && buttonAction && (
-        <button className={styles.createTaskButton} onClick={buttonAction}>
-          {buttonText}
-        </button>
+        <CreateEntityButton
+          buttonText={buttonText}
+          buttonAction={buttonAction}
+        />
       )}
     </div>
   );
