@@ -6,7 +6,7 @@ import { Calendar } from "../Calendar/Calendar";
 import styles from "./DatePicker.module.css";
 
 interface DatePickerProps {
-  date?: Date;
+  date?: Date | undefined;
   setDate: (date?: Date) => void;
   placeholder?: string;
   locale?: Locale;

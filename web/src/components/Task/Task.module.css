@@ -55,6 +55,12 @@
   gap: 15px;
 }
 
+.dateContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .reward {
   display: flex;
   gap: 5px;

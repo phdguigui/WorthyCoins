@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export interface TokenPayload {
+  parentId?: number;
   sub?: string;
   email?: string;
   name?: string;

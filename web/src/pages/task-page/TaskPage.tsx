@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./TaskPage.module.css";
 import {
   Select,
@@ -12,18 +12,44 @@ import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
+import { UserTaskStatusEnum, type UserTask } from "../../api/types";
+import { getTokenData } from "../../utils/auth";
+import { getTasksByParentId } from "../../api/TaskPageApi";
 
 export function TaskPage() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedChild, setSelectedChild] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState<
+    UserTaskStatusEnum | undefined
+  >(undefined);
+  const [selectedChild, setSelectedChild] = useState<number | undefined>(
+    undefined,
+  );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [tasks, setTasks] = useState<UserTask[]>([]);
+
+  useEffect(() => {
+    const userInfo = getTokenData();
+
+    if (userInfo!.parentId) {
+      getTasksByParentId(
+        userInfo!.parentId!,
+        selectedCategory,
+        selectedChild,
+        selectedDate,
+      ).then((res) => {
+        setTasks(res.data);
+      });
+    }
+  }, [selectedCategory, selectedChild, selectedDate]);
 
   const categories = [
-    { value: "all", label: "All" },
-    { value: "pending", label: "Pending" },
-    { value: "completed", label: "Completed" },
-    { value: "approved", label: "Approved" },
-    { value: "overdue", label: "Overdue" },
+    { value: undefined, label: "All" },
+    { value: UserTaskStatusEnum.NotStarted, label: "Pending" },
+    { value: UserTaskStatusEnum.Completed, label: "Completed" },
+    {
+      value: UserTaskStatusEnum.WaitingForApproval,
+      label: "Waiting for Approval",
+    },
+    { value: UserTaskStatusEnum.Overdue, label: "Overdue" },
   ];
 
   const childrenOptions = [
@@ -47,7 +73,12 @@ export function TaskPage() {
           onSelectCategory={setSelectedCategory}
         />
         <div className={styles.childrenFilter}>
-          <Select value={selectedChild} onValueChange={setSelectedChild}>
+          <Select
+            value={selectedChild !== undefined ? String(selectedChild) : "all"}
+            onValueChange={(val) =>
+              setSelectedChild(val === "all" ? undefined : Number(val))
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select a child" />
             </SelectTrigger>
@@ -70,7 +101,9 @@ export function TaskPage() {
           />
         </div>
       </div>
-      <Task />
+      {tasks?.map((task) => (
+        <Task key={task.id} task={task} />
+      ))}
     </div>
   );
 }

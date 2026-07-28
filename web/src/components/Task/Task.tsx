@@ -1,8 +1,11 @@
 import { MoreOptions } from "../MoreOptions/MoreOptions";
 import styles from "./Task.module.css";
-import { Coins, Star } from "lucide-react";
+import { Calendar, Coins, Star } from "lucide-react";
+import type { UserTask } from "../../api/types";
 
-export function Task() {
+import { formatShortDate } from "../../utils/date";
+
+export function Task({ task }: { task: UserTask }) {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.iconContainer}>
@@ -11,19 +14,20 @@ export function Task() {
         </div>
       </div>
       <div className={styles.content}>
-        <p className={styles.taskName}>Clean Room</p>
-        <p className={styles.taskDescription}>
-          Tidy up and make the bed, put your toys in the box
-        </p>
+        <p className={styles.taskName}>{task.title}</p>
+        <p className={styles.taskDescription}>{task.description}</p>
         <div className={styles.furtherInformations}>
-          <span>Leo</span>
-          <span>Mar 4</span>
-          <span>Pending</span>
+          <span>{task.assignedChild?.name}</span>
+          <span className={styles.dateContainer}>
+            <Calendar size={14} />
+            {formatShortDate(task.dueDate)}
+          </span>
+          <span>{task.status}</span>
         </div>
       </div>
       <div className={styles.reward}>
         <Coins size={18} strokeWidth={1.5} />
-        <span>5.00</span>
+        <span>{task.rewardAmount.toFixed(2)}</span>
       </div>
       <div className={styles.moreOptions}>
         <MoreOptions />

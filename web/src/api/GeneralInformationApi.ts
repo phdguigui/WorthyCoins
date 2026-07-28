@@ -12,7 +12,12 @@ export async function getSidebarInformation(
   userId: string,
 ): Promise<ApiResponse<SidebarData>> {
   const response = await apiClient.get<ApiResponse<SidebarData>>(
-    `/GeneralInfo/sidebar?userId=${userId}`,
+    `/GeneralInfo/sidebar`,
+    {
+      params: {
+        userId: userId,
+      },
+    },
   );
   return response.data;
 }
