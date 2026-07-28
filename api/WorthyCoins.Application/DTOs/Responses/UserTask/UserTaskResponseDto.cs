@@ -1,10 +1,5 @@
 ﻿using WorthyCoins.Application.DTOs.Responses.Child;
-using WorthyCoins.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WorthyCoins.Domain.Enumerators;
 
 namespace WorthyCoins.Application.DTOs.Responses.UserTask
 {
@@ -16,9 +11,8 @@ namespace WorthyCoins.Application.DTOs.Responses.UserTask
         public DateTime CreationDate { get; set; }
         public DateTime? DueDate { get; set; }
         public int AssignedChildId { get; set; }
-        public bool IsCompleted { get; set; }
-        public bool IsCanceled { get; set; }
         public decimal RewardAmount { get; set; }
+        public UserTaskStatusEnum Status { get; set; }
         public virtual ChildResponseDto? AssignedChild { get; set; }
     }
 }

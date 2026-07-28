@@ -1,7 +1,8 @@
-﻿using WorthyCoins.Application.DTOs.Requests.UserTask;
+﻿using Microsoft.AspNetCore.Mvc;
+using WorthyCoins.Application.DTOs.Requests.UserTask;
 using WorthyCoins.Application.DTOs.Responses.UserTask;
 using WorthyCoins.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using WorthyCoins.Domain.Enumerators;
 
 namespace WorthyCoins.API.Controllers
 {
@@ -33,10 +34,14 @@ namespace WorthyCoins.API.Controllers
         }
 
         [HttpGet]
-        [Route("get-by-parent")]
-        public async Task<ActionResult<List<UserTaskResponseDto>>> GetByParent(GetUserTaskByParentIdRequestDto request)
+        [Route("{parentId}")]
+        public async Task<ActionResult<List<UserTaskResponseDto>>> GetByParent(
+            [FromRoute] int parentId,
+            [FromQuery] UserTaskStatusEnum? status,
+            [FromQuery] int? childId,
+            [FromQuery] DateTime? dueDate)
         {
-            var response = await _service.GetByParentId(request);
+            var response = await _service.GetByParentId(parentId, status, childId, dueDate);
 
             return Ok(response);
         }

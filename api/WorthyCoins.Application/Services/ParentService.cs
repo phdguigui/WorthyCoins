@@ -54,5 +54,19 @@ namespace WorthyCoins.Application.Services
             await _repository.DeleteAsync(id);
             await _userRepository.DeleteUserAsync(entity.UserId);
         }
+
+        public async Task<ParentResponseDto> GetParentByUserIdAsync(string userId)
+        {
+            var entity = await _repository.GetByUserIdAsync(userId) ?? throw new Exception("Parent not found");
+
+            var response = new ParentResponseDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                UserId = entity.UserId
+            };
+
+            return response;
+        }
     }
 }

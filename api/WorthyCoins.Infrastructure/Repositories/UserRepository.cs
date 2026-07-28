@@ -17,25 +17,25 @@ namespace WorthyCoins.Infrastructure.Repositories
             return (user?.FirstName, user?.LastName);
         }
 
-        public async Task<(string userId, string token)> CreateUserAsync(string email, string password, string name)
-        {
-            var user = new User
-            {
-                UserName = name,
-                Email = email,
-            };
+        //public async Task<(string userId, string token)> CreateUserAsync(string email, string password, string name)
+        //{
+        //    var user = new User
+        //    {
+        //        UserName = name,
+        //        Email = email,
+        //    };
 
-            var result = await _userManager.CreateAsync(user, password);
+        //    var result = await _userManager.CreateAsync(user, password);
 
-            if (!result.Succeeded)
-            {
-                throw new Exception("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-            }
+        //    if (!result.Succeeded)
+        //    {
+        //        throw new Exception("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+        //    }
 
-            var token = _tokenService.Generate(user);
+        //    var token = _tokenService.Generate(user);
 
-            return (user.Id, token);
-        }
+        //    return (user.Id, token);
+        //}
 
         public async Task DeleteUserAsync(string userId)
         {

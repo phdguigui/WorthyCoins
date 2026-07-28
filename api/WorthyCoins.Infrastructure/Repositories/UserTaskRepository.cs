@@ -1,6 +1,7 @@
 ﻿using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using WorthyCoins.Domain.Enumerators;
 
 namespace WorthyCoins.Infrastructure.Repositories
 {
@@ -34,13 +35,22 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<UserTask>> GetByParentIdAsync(int parentId)
+        public async Task<List<UserTask>> GetByParentIdAsync(int parentId, UserTaskStatusEnum? status, int? childId, DateTime? dueDate)
         {
-            return await _context.UserTasks
-                .AsNoTracking()
+            var query = _context.UserTasks.AsNoTracking()
                 .Include(x => x.AssignedChild)
-                .Where(x => x.AssignedChild!.ParentId == parentId)
-                .ToListAsync();
+                .Where(x => x.AssignedChild!.ParentId == parentId);
+
+            if (status.HasValue)
+                query = query.Where(x => x.Status == status.Value);
+
+            if (childId.HasValue)
+                query = query.Where(x => x.AssignedChildId == childId.Value);
+
+            if (dueDate.HasValue)
+                query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == dueDate.Value.Date);
+
+            return await query.ToListAsync();
         }
 
         public async Task<UserTask> UpdateAsync(UserTask entity)

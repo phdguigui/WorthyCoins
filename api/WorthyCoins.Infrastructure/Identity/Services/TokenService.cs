@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ namespace WorthyCoins.Infrastructure.Identity.Services
     {
         private readonly string _privateKey = configuration["Jwt:PrivateKey"] ?? throw new ArgumentNullException("Jwt:PrivateKey is not configured");
 
-        public string Generate(User user)
+        public string Generate(User user, int parentId)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -23,6 +24,7 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             var claims = new[]
             {
+                new Claim("parentId", parentId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             };

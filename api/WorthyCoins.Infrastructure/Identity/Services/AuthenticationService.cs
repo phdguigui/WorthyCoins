@@ -21,8 +21,9 @@ namespace WorthyCoins.Infrastructure.Identity.Services
             if (user == null || !await _userManager.CheckPasswordAsync(user, password))
                 return Result<string>.Fail(ErrorCodes.InvalidCredentials);
 
+            var parent = await _parentService.GetParentByUserIdAsync(user.Id);
 
-            return Result<string>.Ok(_tokenService.Generate(user));
+            return Result<string>.Ok(_tokenService.Generate(user, parent.Id));
         }
 
         public async Task<Result<string>> RegisterUserAsync(string email, string password, string firstName, string lastName, string confirmPassword)
@@ -53,13 +54,13 @@ namespace WorthyCoins.Infrastructure.Identity.Services
 
             if (result.Succeeded)
             {
-                await _parentService.CreateParentAsync(
+                var parent = await _parentService.CreateParentAsync(
                     new CreateParentRequestDto 
                     { 
                         Name = $"{user.FirstName} {user.LastName}", 
                         UserId = user.Id 
                     });
-                return Result<string>.Ok(_tokenService.Generate(user));
+                return Result<string>.Ok(_tokenService.Generate(user, parent.Id));
             } 
 
             if (result.Errors.Select(x => x.Code).Contains("DuplicateUserName"))

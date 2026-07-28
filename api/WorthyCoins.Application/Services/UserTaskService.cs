@@ -1,8 +1,10 @@
 ﻿using WorthyCoins.Application.DTOs.Requests.UserTask;
+using WorthyCoins.Application.DTOs.Responses.Child;
 using WorthyCoins.Application.DTOs.Responses.UserTask;
 using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
+using WorthyCoins.Domain.Enumerators;
 
 namespace WorthyCoins.Application.Services
 {
@@ -39,9 +41,13 @@ namespace WorthyCoins.Application.Services
             return entities.Select(MapToDto).ToList();
         }
 
-        public async Task<List<UserTaskResponseDto>> GetByParentId(GetUserTaskByParentIdRequestDto request)
+        public async Task<List<UserTaskResponseDto>> GetByParentId(
+            int parentId,
+            UserTaskStatusEnum? status,
+            int? childId,
+            DateTime? dueDate)
         {
-            var entities = await _repository.GetByParentIdAsync(request.ParentId);
+            var entities = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate);
 
             return entities.Select(MapToDto).ToList();
         }
@@ -81,6 +87,13 @@ namespace WorthyCoins.Application.Services
 
         private static UserTaskResponseDto MapToDto(UserTask entity)
         {
+            var assignedChild = new ChildResponseDto { 
+                Id = entity.AssignedChildId,
+                Name = entity.AssignedChild?.Name!,
+                DateOfBirth = entity.AssignedChild?.DateOfBirth,
+                TotalCoins = entity.AssignedChild?.TotalCoins ?? 0
+            };
+
             return new UserTaskResponseDto
             {
                 Id = entity.Id,
@@ -89,7 +102,9 @@ namespace WorthyCoins.Application.Services
                 CreationDate = entity.CreationDate,
                 DueDate = entity.DueDate,
                 AssignedChildId = entity.AssignedChildId,
-                RewardAmount = entity.RewardAmount
+                AssignedChild = assignedChild,
+                RewardAmount = entity.RewardAmount,
+                Status = entity.Status
             };
         }
     }
