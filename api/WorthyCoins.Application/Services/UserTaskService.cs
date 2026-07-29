@@ -49,21 +49,33 @@ namespace WorthyCoins.Application.Services
             }
         }
 
-        public async Task<Result<List<UserTaskResponseDto>>> GetByParentId(
+        public async Task<Result<PagedResult<UserTaskResponseDto>>> GetByParentId(
             int parentId,
             UserTaskStatusEnum? status,
             int? childId,
-            DateTime? dueDate)
+            DateTime? dueDate,
+            int pageNumber = 1,
+            int pageSize = 10)
         {
             try
             {
-                var entities = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate);
-                var data = entities.Select(MapToDto).ToList();
-                return Result<List<UserTaskResponseDto>>.Ok(data);
+                var paged = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate, pageNumber, pageSize);
+
+                var dtoItems = paged.Items.Select(MapToDto).ToList();
+
+                var resultPaged = new PagedResult<UserTaskResponseDto>
+                {
+                    Items = dtoItems,
+                    PageNumber = paged.PageNumber,
+                    PageSize = paged.PageSize,
+                    TotalItems = paged.TotalItems
+                };
+
+                return Result<PagedResult<UserTaskResponseDto>>.Ok(resultPaged);
             }
             catch (Exception)
             {
-                return Result<List<UserTaskResponseDto>>.Fail("UNEXPECTED_ERROR");
+                return Result<PagedResult<UserTaskResponseDto>>.Fail("UNEXPECTED_ERROR");
             }
         }
 

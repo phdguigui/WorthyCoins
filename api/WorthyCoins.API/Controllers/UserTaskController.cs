@@ -57,9 +57,11 @@ namespace WorthyCoins.API.Controllers
             [FromRoute] int parentId,
             [FromQuery] UserTaskStatusEnum? status,
             [FromQuery] int? childId,
-            [FromQuery] DateTime? dueDate)
+            [FromQuery] DateTime? dueDate,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate);
+            var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate, pageNumber, pageSize);
 
             if (!svcResult.Success)
             {
