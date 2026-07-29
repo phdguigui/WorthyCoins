@@ -174,4 +174,10 @@
   <data name="PARENT_NOT_FOUND" xml:space="preserve">
     <value>Responsável não encontrado.</value>
   </data>
+  <data name="UNEXPECTED_ERROR" xml:space="preserve">
+    <value>Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.</value>
+  </data>
+  <data name="USER_TASK_NOT_FOUND" xml:space="preserve">
+    <value>Tarefa não encontrada.</value>
+  </data>
 </root>

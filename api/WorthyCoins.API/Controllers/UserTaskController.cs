@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using WorthyCoins.API.Resources.Errors;
+using WorthyCoins.Application.Commons.Results;
 using WorthyCoins.Application.DTOs.Requests.UserTask;
 using WorthyCoins.Application.DTOs.Responses.UserTask;
 using WorthyCoins.Application.Interfaces;
@@ -11,53 +14,88 @@ namespace WorthyCoins.API.Controllers
     public class UserTaskController : ControllerBase
     {
         private readonly IUserTaskService _service;
-        public UserTaskController(IUserTaskService taskService)
+        private readonly IStringLocalizer<Error> _localizer;
+
+        public UserTaskController(IUserTaskService taskService, IStringLocalizer<Error> localizer)
         {
             _service = taskService;
+            _localizer = localizer;
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserTaskResponseDto>> Create(CreateUserTaskRequestDto request)
+        public async Task<ActionResult> Create(CreateUserTaskRequestDto request)
         {
-            var response = await _service.CreateUserTaskAsync(request);
+            var result = await _service.CreateUserTaskAsync(request);
 
-            return Ok(response);
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("get-by-child")]
-        public async Task<ActionResult<List<UserTaskResponseDto>>> GetByChild(GetUserTaskByChildIdRequestDto request)
+        public async Task<ActionResult> GetByChild(GetUserTaskByChildIdRequestDto request)
         {
-            var response = await _service.GetByChildId(request);
+            var result = await _service.GetByChildId(request);
 
-            return Ok(response);
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("{parentId}")]
-        public async Task<ActionResult<List<UserTaskResponseDto>>> GetByParent(
+        public async Task<ActionResult> GetByParent(
             [FromRoute] int parentId,
             [FromQuery] UserTaskStatusEnum? status,
             [FromQuery] int? childId,
             [FromQuery] DateTime? dueDate)
         {
-            var response = await _service.GetByParentId(parentId, status, childId, dueDate);
+            var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate);
 
-            return Ok(response);
+            if (!svcResult.Success)
+            {
+                svcResult.Message = _localizer[svcResult.ErrorCode ?? string.Empty].Value;
+                return BadRequest(svcResult);
+            }
+
+            return Ok(svcResult);
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserTaskResponseDto>> Update(UpdateUserTaskRequestDto request)
+        public async Task<ActionResult> Update(UpdateUserTaskRequestDto request)
         {
-            var response = await _service.Update(request);
-            return Ok(response);
+            var result = await _service.Update(request);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery]int userTaskId)
+        public async Task<ActionResult> Delete([FromQuery]int userTaskId)
         {
-            await _service.Delete(userTaskId);
-            return Ok();
+            var result = await _service.Delete(userTaskId);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }

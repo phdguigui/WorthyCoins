@@ -5,6 +5,7 @@ using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using WorthyCoins.Domain.Enumerators;
+using WorthyCoins.Application.Commons.Results;
 
 namespace WorthyCoins.Application.Services
 {
@@ -17,7 +18,7 @@ namespace WorthyCoins.Application.Services
             _repository = repository;
         }
 
-        public async Task<UserTaskResponseDto> CreateUserTaskAsync(CreateUserTaskRequestDto request)
+        public async Task<Result<UserTaskResponseDto>> CreateUserTaskAsync(CreateUserTaskRequestDto request)
         {
             var entity = new UserTask
             {
@@ -31,58 +32,90 @@ namespace WorthyCoins.Application.Services
 
             entity = await _repository.AddAsync(entity);
 
-            return MapToDto(entity);
+            return Result<UserTaskResponseDto>.Ok(MapToDto(entity));
         }
 
-        public async Task<List<UserTaskResponseDto>> GetByChildId(GetUserTaskByChildIdRequestDto request)
+        public async Task<Result<List<UserTaskResponseDto>>> GetByChildId(GetUserTaskByChildIdRequestDto request)
         {
-            var entities = await _repository.GetByChildIdAsync(request.ChildId);
-
-            return entities.Select(MapToDto).ToList();
+            try
+            {
+                var entities = await _repository.GetByChildIdAsync(request.ChildId);
+                var data = entities.Select(MapToDto).ToList();
+                return Result<List<UserTaskResponseDto>>.Ok(data);
+            }
+            catch (Exception)
+            {
+                return Result<List<UserTaskResponseDto>>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task<List<UserTaskResponseDto>> GetByParentId(
+        public async Task<Result<List<UserTaskResponseDto>>> GetByParentId(
             int parentId,
             UserTaskStatusEnum? status,
             int? childId,
             DateTime? dueDate)
         {
-            var entities = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate);
-
-            return entities.Select(MapToDto).ToList();
+            try
+            {
+                var entities = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate);
+                var data = entities.Select(MapToDto).ToList();
+                return Result<List<UserTaskResponseDto>>.Ok(data);
+            }
+            catch (Exception)
+            {
+                return Result<List<UserTaskResponseDto>>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task<UserTaskResponseDto> Update(UpdateUserTaskRequestDto request)
+        public async Task<Result<UserTaskResponseDto>> Update(UpdateUserTaskRequestDto request)
         {
-            var userTask = await _repository.GetByIdAsync(request.UserTaskId)
-                ?? throw new Exception($"UserTask com ID {request.UserTaskId} não encontrada.");
+            try
+            {
+                var userTask = await _repository.GetByIdAsync(request.UserTaskId);
 
-            if (!string.IsNullOrWhiteSpace(request.Title))
-                userTask.Title = request.Title;
+                if (userTask == null)
+                    return Result<UserTaskResponseDto>.Fail("USER_TASK_NOT_FOUND");
 
-            if (!string.IsNullOrWhiteSpace(request.Description))
-                userTask.Description = request.Description;
+                if (!string.IsNullOrWhiteSpace(request.Title))
+                    userTask.Title = request.Title;
 
-            if (request.DueDate.HasValue)
-                userTask.DueDate = request.DueDate.Value;
+                if (!string.IsNullOrWhiteSpace(request.Description))
+                    userTask.Description = request.Description;
 
-            if (request.AssignedChildId.HasValue)
-                userTask.AssignedChildId = request.AssignedChildId.Value;
+                if (request.DueDate.HasValue)
+                    userTask.DueDate = request.DueDate.Value;
 
-            if (request.RewardAmount.HasValue)
-                userTask.RewardAmount = request.RewardAmount.Value;
+                if (request.AssignedChildId.HasValue)
+                    userTask.AssignedChildId = request.AssignedChildId.Value;
 
-            userTask = await _repository.UpdateAsync(userTask);
+                if (request.RewardAmount.HasValue)
+                    userTask.RewardAmount = request.RewardAmount.Value;
 
-            return MapToDto(userTask);
+                userTask = await _repository.UpdateAsync(userTask);
+
+                return Result<UserTaskResponseDto>.Ok(MapToDto(userTask));
+            }
+            catch (Exception)
+            {
+                return Result<UserTaskResponseDto>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task Delete(int userTaskId)
+        public async Task<Result> Delete(int userTaskId)
         {
-            var rowsAffected = await _repository.DeleteAsync(userTaskId);
+            try
+            {
+                var rowsAffected = await _repository.DeleteAsync(userTaskId);
 
-            if (rowsAffected == 0)
-                throw new Exception($"UserTask com ID {userTaskId} não encontrada.");
+                if (rowsAffected == 0)
+                    return Result.Fail("USER_TASK_NOT_FOUND");
+
+                return Result.Ok();
+            }
+            catch (Exception)
+            {
+                return Result.Fail("UNEXPECTED_ERROR");
+            }
         }
 
         private static UserTaskResponseDto MapToDto(UserTask entity)

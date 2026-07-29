@@ -193,4 +193,12 @@
     <value>Parent not found.</value>
     <comment>Parent not found.</comment>
   </data>
+  <data name="UNEXPECTED_ERROR" xml:space="preserve">
+    <value>An unexpected error occurred. Please try again later.</value>
+    <comment>Generic unexpected error</comment>
+  </data>
+  <data name="USER_TASK_NOT_FOUND" xml:space="preserve">
+    <value>Task not found.</value>
+    <comment>Task with given id was not found</comment>
+  </data>
 </root>
