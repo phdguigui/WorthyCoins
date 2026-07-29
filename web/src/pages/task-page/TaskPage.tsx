@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./TaskPage.module.css";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/Select/Select";
 import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
-import { UserTaskStatusEnum, type UserTask } from "../../api/types";
+import { UserTaskStatusEnum, type UserTask, type Child } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
 import { getTasksByParentId } from "../../api/TaskPageApi";
+import { getChildrenByParentId } from "../../api/ChildApi";
+import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
 
 export function TaskPage() {
   const [selectedCategory, setSelectedCategory] = useState<
@@ -26,6 +21,54 @@ export function TaskPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [tasks, setTasks] = useState<UserTask[]>([]);
 
+  // States for InfiniteSelect with backend API
+  const [children, setChildren] = useState<Child[]>([]);
+  const [childrenPage, setChildrenPage] = useState(1);
+  const [childrenIsLoading, setChildrenIsLoading] = useState(false);
+  const [childrenHasMore, setChildrenHasMore] = useState(true);
+  const isLoadingRef = useRef(false);
+
+  const loadChildren = async () => {
+    if (childrenIsLoading || isLoadingRef.current || !childrenHasMore) return;
+
+    const userInfo = getTokenData();
+    if (!userInfo || !userInfo.parentId) return;
+
+    isLoadingRef.current = true;
+    setChildrenIsLoading(true);
+    try {
+      const res = await getChildrenByParentId(
+        userInfo.parentId,
+        childrenPage,
+        10,
+      );
+      if (res.success && res.data) {
+        const { items, totalItems } = res.data;
+        setChildren((prev) => {
+          const newItems = items.filter(
+            (item) => !prev.some((p) => p.id === item.id)
+          );
+          const updated = [...prev, ...newItems];
+          setChildrenHasMore(updated.length < totalItems);
+          return updated;
+        });
+        setChildrenPage((prev) => prev + 1);
+      } else {
+        setChildrenHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load children options", error);
+      setChildrenHasMore(false);
+    } finally {
+      setChildrenIsLoading(false);
+      isLoadingRef.current = false;
+    }
+  };
+
+  useEffect(() => {
+    loadChildren();
+  }, []);
+
   useEffect(() => {
     const userInfo = getTokenData();
 
@@ -36,7 +79,8 @@ export function TaskPage() {
         selectedChild,
         selectedDate,
       ).then((res) => {
-        setTasks(res.data);
+        console.log("res.data", res.data);
+        setTasks(res.data.items);
       });
     }
   }, [selectedCategory, selectedChild, selectedDate]);
@@ -52,11 +96,20 @@ export function TaskPage() {
     { value: UserTaskStatusEnum.Overdue, label: "Overdue" },
   ];
 
-  const childrenOptions = [
-    { id: "all", name: "All Children" },
-    { id: "pedro", name: "Pedro" },
-    { id: "sofia", name: "Sofia" },
+  const childrenSelectOptions = [
+    { value: "all", label: "All Children" },
+    ...children.map((child) => ({
+      value: String(child.id),
+      label: child.name,
+    })),
   ];
+
+  const selectedChildValue =
+    selectedChild !== undefined ? String(selectedChild) : "all";
+
+  const handleChildChange = (val: string) => {
+    setSelectedChild(val === "all" ? undefined : Number(val));
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -73,23 +126,15 @@ export function TaskPage() {
           onSelectCategory={setSelectedCategory}
         />
         <div className={styles.childrenFilter}>
-          <Select
-            value={selectedChild !== undefined ? String(selectedChild) : "all"}
-            onValueChange={(val) =>
-              setSelectedChild(val === "all" ? undefined : Number(val))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a child" />
-            </SelectTrigger>
-            <SelectContent>
-              {childrenOptions.map((child) => (
-                <SelectItem key={child.id} value={child.id}>
-                  {child.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <InfiniteSelect
+            value={selectedChildValue}
+            onValueChange={handleChildChange}
+            placeholder="Select a child"
+            options={childrenSelectOptions}
+            isLoading={childrenIsLoading}
+            hasMore={childrenHasMore}
+            onLoadMore={loadChildren}
+          />
         </div>
 
         <div className={styles.dateFilter}>

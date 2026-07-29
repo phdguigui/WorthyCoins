@@ -33,3 +33,11 @@ export enum UserTaskStatusEnum {
   Overdue = 5,
   Canceled = 6,
 }
+
+export interface PagedResult<T> {
+  items: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalItems: number;
+}
+

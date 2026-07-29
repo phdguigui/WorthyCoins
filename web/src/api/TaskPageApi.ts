@@ -1,13 +1,18 @@
 import apiClient from "./apiClient";
-import type { ApiResponse, UserTask, UserTaskStatusEnum } from "./types";
+import type {
+  ApiResponse,
+  PagedResult,
+  UserTask,
+  UserTaskStatusEnum,
+} from "./types";
 
 export async function getTasksByParentId(
   parentId: number,
   status: UserTaskStatusEnum | undefined,
   childId: number | undefined,
   dueDate: Date | undefined | null,
-): Promise<ApiResponse<UserTask[]>> {
-  const response = await apiClient.get<ApiResponse<UserTask[]>>(
+): Promise<ApiResponse<PagedResult<UserTask>>> {
+  const response = await apiClient.get<ApiResponse<PagedResult<UserTask>>>(
     `/UserTask/${parentId}`,
     {
       params: {
