@@ -180,4 +180,10 @@
   <data name="USER_TASK_NOT_FOUND" xml:space="preserve">
     <value>Tarefa não encontrada.</value>
   </data>
+  <data name="CHILD_NOT_FOUND" xml:space="preserve">
+    <value>Criança não encontrada.</value>
+  </data>
+  <data name="CHILDREN_NOT_FOUND" xml:space="preserve">
+    <value>Nenhuma criança encontrada.</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using WorthyCoins.Application.DTOs.Responses.Child;
 using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
+using WorthyCoins.Application.Commons.Results;
 
 namespace WorthyCoins.Application.Services
 {
@@ -15,7 +16,7 @@ namespace WorthyCoins.Application.Services
             _repository = repository;
         }
 
-        public async Task<ChildResponseDto> CreateChildAsync(CreateChildRequestDto request)
+        public async Task<Result<ChildResponseDto>> CreateChildAsync(CreateChildRequestDto request)
         {
             var entity = new Child
             {
@@ -27,77 +28,110 @@ namespace WorthyCoins.Application.Services
 
             var child = await _repository.AddAsync(entity);
 
-            return new ChildResponseDto
+            return Result<ChildResponseDto>.Ok(new ChildResponseDto
             {
                 Id = child.Id,
                 Name = child.Name,
                 DateOfBirth = child.DateOfBirth,
                 TotalCoins = child.TotalCoins
-            };
+            });
         }
 
-        public async Task<ChildResponseDto> GetChildByIdAsync(int childId)
+        public async Task<Result<ChildResponseDto>> GetChildByIdAsync(int childId)
         {
-            var child = await _repository.GetByIdAsync(childId)
-                ?? throw new KeyNotFoundException($"Child with ID {childId} not found.");
-
-            return new ChildResponseDto
+            try
             {
-                Id = child.Id,
-                Name = child.Name,
-                DateOfBirth = child.DateOfBirth,
-                TotalCoins = child.TotalCoins
-            };
+                var child = await _repository.GetByIdAsync(childId);
+
+                if (child == null)
+                    return Result<ChildResponseDto>.Fail("CHILD_NOT_FOUND");
+
+                return Result<ChildResponseDto>.Ok(new ChildResponseDto
+                {
+                    Id = child.Id,
+                    Name = child.Name,
+                    DateOfBirth = child.DateOfBirth,
+                    TotalCoins = child.TotalCoins
+                });
+            }
+            catch (Exception)
+            {
+                return Result<ChildResponseDto>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task<List<ChildResponseDto>> GetChildrenByParentIdAsync(int parentId)
+        public async Task<Result<List<ChildResponseDto>>> GetChildrenByParentIdAsync(int parentId)
         {
-            var children = await _repository.GetByParentIdAsync(parentId);
-
-            if (children == null || !children.Any())
-                throw new KeyNotFoundException($"No children found for Parent with ID {parentId}.");
-
-            return children.Select(c => new ChildResponseDto
+            try
             {
-                Id = c.Id,
-                Name = c.Name,
-                DateOfBirth = c.DateOfBirth,
-                TotalCoins = c.TotalCoins
-            }).ToList();
+                var children = await _repository.GetByParentIdAsync(parentId);
+
+                if (children == null || !children.Any())
+                    return Result<List<ChildResponseDto>>.Fail("CHILDREN_NOT_FOUND");
+
+                var data = children.Select(c => new ChildResponseDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    DateOfBirth = c.DateOfBirth,
+                    TotalCoins = c.TotalCoins
+                }).ToList();
+
+                return Result<List<ChildResponseDto>>.Ok(data);
+            }
+            catch (Exception)
+            {
+                return Result<List<ChildResponseDto>>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task<ChildResponseDto> UpdateChildAsync(UpdateChildRequestDto request)
+        public async Task<Result<ChildResponseDto>> UpdateChildAsync(UpdateChildRequestDto request)
         {
-            var child = await _repository.GetByIdAsync(request.Id)
-                ??
-                throw new Exception($"Child com ID {request.Id} não encontrado.");
-
-            // Fix these comparisons
-            if (request.Name != child.Name)
-                child.Name = request.Name;
-
-            if (request.DateOfBirth != child.DateOfBirth)
-                child.DateOfBirth = request.DateOfBirth;
-
-            child = await _repository.UpdateAsync(child);
-
-            var response = new ChildResponseDto
+            try
             {
-                Id = child.Id,
-                Name = child.Name,
-                DateOfBirth = child.DateOfBirth,
-            };
+                var child = await _repository.GetByIdAsync(request.Id);
 
-            return response;
+                if (child == null)
+                    return Result<ChildResponseDto>.Fail("CHILD_NOT_FOUND");
+
+                // Fix these comparisons
+                if (request.Name != child.Name)
+                    child.Name = request.Name;
+
+                if (request.DateOfBirth != child.DateOfBirth)
+                    child.DateOfBirth = request.DateOfBirth;
+
+                child = await _repository.UpdateAsync(child);
+
+                var response = new ChildResponseDto
+                {
+                    Id = child.Id,
+                    Name = child.Name,
+                    DateOfBirth = child.DateOfBirth,
+                };
+
+                return Result<ChildResponseDto>.Ok(response);
+            }
+            catch (Exception)
+            {
+                return Result<ChildResponseDto>.Fail("UNEXPECTED_ERROR");
+            }
         }
 
-        public async Task DeleteChildAsync(int childId)
+        public async Task<Result> DeleteChildAsync(int childId)
         {
-            var rowsAffected = await _repository.DeleteAsync(childId);
-
-            if (rowsAffected == 0)
+            try
             {
-                throw new Exception($"Child com ID {childId} não encontrada.");
+                var rowsAffected = await _repository.DeleteAsync(childId);
+
+                if (rowsAffected == 0)
+                    return Result.Fail("CHILD_NOT_FOUND");
+
+                return Result.Ok();
+            }
+            catch (Exception)
+            {
+                return Result.Fail("UNEXPECTED_ERROR");
             }
         }
     }

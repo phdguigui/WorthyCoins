@@ -1,7 +1,8 @@
-﻿using WorthyCoins.Application.DTOs.Requests.Child;
-using WorthyCoins.Application.DTOs.Responses.Child;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using WorthyCoins.API.Resources.Errors;
+using WorthyCoins.Application.DTOs.Requests.Child;
 using WorthyCoins.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WorthyCoins.API.Controllers
 {
@@ -10,46 +11,83 @@ namespace WorthyCoins.API.Controllers
     public class ChildController : ControllerBase
     {
         private readonly IChildService _service;
-        public ChildController(IChildService childService)
+        private readonly IStringLocalizer<Error> _localizer;
+
+        public ChildController(IChildService childService, IStringLocalizer<Error> localizer)
         {
             _service = childService;
+            _localizer = localizer;
         }
 
         [HttpPost]
-        public async Task<ActionResult<ChildResponseDto>> Create(CreateChildRequestDto request)
+        public async Task<ActionResult> Create(CreateChildRequestDto request)
         {
-            var response = await _service.CreateChildAsync(request);
+            var result = await _service.CreateChildAsync(request);
 
-            return Ok(response);
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<ChildResponseDto>> Get([FromQuery] int childId)
+        public async Task<ActionResult> Get([FromQuery] int childId)
         {
-            var response = await _service.GetChildByIdAsync(childId);
-            return Ok(response);
+            var result = await _service.GetChildByIdAsync(childId);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("get-by-parent-id")]
-        public async Task<ActionResult<List<ChildResponseDto>>> GetByParentId([FromQuery] int parentId)
+        public async Task<ActionResult> GetByParentId([FromQuery] int parentId)
         {
-            var response = await _service.GetChildrenByParentIdAsync(parentId);
-            return Ok(response);
+            var result = await _service.GetChildrenByParentIdAsync(parentId);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ChildResponseDto>> Update(UpdateChildRequestDto request)
+        public async Task<ActionResult> Update(UpdateChildRequestDto request)
         {
-            var response = await _service.UpdateChildAsync(request);
-            return Ok(response);
+            var result = await _service.UpdateChildAsync(request);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] int childId)
+        public async Task<ActionResult> Delete([FromQuery] int childId)
         {
-            await _service.DeleteChildAsync(childId);
-            return Ok();
+            var result = await _service.DeleteChildAsync(childId);
+
+            if (!result.Success)
+            {
+                result.Message = _localizer[result.ErrorCode ?? string.Empty].Value;
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }
