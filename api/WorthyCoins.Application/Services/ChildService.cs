@@ -1,4 +1,4 @@
-﻿using WorthyCoins.Application.DTOs.Requests.Child;
+using WorthyCoins.Application.DTOs.Requests.Child;
 using WorthyCoins.Application.DTOs.Responses.Child;
 using WorthyCoins.Application.Interfaces;
 using WorthyCoins.Application.Interfaces.Repositories;
@@ -60,16 +60,16 @@ namespace WorthyCoins.Application.Services
             }
         }
 
-        public async Task<Result<List<ChildResponseDto>>> GetChildrenByParentIdAsync(int parentId)
+        public async Task<Result<PagedResult<ChildResponseDto>>> GetChildrenByParentIdAsync(int parentId, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                var children = await _repository.GetByParentIdAsync(parentId);
+                var paged = await _repository.GetByParentIdAsync(parentId, pageNumber, pageSize);
 
-                if (children == null || !children.Any())
-                    return Result<List<ChildResponseDto>>.Fail("CHILDREN_NOT_FOUND");
+                if (paged.Items == null || !paged.Items.Any())
+                    return Result<PagedResult<ChildResponseDto>>.Fail("CHILDREN_NOT_FOUND");
 
-                var data = children.Select(c => new ChildResponseDto
+                var dtoItems = paged.Items.Select(c => new ChildResponseDto
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -77,11 +77,19 @@ namespace WorthyCoins.Application.Services
                     TotalCoins = c.TotalCoins
                 }).ToList();
 
-                return Result<List<ChildResponseDto>>.Ok(data);
+                var resultPaged = new PagedResult<ChildResponseDto>
+                {
+                    Items = dtoItems,
+                    PageNumber = paged.PageNumber,
+                    PageSize = paged.PageSize,
+                    TotalItems = paged.TotalItems
+                };
+
+                return Result<PagedResult<ChildResponseDto>>.Ok(resultPaged);
             }
             catch (Exception)
             {
-                return Result<List<ChildResponseDto>>.Fail("UNEXPECTED_ERROR");
+                return Result<PagedResult<ChildResponseDto>>.Fail("UNEXPECTED_ERROR");
             }
         }
 

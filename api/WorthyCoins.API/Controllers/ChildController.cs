@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WorthyCoins.API.Resources.Errors;
 using WorthyCoins.Application.DTOs.Requests.Child;
@@ -49,9 +49,12 @@ namespace WorthyCoins.API.Controllers
 
         [HttpGet]
         [Route("get-by-parent-id")]
-        public async Task<ActionResult> GetByParentId([FromQuery] int parentId)
+        public async Task<ActionResult> GetByParentId(
+            [FromQuery] int parentId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var result = await _service.GetChildrenByParentIdAsync(parentId);
+            var result = await _service.GetChildrenByParentIdAsync(parentId, pageNumber, pageSize);
 
             if (!result.Success)
             {

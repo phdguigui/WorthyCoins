@@ -1,6 +1,7 @@
-﻿using WorthyCoins.Application.Interfaces.Repositories;
+using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using WorthyCoins.Application.Commons.Results;
 
 namespace WorthyCoins.Infrastructure.Repositories
 {
@@ -26,11 +27,28 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Child>> GetByParentIdAsync(int parentId)
+        public async Task<PagedResult<Child>> GetByParentIdAsync(int parentId, int pageNumber = 1, int pageSize = 10)
         {
-            return await _context.Children
-                .Where(c => c.ParentId == parentId)
+            var query = _context.Children.AsNoTracking()
+                .Where(c => c.ParentId == parentId);
+
+            var total = await query.LongCountAsync();
+
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return new PagedResult<Child>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = total
+            };
         }
 
         public async Task<Child> UpdateAsync(Child entity)
