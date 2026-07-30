@@ -10,6 +10,8 @@ import {
   type UserTask,
   type Child,
   getUserTaskStatusLabel,
+  getUserTaskStatusIcon,
+  getUserTaskStatusColor,
 } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
 import { getTasksByParentId } from "../../api/TaskPageApi";
@@ -92,16 +94,16 @@ export function TaskPage() {
   const categories = [
     { value: undefined, label: "All", icon: "List", color: "#64748b" },
     ...[
-      { value: UserTaskStatusEnum.NotStarted, icon: "Circle", color: "#2563eb" },
-      { value: UserTaskStatusEnum.InProgress, icon: "Play", color: "#d97706" },
-      { value: UserTaskStatusEnum.WaitingForApproval, icon: "Clock", color: "#7c3aed" },
-      { value: UserTaskStatusEnum.Overdue, icon: "AlertTriangle", color: "#dc2626" },
-      { value: UserTaskStatusEnum.Completed, icon: "CheckCircle2", color: "#16a34a" },
-    ].map((item) => ({
-      value: item.value,
-      label: getUserTaskStatusLabel(item.value),
-      icon: item.icon,
-      color: item.color,
+      UserTaskStatusEnum.NotStarted,
+      UserTaskStatusEnum.InProgress,
+      UserTaskStatusEnum.WaitingForApproval,
+      UserTaskStatusEnum.Overdue,
+      UserTaskStatusEnum.Completed,
+    ].map((status) => ({
+      value: status,
+      label: getUserTaskStatusLabel(status),
+      icon: getUserTaskStatusIcon(status),
+      color: getUserTaskStatusColor(status),
     })),
   ];
 

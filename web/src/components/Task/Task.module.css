@@ -79,3 +79,11 @@
   align-items: center;
   justify-self: center;
 }
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+

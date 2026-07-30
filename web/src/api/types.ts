@@ -53,6 +53,45 @@ export function getUserTaskStatusLabel(status: UserTaskStatusEnum): string {
   }
 }
 
+export function getUserTaskStatusIcon(status: UserTaskStatusEnum): string {
+  switch (status) {
+    case UserTaskStatusEnum.NotStarted:
+      return "Circle";
+    case UserTaskStatusEnum.InProgress:
+      return "Play";
+    case UserTaskStatusEnum.WaitingForApproval:
+      return "Clock";
+    case UserTaskStatusEnum.Overdue:
+      return "AlertTriangle";
+    case UserTaskStatusEnum.Completed:
+      return "CheckCircle2";
+    case UserTaskStatusEnum.Canceled:
+      return "XCircle";
+    default:
+      return "HelpCircle";
+  }
+}
+
+export function getUserTaskStatusColor(status: UserTaskStatusEnum): string {
+  switch (status) {
+    case UserTaskStatusEnum.NotStarted:
+      return "#2563eb";
+    case UserTaskStatusEnum.InProgress:
+      return "#d97706";
+    case UserTaskStatusEnum.WaitingForApproval:
+      return "#7c3aed";
+    case UserTaskStatusEnum.Overdue:
+      return "#dc2626";
+    case UserTaskStatusEnum.Completed:
+      return "#16a34a";
+    case UserTaskStatusEnum.Canceled:
+      return "#6b7280";
+    default:
+      return "#64748b";
+  }
+}
+
+
 export interface PagedResult<T> {
   items: T[];
   pageNumber: number;
