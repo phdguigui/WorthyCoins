@@ -5,7 +5,12 @@ import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
-import { UserTaskStatusEnum, type UserTask, type Child } from "../../api/types";
+import {
+  UserTaskStatusEnum,
+  type UserTask,
+  type Child,
+  getUserTaskStatusLabel,
+} from "../../api/types";
 import { getTokenData } from "../../utils/auth";
 import { getTasksByParentId } from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
@@ -46,7 +51,7 @@ export function TaskPage() {
         const { items, totalItems } = res.data;
         setChildren((prev) => {
           const newItems = items.filter(
-            (item) => !prev.some((p) => p.id === item.id)
+            (item) => !prev.some((p) => p.id === item.id),
           );
           const updated = [...prev, ...newItems];
           setChildrenHasMore(updated.length < totalItems);
@@ -79,21 +84,25 @@ export function TaskPage() {
         selectedChild,
         selectedDate,
       ).then((res) => {
-        console.log("res.data", res.data);
         setTasks(res.data.items);
       });
     }
   }, [selectedCategory, selectedChild, selectedDate]);
 
   const categories = [
-    { value: undefined, label: "All" },
-    { value: UserTaskStatusEnum.NotStarted, label: "Pending" },
-    { value: UserTaskStatusEnum.Completed, label: "Completed" },
-    {
-      value: UserTaskStatusEnum.WaitingForApproval,
-      label: "Waiting for Approval",
-    },
-    { value: UserTaskStatusEnum.Overdue, label: "Overdue" },
+    { value: undefined, label: "All", icon: "List", color: "#64748b" },
+    ...[
+      { value: UserTaskStatusEnum.NotStarted, icon: "Circle", color: "#2563eb" },
+      { value: UserTaskStatusEnum.InProgress, icon: "Play", color: "#d97706" },
+      { value: UserTaskStatusEnum.WaitingForApproval, icon: "Clock", color: "#7c3aed" },
+      { value: UserTaskStatusEnum.Overdue, icon: "AlertTriangle", color: "#dc2626" },
+      { value: UserTaskStatusEnum.Completed, icon: "CheckCircle2", color: "#16a34a" },
+    ].map((item) => ({
+      value: item.value,
+      label: getUserTaskStatusLabel(item.value),
+      icon: item.icon,
+      color: item.color,
+    })),
   ];
 
   const childrenSelectOptions = [
@@ -141,7 +150,7 @@ export function TaskPage() {
           <DatePicker
             date={selectedDate}
             setDate={setSelectedDate}
-            placeholder="Filtrar por data"
+            placeholder="Filter by date"
             locale={ptBR}
           />
         </div>

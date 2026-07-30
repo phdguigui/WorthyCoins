@@ -1,7 +1,7 @@
 import { MoreOptions } from "../MoreOptions/MoreOptions";
 import styles from "./Task.module.css";
 import { Calendar, Coins, Star } from "lucide-react";
-import type { UserTask } from "../../api/types";
+import { getUserTaskStatusLabel, type UserTask } from "../../api/types";
 
 import { formatShortDate } from "../../utils/date";
 
@@ -22,7 +22,7 @@ export function Task({ task }: { task: UserTask }) {
             <Calendar size={14} />
             {formatShortDate(task.dueDate)}
           </span>
-          <span>{task.status}</span>
+          <span>{getUserTaskStatusLabel(task.status)}</span>
         </div>
       </div>
       <div className={styles.reward}>
