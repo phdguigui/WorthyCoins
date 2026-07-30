@@ -34,10 +34,28 @@ export enum UserTaskStatusEnum {
   Canceled = 6,
 }
 
+export function getUserTaskStatusLabel(status: UserTaskStatusEnum): string {
+  switch (status) {
+    case UserTaskStatusEnum.NotStarted:
+      return "Not Started";
+    case UserTaskStatusEnum.InProgress:
+      return "In Progress";
+    case UserTaskStatusEnum.WaitingForApproval:
+      return "Waiting for Approval";
+    case UserTaskStatusEnum.Completed:
+      return "Completed";
+    case UserTaskStatusEnum.Overdue:
+      return "Overdue";
+    case UserTaskStatusEnum.Canceled:
+      return "Canceled";
+    default:
+      return "Unknown";
+  }
+}
+
 export interface PagedResult<T> {
   items: T[];
   pageNumber: number;
   pageSize: number;
   totalItems: number;
 }
-
