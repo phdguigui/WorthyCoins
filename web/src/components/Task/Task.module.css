@@ -87,3 +87,60 @@
   font-weight: 500;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 25%,
+    #e5e7eb 50%,
+    #f3f4f6 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite ease-in-out;
+}
+
+.skeletonTitle {
+  height: 18px;
+  width: 140px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.skeletonDescription {
+  height: 14px;
+  width: 260px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.skeletonInfoGroup {
+  display: flex;
+  gap: 15px;
+}
+
+.skeletonInfo {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.skeletonReward {
+  width: 90px;
+  height: 38px;
+  border-radius: 20px;
+}
+
+.skeletonMore {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+

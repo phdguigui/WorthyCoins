@@ -3,6 +3,7 @@ import styles from "./TaskPage.module.css";
 import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
+import { TaskSkeleton } from "../../components/Task/TaskSkeleton";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
 import {
@@ -27,6 +28,7 @@ export function TaskPage() {
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [tasks, setTasks] = useState<UserTask[]>([]);
+  const [tasksIsLoading, setTasksIsLoading] = useState(true);
 
   // States for InfiniteSelect with backend API
   const [children, setChildren] = useState<Child[]>([]);
@@ -79,15 +81,25 @@ export function TaskPage() {
   useEffect(() => {
     const userInfo = getTokenData();
 
-    if (userInfo!.parentId) {
+    if (userInfo?.parentId) {
+      setTasksIsLoading(true);
       getTasksByParentId(
-        userInfo!.parentId!,
+        userInfo.parentId,
         selectedCategory,
         selectedChild,
         selectedDate,
-      ).then((res) => {
-        setTasks(res.data.items);
-      });
+      )
+        .then((res) => {
+          setTasks(res.data.items);
+        })
+        .catch((error) => {
+          console.error("Failed to load tasks", error);
+        })
+        .finally(() => {
+          setTasksIsLoading(false);
+        });
+    } else {
+      setTasksIsLoading(false);
     }
   }, [selectedCategory, selectedChild, selectedDate]);
 
@@ -157,9 +169,11 @@ export function TaskPage() {
           />
         </div>
       </div>
-      {tasks?.map((task) => (
-        <Task key={task.id} task={task} />
-      ))}
+      {tasksIsLoading
+        ? Array.from({ length: 4 }).map((_, index) => (
+            <TaskSkeleton key={index} />
+          ))
+        : tasks?.map((task) => <Task key={task.id} task={task} />)}
     </div>
   );
 }
