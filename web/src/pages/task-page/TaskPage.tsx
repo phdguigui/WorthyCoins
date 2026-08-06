@@ -4,6 +4,7 @@ import { DatePicker } from "../../components/DatePicker/DatePicker";
 import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { TaskSkeleton } from "../../components/Task/TaskSkeleton";
+import { EmptyState } from "../../components/EmptyState/EmptyState";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
 import {
@@ -169,11 +170,18 @@ export function TaskPage() {
           />
         </div>
       </div>
-      {tasksIsLoading
-        ? Array.from({ length: 4 }).map((_, index) => (
-            <TaskSkeleton key={index} />
-          ))
-        : tasks?.map((task) => <Task key={task.id} task={task} />)}
+      {tasksIsLoading ? (
+        Array.from({ length: 4 }).map((_, index) => (
+          <TaskSkeleton key={index} />
+        ))
+      ) : tasks && tasks.length > 0 ? (
+        tasks.map((task) => <Task key={task.id} task={task} />)
+      ) : (
+        <EmptyState
+          message="Nenhuma tarefa encontrada"
+          description="Tente ajustar os filtros ou criar uma nova tarefa para começar."
+        />
+      )}
     </div>
   );
 }
