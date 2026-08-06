@@ -43,3 +43,19 @@
 .content {
   padding: 0; /* Let Calendar handle its own padding */
 }
+
+.clearButton {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  border-radius: 4px;
+  padding: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.clearButton:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
