@@ -16,9 +16,11 @@
   justify-content: flex-start;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
-.childrenFilter {
+.childrenFilter,
+.dateFilter {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -28,4 +30,38 @@
   font-size: 14px;
   font-weight: 600;
   color: #6b7280;
+}
+
+@media (max-width: 1400px) {
+  .mainContainer {
+    padding: 50px 150px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .mainContainer {
+    padding: 40px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    padding: 30px 20px;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .childrenFilter,
+  .dateFilter {
+    width: 100%;
+  }
+
+  .childrenFilter > *,
+  .dateFilter > * {
+    width: 100% !important;
+  }
 }
