@@ -13,7 +13,7 @@ import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
 import { getTokenData } from "../../utils/auth";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function Sidebar() {
   const [firstName, setFirstName] = useState<string>("");
@@ -22,6 +22,7 @@ export function Sidebar() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>("");
   const [hasImageError, setHasImageError] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const userInfo = getTokenData();
@@ -79,11 +80,17 @@ export function Sidebar() {
         </div>
       </div>
       <div className={styles.navigation}>
-        <div className={styles.navItem} onClick={() => navigate("/")}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/" ? styles.active : ""}`}
+          onClick={() => navigate("/")}
+        >
           <Home size={20} strokeWidth={1.8} />
           <span className={styles.label}>Início</span>
         </div>
-        <div className={styles.navItem} onClick={() => navigate("/tasks")}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/tasks" ? styles.active : ""}`}
+          onClick={() => navigate("/tasks")}
+        >
           <ListChecks size={20} strokeWidth={1.8} />
           <span className={styles.label}>Tarefas</span>
         </div>

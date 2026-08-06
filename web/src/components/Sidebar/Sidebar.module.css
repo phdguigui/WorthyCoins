@@ -9,6 +9,10 @@
   border-radius: 10px;
   width: 3vw;
   min-width: 55px;
+  height: calc(100vh - 10px);
+  position: sticky;
+  top: 5px;
+  flex-shrink: 0;
   transition:
     width 0.3s ease,
     min-width 0.3s ease;
@@ -46,12 +50,14 @@
   flex-shrink: 0;
 }
 
-.navItem:hover {
+.navItem:hover,
+.navItem.active {
   background-color: #e2e8f0;
   color: green;
 }
 
-.navItem:hover .label {
+.navItem:hover .label,
+.navItem.active .label {
   color: green;
   font-weight: 500;
 }
