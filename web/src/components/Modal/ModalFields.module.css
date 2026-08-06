@@ -35,3 +35,24 @@
   border-color: #258d31;
   box-shadow: 0 0 0 3px rgba(37, 141, 49, 0.15);
 }
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputWithIcon {
+  padding-left: 42px;
+}
