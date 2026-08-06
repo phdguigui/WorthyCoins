@@ -1,0 +1,123 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  box-sizing: border-box;
+  margin-top: 16px;
+}
+
+.leftSection {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 14px;
+  color: #65758b;
+}
+
+.leftSection strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.centerSection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+.pageButton,
+.chevronButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #65758b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+/* .pageButton:hover,
+.chevronButton:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  color: #1e293b;
+} */
+
+.chevronButton:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background-color: #218f26;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(33, 143, 38, 0.2);
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  color: #94a3b8;
+  user-select: none;
+}
+
+.rightSection {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.pageSizeLabel {
+  font-size: 14px;
+  color: #65758b;
+}
+
+.pageSizeSelect {
+  width: 80px;
+}
+
+.pageSizeTrigger {
+  width: 100% !important;
+  height: 36px !important;
+  padding: 0 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+.pageSizeTrigger:hover {
+  border-color: #cbd5e1 !important;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .leftSection,
+  .rightSection {
+    justify-content: center;
+    flex: none;
+    width: 100%;
+  }
+}

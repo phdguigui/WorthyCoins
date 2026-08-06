@@ -5,6 +5,7 @@ import { ptBR } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { TaskSkeleton } from "../../components/Task/TaskSkeleton";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
+import { Pagination } from "../../components/Pagination/Pagination";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
 import {
@@ -30,6 +31,9 @@ export function TaskPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [tasks, setTasks] = useState<UserTask[]>([]);
   const [tasksIsLoading, setTasksIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalTasks, setTotalTasks] = useState(0);
 
   // States for InfiniteSelect with backend API
   const [children, setChildren] = useState<Child[]>([]);
@@ -89,9 +93,12 @@ export function TaskPage() {
         selectedCategory,
         selectedChild,
         selectedDate,
+        page,
+        pageSize,
       )
         .then((res) => {
           setTasks(res.data.items);
+          setTotalTasks(res.data.totalItems);
         })
         .catch((error) => {
           console.error("Failed to load tasks", error);
@@ -102,7 +109,7 @@ export function TaskPage() {
     } else {
       setTasksIsLoading(false);
     }
-  }, [selectedCategory, selectedChild, selectedDate]);
+  }, [selectedCategory, selectedChild, selectedDate, page, pageSize]);
 
   const categories = [
     { value: undefined, label: "All", icon: "List", color: "#64748b" },
@@ -133,6 +140,7 @@ export function TaskPage() {
 
   const handleChildChange = (val: string) => {
     setSelectedChild(val === "all" ? undefined : Number(val));
+    setPage(1);
   };
 
   return (
@@ -147,7 +155,10 @@ export function TaskPage() {
         <CategoriesFilter
           categories={categories}
           selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
+          onSelectCategory={(cat) => {
+            setSelectedCategory(cat);
+            setPage(1);
+          }}
         />
         <div className={styles.childrenFilter}>
           <InfiniteSelect
@@ -164,7 +175,10 @@ export function TaskPage() {
         <div className={styles.dateFilter}>
           <DatePicker
             date={selectedDate}
-            setDate={setSelectedDate}
+            setDate={(date) => {
+              setSelectedDate(date);
+              setPage(1);
+            }}
             placeholder="Filter by date"
             locale={ptBR}
           />
@@ -180,6 +194,18 @@ export function TaskPage() {
         <EmptyState
           message="Nenhuma tarefa encontrada"
           description="Tente ajustar os filtros ou criar uma nova tarefa para começar."
+        />
+      )}
+      {!tasksIsLoading && tasks && tasks.length > 0 && (
+        <Pagination
+          currentPage={page}
+          pageSize={pageSize}
+          totalItems={totalTasks}
+          onPageChange={setPage}
+          onPageSizeChange={(size) => {
+            setPageSize(size);
+            setPage(1);
+          }}
         />
       )}
     </div>

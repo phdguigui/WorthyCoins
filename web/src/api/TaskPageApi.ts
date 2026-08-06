@@ -11,6 +11,8 @@ export async function getTasksByParentId(
   status: UserTaskStatusEnum | undefined,
   childId: number | undefined,
   dueDate: Date | undefined | null,
+  pageNumber = 1,
+  pageSize = 10,
 ): Promise<ApiResponse<PagedResult<UserTask>>> {
   const response = await apiClient.get<ApiResponse<PagedResult<UserTask>>>(
     `/UserTask/${parentId}`,
@@ -19,6 +21,8 @@ export async function getTasksByParentId(
         status,
         childId,
         dueDate: dueDate ?? null,
+        pageNumber,
+        pageSize,
       },
     },
   );
