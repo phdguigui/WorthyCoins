@@ -10,6 +10,7 @@ interface DatePickerProps {
   setDate: (date?: Date) => void;
   placeholder?: string;
   locale?: Locale;
+  className?: string;
 }
 
 export function DatePicker({
@@ -17,12 +18,13 @@ export function DatePicker({
   setDate,
   placeholder = "Pick a date",
   locale,
+  className = "",
 }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button
-          className={`${styles.trigger} ${!date ? styles.placeholder : ""}`}
+          className={`${styles.trigger} ${!date ? styles.placeholder : ""} ${className}`}
         >
           <CalendarIcon className={styles.icon} size={16} />
           <span>{date ? format(date, "PPP", { locale }) : placeholder}</span>
