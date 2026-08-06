@@ -10,9 +10,9 @@ export function ProtectedRoute() {
   }
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div className="app-container">
       <Sidebar />
-      <main style={{ flex: 1, overflowY: "auto" }}>
+      <main className="main-content">
         <Outlet />
       </main>
     </div>

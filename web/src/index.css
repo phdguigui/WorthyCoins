@@ -4,3 +4,13 @@
   font-family: "Quicksand", sans-serif;
   outline: none;
 }
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+}
