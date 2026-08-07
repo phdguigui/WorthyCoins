@@ -44,7 +44,7 @@
 
 .content {
   position: relative;
-  z-index: 50;
+  z-index: 1100;
   min-width: 180px;
   overflow: hidden;
   border-radius: 6px;
