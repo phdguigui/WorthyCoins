@@ -112,16 +112,24 @@ export function TaskPage() {
     } else {
       setTasksIsLoading(false);
     }
-  }, [selectedCategory, selectedChild, selectedDate, page, pageSize, refreshKey]);
+  }, [
+    selectedCategory,
+    selectedChild,
+    selectedDate,
+    page,
+    pageSize,
+    refreshKey,
+  ]);
 
   const categories = [
-    { value: undefined, label: "All", icon: "List", color: "#218f26" },
+    { value: undefined, label: "Today", icon: "List", color: "#218f26" },
     ...[
-      UserTaskStatusEnum.NotStarted,
-      UserTaskStatusEnum.InProgress,
-      UserTaskStatusEnum.WaitingForApproval,
-      UserTaskStatusEnum.Overdue,
+      // UserTaskStatusEnum.NotStarted,
+      // UserTaskStatusEnum.InProgress,
+      // UserTaskStatusEnum.WaitingForApproval,
+      // UserTaskStatusEnum.Overdue,
       UserTaskStatusEnum.Completed,
+      UserTaskStatusEnum.Pending,
     ].map((status) => ({
       value: status,
       label: getUserTaskStatusLabel(status),
@@ -194,7 +202,7 @@ export function TaskPage() {
               setSelectedDate(date);
               setPage(1);
             }}
-            placeholder="Filter by date"
+            placeholder="Filter by due date"
             locale={ptBR}
           />
         </div>
