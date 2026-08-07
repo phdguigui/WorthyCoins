@@ -6,6 +6,16 @@ import type {
   UserTaskStatusEnum,
 } from "./types";
 
+export interface CreateUserTaskRequest {
+  title: string;
+  description?: string | null;
+  dueDate?: Date | string | null;
+  assignedChildId: number;
+  rewardAmount: number;
+  icon: string;
+  color: string;
+}
+
 export async function getTasksByParentId(
   parentId: number,
   status: UserTaskStatusEnum | undefined,
@@ -25,6 +35,16 @@ export async function getTasksByParentId(
         pageSize,
       },
     },
+  );
+  return response.data;
+}
+
+export async function createUserTask(
+  request: CreateUserTaskRequest,
+): Promise<ApiResponse<UserTask>> {
+  const response = await apiClient.post<ApiResponse<UserTask>>(
+    "/UserTask",
+    request,
   );
   return response.data;
 }

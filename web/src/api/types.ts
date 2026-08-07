@@ -91,7 +91,6 @@ export function getUserTaskStatusColor(status: UserTaskStatusEnum): string {
   }
 }
 
-
 export interface PagedResult<T> {
   items: T[];
   pageNumber: number;

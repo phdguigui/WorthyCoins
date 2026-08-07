@@ -36,6 +36,7 @@ export function TaskPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalTasks, setTotalTasks] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // States for InfiniteSelect with backend API
   const [children, setChildren] = useState<Child[]>([]);
@@ -111,7 +112,7 @@ export function TaskPage() {
     } else {
       setTasksIsLoading(false);
     }
-  }, [selectedCategory, selectedChild, selectedDate, page, pageSize]);
+  }, [selectedCategory, selectedChild, selectedDate, page, pageSize, refreshKey]);
 
   const categories = [
     { value: undefined, label: "All", icon: "List", color: "#218f26" },
@@ -163,6 +164,7 @@ export function TaskPage() {
         isLoadingChildren={childrenIsLoading}
         hasMoreChildren={childrenHasMore}
         onLoadMoreChildren={loadChildren}
+        onTaskCreated={() => setRefreshKey((prev) => prev + 1)}
       />
       <div className={styles.filters}>
         <CategoriesFilter
