@@ -1,6 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .label {
@@ -24,6 +25,7 @@
   border-radius: 8px;
   outline: none;
   transition: all 0.2s ease;
+  min-width: 0 !important;
 }
 
 .input:hover {

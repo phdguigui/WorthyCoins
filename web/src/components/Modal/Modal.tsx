@@ -9,6 +9,8 @@ interface ModalProps {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  actionLabel?: string;
+  onAction?: () => void;
 }
 
 export function Modal({
@@ -18,6 +20,8 @@ export function Modal({
   title,
   subtitle,
   children,
+  actionLabel,
+  onAction,
 }: ModalProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -63,6 +67,18 @@ export function Modal({
           {subtitle && <div className={styles.headerSubtitle}>{subtitle}</div>}
         </div>
         <div className={styles.content}>{children}</div>
+        <div className={styles.footer}>
+          {actionLabel && onAction && (
+            <button
+              className={styles.actionButton}
+              onClick={onAction}
+              type="button"
+            >
+              {icon && <span className={styles.buttonIcon}>{icon}</span>}
+              <span>{actionLabel}</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
