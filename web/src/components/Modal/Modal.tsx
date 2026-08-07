@@ -42,17 +42,22 @@ export function Modal({
     }
   };
 
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!shouldRender) return null;
 
   return (
     <div
       className={`${styles.overlay} ${isAnimatingOut ? styles.fadeOut : ""}`}
-      onClick={onClose}
+      onClick={handleOverlayClick}
       onAnimationEnd={handleAnimationEnd}
     >
       <div
         className={`${styles.modalContent} ${isAnimatingOut ? styles.scaleDown : ""}`}
-        onClick={(e) => e.stopPropagation()}
       >
         <button
           className={styles.closeButton}
