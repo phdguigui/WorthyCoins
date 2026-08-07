@@ -20,8 +20,10 @@ import { getTokenData } from "../../utils/auth";
 import { getTasksByParentId } from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
 import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
+import { TaskModal } from "../../components/TaskModal/TaskModal";
 
 export function TaskPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<
     UserTaskStatusEnum | undefined
   >(undefined);
@@ -32,7 +34,7 @@ export function TaskPage() {
   const [tasks, setTasks] = useState<UserTask[]>([]);
   const [tasksIsLoading, setTasksIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [totalTasks, setTotalTasks] = useState(0);
 
   // States for InfiniteSelect with backend API
@@ -112,7 +114,7 @@ export function TaskPage() {
   }, [selectedCategory, selectedChild, selectedDate, page, pageSize]);
 
   const categories = [
-    { value: undefined, label: "All", icon: "List", color: "#64748b" },
+    { value: undefined, label: "All", icon: "List", color: "#218f26" },
     ...[
       UserTaskStatusEnum.NotStarted,
       UserTaskStatusEnum.InProgress,
@@ -149,7 +151,18 @@ export function TaskPage() {
         title="Quest Board"
         description="Create and manage tasks for your children."
         buttonText="+ New Task"
-        buttonAction={() => {}}
+        buttonAction={() => setIsModalOpen(true)}
+      />
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        childrenOptions={children.map((child) => ({
+          value: String(child.id),
+          label: child.name,
+        }))}
+        isLoadingChildren={childrenIsLoading}
+        hasMoreChildren={childrenHasMore}
+        onLoadMoreChildren={loadChildren}
       />
       <div className={styles.filters}>
         <CategoriesFilter
@@ -185,7 +198,7 @@ export function TaskPage() {
         </div>
       </div>
       {tasksIsLoading ? (
-        Array.from({ length: 4 }).map((_, index) => (
+        Array.from({ length: pageSize }).map((_, index) => (
           <TaskSkeleton key={index} />
         ))
       ) : tasks && tasks.length > 0 ? (

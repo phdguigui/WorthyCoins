@@ -1,0 +1,29 @@
+.centralFields {
+  background-color: #edeff380;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.centralFieldsFirstRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.centralFieldsSecondRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .centralFieldsFirstRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
