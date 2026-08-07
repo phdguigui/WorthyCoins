@@ -15,6 +15,37 @@ import {
   Trophy,
 } from "lucide-react";
 
+export function getTaskIcon(iconName: string, size = 20): React.ReactNode {
+  switch (iconName) {
+    case "Sparkles":
+      return <Sparkles size={size} />;
+    case "Trash":
+      return <Trash size={size} />;
+    case "Dog":
+      return <Dog size={size} />;
+    case "Cat":
+      return <Cat size={size} />;
+    case "Fish":
+      return <Fish size={size} />;
+    case "Trophy":
+      return <Trophy size={size} />;
+    case "Music":
+      return <Music size={size} />;
+    case "BookOpen":
+      return <BookOpen size={size} />;
+    case "Bubbles":
+      return <Bubbles size={size} />;
+    case "BrushCleaning":
+      return <BrushCleaning size={size} />;
+    case "GraduationCap":
+      return <GraduationCap size={size} />;
+    case "Sprout":
+      return <Sprout size={size} />;
+    default:
+      return <Sparkles size={size} />;
+  }
+}
+
 export const TASK_ICONS = [
   { value: "Sparkles", icon: <Sparkles size={20} /> },
   { value: "Trash", icon: <Trash size={20} /> },

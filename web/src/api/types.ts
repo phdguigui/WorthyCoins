@@ -15,6 +15,8 @@ export interface UserTask {
   assignedChild?: Child | null;
   rewardAmount: number;
   status: UserTaskStatusEnum;
+  icon: string;
+  color: string;
 }
 
 export interface Child {
