@@ -28,7 +28,7 @@ namespace WorthyCoins.Infrastructure.Configurations
 
             builder.Property(x => x.Status)
                 .IsRequired()
-                .HasDefaultValue(UserTaskStatusEnum.NotStarted)
+                .HasDefaultValue(UserTaskStatusEnum.Pending)
                 .HasConversion<int>();
 
             builder.Property(x => x.RewardAmount)
