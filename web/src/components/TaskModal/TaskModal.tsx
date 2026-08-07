@@ -31,6 +31,7 @@ export function TaskModal({
   const [rewardCoins, setRewardCoins] = useState<number | string>("0");
   const [selectedChild, setSelectedChild] = useState<string>("");
   const [selectedIcon, setSelectedIcon] = useState<string>("Sparkles");
+  const [selectedColor, setSelectedColor] = useState<string>("#10b981");
 
   return (
     <Modal
@@ -41,7 +42,7 @@ export function TaskModal({
       subtitle="Build a fun challenge and reward it with WorthyCoins."
       actionLabel="Create Task"
       onAction={() =>
-        console.log("Create task", { rewardCoins, dueDate, selectedChild })
+        console.log("Create task", { rewardCoins, dueDate, selectedChild, selectedIcon, selectedColor })
       }
     >
       <ModalTextField label="QUEST TITLE" placeholder="e.g. Clean room" />
@@ -77,7 +78,12 @@ export function TaskModal({
           />
         </div>
       </div>
-      <TaskIconPicker value={selectedIcon} onChange={setSelectedIcon} />
+      <TaskIconPicker
+        value={selectedIcon}
+        onChange={setSelectedIcon}
+        color={selectedColor}
+        onChangeColor={setSelectedColor}
+      />
     </Modal>
   );
 }

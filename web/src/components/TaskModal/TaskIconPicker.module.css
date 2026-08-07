@@ -1,16 +1,64 @@
 .iconPicker {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+.pickerContainer {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.colorPickerWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.colorPickerWrapper :global(.react-colorful) {
+  width: 160px !important;
+  height: 140px !important;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.05),
+    0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+.colorInputContainer {
+  display: flex;
+  align-items: center;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: inherit;
+}
+
+.hashPrefix {
+  color: #94a3b8;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.colorInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  text-transform: uppercase;
 }
 
 .iconsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
-  align-items: center;
-  justify-items: center;
   width: 100%;
   gap: 12px;
+  align-content: start;
 }
 
 .iconWrapper {
@@ -21,13 +69,11 @@
   height: 20px;
   border-radius: 10px;
   padding: 12px;
-  background-color: #edeff3;
   cursor: pointer;
-  color: #65758b;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  opacity: 0.65;
+  transition: all 0.2s ease;
 }
 
 .iconWrapper.selected {
-  background-color: #d1fae5;
-  color: #10b981;
+  opacity: 1;
 }
