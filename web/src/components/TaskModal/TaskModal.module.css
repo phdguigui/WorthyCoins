@@ -21,6 +21,7 @@
   width: 100%;
 }
 
+
 @media (max-width: 480px) {
   .centralFieldsFirstRow {
     flex-direction: column;

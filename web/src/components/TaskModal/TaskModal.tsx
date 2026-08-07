@@ -8,6 +8,7 @@ import { ModalCoinsField } from "../ModalCoinsField/ModalCoinsField";
 import { ModalSelectField } from "../ModalSelectField/ModalSelectField";
 import type { InfiniteSelectOption } from "../Select/InfiniteSelect";
 import { ptBR } from "date-fns/locale";
+import { TaskIconPicker } from "./TaskIconPicker";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export function TaskModal({
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const [rewardCoins, setRewardCoins] = useState<number | string>("");
   const [selectedChild, setSelectedChild] = useState<string>("");
+  const [selectedIcon, setSelectedIcon] = useState<string>("Sparkles");
 
   return (
     <Modal
@@ -38,7 +40,9 @@ export function TaskModal({
       title="Create New Task"
       subtitle="Build a fun challenge and reward it with WorthyCoins."
       actionLabel="Create Task"
-      onAction={() => console.log("Create task", { rewardCoins, dueDate, selectedChild })}
+      onAction={() =>
+        console.log("Create task", { rewardCoins, dueDate, selectedChild })
+      }
     >
       <ModalTextField label="QUEST TITLE" placeholder="e.g. Clean room" />
       <ModalTextField
@@ -74,6 +78,8 @@ export function TaskModal({
           />
         </div>
       </div>
+      <TaskIconPicker value={selectedIcon} onChange={setSelectedIcon} />
     </Modal>
   );
 }
+
