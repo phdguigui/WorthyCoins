@@ -28,7 +28,7 @@ export function TaskModal({
   onLoadMoreChildren,
 }: TaskModalProps) {
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-  const [rewardCoins, setRewardCoins] = useState<number | string>("");
+  const [rewardCoins, setRewardCoins] = useState<number | string>("0");
   const [selectedChild, setSelectedChild] = useState<string>("");
   const [selectedIcon, setSelectedIcon] = useState<string>("Sparkles");
 
@@ -53,7 +53,6 @@ export function TaskModal({
         <div className={styles.centralFieldsFirstRow}>
           <ModalCoinsField
             label="WORTHYCOINS REWARD"
-            placeholder="5"
             value={rewardCoins}
             onChange={(e) => setRewardCoins(e.target.value)}
           />
@@ -82,4 +81,3 @@ export function TaskModal({
     </Modal>
   );
 }
-
