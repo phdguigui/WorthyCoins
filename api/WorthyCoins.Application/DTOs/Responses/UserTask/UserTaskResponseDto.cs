@@ -13,6 +13,8 @@ namespace WorthyCoins.Application.DTOs.Responses.UserTask
         public int AssignedChildId { get; set; }
         public decimal RewardAmount { get; set; }
         public UserTaskStatusEnum Status { get; set; }
+        public required string Icon { get; set; }
+        public required string Color { get; set; }
         public virtual ChildResponseDto? AssignedChild { get; set; }
     }
 }

@@ -151,7 +151,9 @@ namespace WorthyCoins.Application.Services
                 AssignedChildId = entity.AssignedChildId,
                 AssignedChild = assignedChild,
                 RewardAmount = entity.RewardAmount,
-                Status = entity.Status
+                Status = entity.Status,
+                Icon = entity.Icon,
+                Color = entity.Color
             };
         }
     }

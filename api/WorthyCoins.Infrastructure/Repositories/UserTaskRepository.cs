@@ -36,7 +36,7 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<WorthyCoins.Application.Commons.Results.PagedResult<UserTask>> GetByParentIdAsync(int parentId, UserTaskStatusEnum? status, int? childId, DateTime? dueDate, int pageNumber = 1, int pageSize = 10)
+        public async Task<PagedResult<UserTask>> GetByParentIdAsync(int parentId, UserTaskStatusEnum? status, int? childId, DateTime? dueDate, int pageNumber = 1, int pageSize = 10)
         {
             var query = _context.UserTasks.AsNoTracking()
                 .Include(x => x.AssignedChild)
