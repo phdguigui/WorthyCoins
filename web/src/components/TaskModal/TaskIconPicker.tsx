@@ -8,13 +8,9 @@ import {
   Dog,
   Fish,
   GraduationCap,
-  Heart,
-  Languages,
   Music,
   Sparkles,
   Sprout,
-  Star,
-  TowelRack,
   Trash,
   Trophy,
 } from "lucide-react";
@@ -26,14 +22,11 @@ export const TASK_ICONS = [
   { value: "Cat", icon: <Cat size={20} /> },
   { value: "Fish", icon: <Fish size={20} /> },
   { value: "Trophy", icon: <Trophy size={20} /> },
-  { value: "Heart", icon: <Heart size={20} /> },
   { value: "Music", icon: <Music size={20} /> },
   { value: "BookOpen", icon: <BookOpen size={20} /> },
   { value: "Bubbles", icon: <Bubbles size={20} /> },
-  { value: "TowelRack", icon: <TowelRack size={20} /> },
   { value: "BrushCleaning", icon: <BrushCleaning size={20} /> },
   { value: "GraduationCap", icon: <GraduationCap size={20} /> },
-  { value: "Languages", icon: <Languages size={20} /> },
   { value: "Sprout", icon: <Sprout size={20} /> },
 ];
 
