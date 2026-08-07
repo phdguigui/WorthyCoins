@@ -7,5 +7,7 @@
         public DateTime? DueDate { get; set; }
         public int AssignedChildId { get; set; }
         public decimal RewardAmount { get; set; }
+        public required string Icon { get; set; }
+        public required string Color { get; set; }
     }
 }

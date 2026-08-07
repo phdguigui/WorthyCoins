@@ -27,7 +27,9 @@ namespace WorthyCoins.Application.Services
                 CreationDate = DateTime.UtcNow,
                 DueDate = request.DueDate,
                 AssignedChildId = request.AssignedChildId,
-                RewardAmount = request.RewardAmount
+                RewardAmount = request.RewardAmount,
+                Icon = request.Icon,
+                Color = request.Color
             };
 
             entity = await _repository.AddAsync(entity);

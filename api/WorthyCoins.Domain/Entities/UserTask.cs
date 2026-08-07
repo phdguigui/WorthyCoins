@@ -12,6 +12,8 @@ namespace WorthyCoins.Domain.Entities
         public int AssignedChildId { get; set; }
         public decimal RewardAmount { get; set; }
         public UserTaskStatusEnum Status { get; set; }
+        public required string Icon { get; set; }
+        public required string Color { get; set; }
         public virtual Child? AssignedChild { get; set; }
     }
 }
