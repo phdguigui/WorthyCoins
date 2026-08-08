@@ -66,17 +66,17 @@ namespace WorthyCoins.Infrastructure.Repositories
                 switch (filterType.ToLowerInvariant())
                 {
                     case "today_all":
-                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date);
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == targetDate);
                         query = query.OrderBy(x => x.Status).ThenBy(x => x.DueDate);
                         break;
 
                     case "today_pending":
-                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date && x.Status == UserTaskStatusEnum.Pending);
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == targetDate && x.Status == UserTaskStatusEnum.Pending);
                         query = query.OrderBy(x => x.DueDate);
                         break;
 
                     case "today_completed":
-                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date && x.Status == UserTaskStatusEnum.Completed);
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == targetDate && x.Status == UserTaskStatusEnum.Completed);
                         query = query.OrderBy(x => x.DueDate);
                         break;
 
