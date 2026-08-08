@@ -35,7 +35,6 @@
 
 .input:focus {
   border-color: #258d31;
-  box-shadow: 0 0 0 3px rgba(37, 141, 49, 0.15);
 }
 
 .inputWrapper {
@@ -76,5 +75,18 @@
 
 .selectTrigger:focus {
   border-color: #258d31 !important;
-  box-shadow: 0 0 0 3px rgba(37, 141, 49, 0.15) !important;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.inputError:hover {
+  border-color: #ef4444 !important;
+}
+
+.inputError:focus {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
 }

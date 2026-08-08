@@ -8,6 +8,7 @@ interface ModalDatePickerFieldProps {
   setDate: (date?: Date) => void;
   placeholder?: string;
   locale?: Locale;
+  error?: boolean | string;
 }
 
 export function ModalDatePickerField({
@@ -16,6 +17,7 @@ export function ModalDatePickerField({
   setDate,
   placeholder,
   locale,
+  error,
 }: ModalDatePickerFieldProps) {
   return (
     <div className={styles.field}>
@@ -25,7 +27,7 @@ export function ModalDatePickerField({
         setDate={setDate}
         placeholder={placeholder}
         locale={locale}
-        className={styles.input}
+        className={`${styles.input} ${error ? styles.inputError : ""}`}
       />
     </div>
   );

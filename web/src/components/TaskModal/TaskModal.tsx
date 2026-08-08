@@ -12,7 +12,10 @@ import { TaskIconPicker } from "./TaskIconPicker";
 import { createUserTask, updateUserTask } from "../../api/TaskPageApi";
 import type { UserTask } from "../../api/types";
 import toast from "react-hot-toast";
-import { ToastContent } from "../ToastContent/ToastContent";
+import { ToastContent } from "../Toast/ToastContent";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -25,6 +28,40 @@ interface TaskModalProps {
   taskToEdit?: UserTask | null;
 }
 
+const taskSchema = z.object({
+  title: z
+    .string()
+    .min(1, "O título é obrigatório.")
+    .max(150, "O título deve ter no máximo 150 caracteres."),
+  description: z
+    .string()
+    .max(500, "A descrição deve ter no máximo 500 caracteres.")
+    .optional()
+    .or(z.literal("")),
+  rewardCoins: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "A recompensa deve ser um número não negativo.",
+    }),
+  selectedChild: z
+    .string()
+    .min(1, "A atribuição é obrigatória."),
+  dueDate: z
+    .date()
+    .nullable()
+    .optional(),
+  selectedIcon: z
+    .string()
+    .min(1, "O ícone é obrigatório.")
+    .max(100),
+  selectedColor: z
+    .string()
+    .min(1, "A cor é obrigatória.")
+    .max(100),
+});
+
+type TaskFormData = z.infer<typeof taskSchema>;
+
 export function TaskModal({
   isOpen,
   onClose,
@@ -35,85 +72,90 @@ export function TaskModal({
   onTaskCreated,
   taskToEdit = null,
 }: TaskModalProps) {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-  const [rewardCoins, setRewardCoins] = useState<number | string>("0");
-  const [selectedChild, setSelectedChild] = useState<string>("");
-  const [selectedIcon, setSelectedIcon] = useState<string>("Sparkles");
-  const [selectedColor, setSelectedColor] = useState<string>("#10b981");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const resetForm = () => {
-    setTitle("");
-    setDescription("");
-    setDueDate(undefined);
-    setRewardCoins("0");
-    setSelectedChild("");
-    setSelectedIcon("Sparkles");
-    setSelectedColor("#10b981");
-  };
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      dueDate: null,
+      rewardCoins: "0",
+      selectedChild: "",
+      selectedIcon: "Sparkles",
+      selectedColor: "#10b981",
+    },
+  });
+
+  const selectedChild = watch("selectedChild");
+  const dueDate = watch("dueDate") || undefined;
+  const selectedIcon = watch("selectedIcon") || "Sparkles";
+  const selectedColor = watch("selectedColor") || "#10b981";
 
   useEffect(() => {
     if (isOpen) {
       if (taskToEdit) {
-        setTitle(taskToEdit.title);
-        setDescription(taskToEdit.description || "");
-        setDueDate(
-          taskToEdit.dueDate ? new Date(taskToEdit.dueDate) : undefined,
-        );
-        setRewardCoins(taskToEdit.rewardAmount);
-        setSelectedChild(String(taskToEdit.assignedChildId));
-        setSelectedIcon(taskToEdit.icon);
-        setSelectedColor(taskToEdit.color);
+        reset({
+          title: taskToEdit.title,
+          description: taskToEdit.description || "",
+          dueDate: taskToEdit.dueDate ? new Date(taskToEdit.dueDate) : null,
+          rewardCoins: String(taskToEdit.rewardAmount),
+          selectedChild: String(taskToEdit.assignedChildId),
+          selectedIcon: taskToEdit.icon,
+          selectedColor: taskToEdit.color,
+        });
       } else {
-        resetForm();
+        reset({
+          title: "",
+          description: "",
+          dueDate: null,
+          rewardCoins: "0",
+          selectedChild: "",
+          selectedIcon: "Sparkles",
+          selectedColor: "#10b981",
+        });
       }
     }
-  }, [taskToEdit, isOpen]);
+  }, [taskToEdit, isOpen, reset]);
 
-  const handleSaveTask = async () => {
-    if (isSubmitting) return;
-    if (!title.trim()) {
-      toast.error(<ToastContent title="Aviso" subtitle="Por favor, insira o título da tarefa." />);
-      return;
-    }
-    if (!selectedChild) {
-      toast.error(<ToastContent title="Aviso" subtitle="Por favor, selecione uma criança." />);
-      return;
-    }
-
+  const onSubmit = async (data: TaskFormData) => {
     setIsSubmitting(true);
     try {
       if (taskToEdit) {
         await updateUserTask({
           userTaskId: taskToEdit.id,
-          title: title.trim(),
-          description: description.trim() || null,
-          dueDate: dueDate || null,
-          assignedChildId: Number(selectedChild),
-          rewardAmount: Number(rewardCoins),
-          icon: selectedIcon,
-          color: selectedColor,
+          title: data.title.trim(),
+          description: data.description?.trim() || null,
+          dueDate: data.dueDate || null,
+          assignedChildId: Number(data.selectedChild),
+          rewardAmount: Number(data.rewardCoins),
+          icon: data.selectedIcon,
+          color: data.selectedColor,
         });
-        toast.success(<ToastContent title="Sucesso" subtitle="Tarefa atualizada com sucesso!" />);
+        toast.success(<ToastContent title="Sucesso" description="Tarefa atualizada com sucesso!" />);
       } else {
         await createUserTask({
-          title: title.trim(),
-          description: description.trim() || null,
-          dueDate: dueDate || null,
-          assignedChildId: Number(selectedChild),
-          rewardAmount: Number(rewardCoins),
-          icon: selectedIcon,
-          color: selectedColor,
+          title: data.title.trim(),
+          description: data.description?.trim() || null,
+          dueDate: data.dueDate || null,
+          assignedChildId: Number(data.selectedChild),
+          rewardAmount: Number(data.rewardCoins),
+          icon: data.selectedIcon,
+          color: data.selectedColor,
         });
-        toast.success(<ToastContent title="Sucesso" subtitle="Tarefa criada com sucesso!" />);
+        toast.success(<ToastContent title="Sucesso" description="Tarefa criada com sucesso!" />);
       }
-      resetForm();
       onTaskCreated?.();
       onClose();
     } catch (error) {
-      toast.error(<ToastContent title="Erro" subtitle="Ocorreu um erro ao salvar a tarefa." />);
+      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao salvar a tarefa." />);
     } finally {
       setIsSubmitting(false);
     }
@@ -139,54 +181,83 @@ export function TaskModal({
             ? "Save Changes"
             : "Create Task"
       }
-      onAction={handleSaveTask}
+      onAction={handleSubmit(onSubmit)}
     >
       <ModalTextField
         label="QUEST TITLE"
         placeholder="e.g. Clean room"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        {...register("title")}
+        error={!!errors.title}
       />
+      {errors.title && <span className={styles.errorMessage}>{errors.title.message}</span>}
+
       <ModalTextField
         label="WHAT NEEDS TO BE DONE"
         placeholder="Tidy up toys, make the bed, vacuum the floor..."
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        {...register("description")}
+        error={!!errors.description}
       />
+      {errors.description && <span className={styles.errorMessage}>{errors.description.message}</span>}
+
       <div className={styles.centralFields}>
         <div className={styles.centralFieldsFirstRow}>
-          <ModalCoinsField
-            label="WORTHYCOINS REWARD"
-            value={rewardCoins}
-            onChange={(e) => setRewardCoins(e.target.value)}
-          />
-          <ModalSelectField
-            label="ASSIGN TO"
-            placeholder="Select a child"
-            value={selectedChild}
-            onValueChange={setSelectedChild}
-            options={childrenOptions}
-            isLoading={isLoadingChildren}
-            hasMore={hasMoreChildren}
-            onLoadMore={onLoadMoreChildren}
-          />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <ModalCoinsField
+              label="WORTHYCOINS REWARD"
+              {...register("rewardCoins")}
+              error={!!errors.rewardCoins}
+            />
+            {errors.rewardCoins && (
+              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+                {errors.rewardCoins.message}
+              </span>
+            )}
+          </div>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <ModalSelectField
+              label="ASSIGN TO"
+              placeholder="Select a child"
+              value={selectedChild}
+              onValueChange={(val) => setValue("selectedChild", val, { shouldValidate: true })}
+              options={childrenOptions}
+              isLoading={isLoadingChildren}
+              hasMore={hasMoreChildren}
+              onLoadMore={onLoadMoreChildren}
+              error={!!errors.selectedChild}
+            />
+            {errors.selectedChild && (
+              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+                {errors.selectedChild.message}
+              </span>
+            )}
+          </div>
         </div>
         <div className={styles.centralFieldsSecondRow}>
-          <ModalDatePickerField
-            label="DUE DATE"
-            date={dueDate}
-            setDate={setDueDate}
-            placeholder="Select a due date"
-            locale={ptBR}
-          />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <ModalDatePickerField
+              label="DUE DATE"
+              date={dueDate}
+              setDate={(date) => setValue("dueDate", date || null, { shouldValidate: true })}
+              placeholder="Select a due date"
+              locale={ptBR}
+              error={!!errors.dueDate}
+            />
+            {errors.dueDate && (
+              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+                {errors.dueDate.message}
+              </span>
+            )}
+          </div>
         </div>
       </div>
       <TaskIconPicker
         value={selectedIcon}
-        onChange={setSelectedIcon}
+        onChange={(icon) => setValue("selectedIcon", icon, { shouldValidate: true })}
         color={selectedColor}
-        onChangeColor={setSelectedColor}
+        onChangeColor={(color) => setValue("selectedColor", color, { shouldValidate: true })}
       />
+      {errors.selectedIcon && <span className={styles.errorMessage}>{errors.selectedIcon.message}</span>}
+      {errors.selectedColor && <span className={styles.errorMessage}>{errors.selectedColor.message}</span>}
     </Modal>
   );
 }

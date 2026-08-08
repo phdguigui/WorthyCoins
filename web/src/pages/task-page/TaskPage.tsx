@@ -16,7 +16,7 @@ import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
 import { TaskModal } from "../../components/TaskModal/TaskModal";
 import { DeleteConfirmModal } from "../../components/DeleteConfirmModal/DeleteConfirmModal";
 import toast from "react-hot-toast";
-import { ToastContent } from "../../components/ToastContent/ToastContent";
+import { ToastContent } from "../../components/Toast/ToastContent";
 
 export function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +77,7 @@ export function TaskPage() {
         setChildrenHasMore(false);
       }
     } catch (error) {
-      toast.error(<ToastContent title="Erro" subtitle="Ocorreu um erro ao carregar a lista de crianças." />);
+      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao carregar a lista de crianças." />);
       setChildrenHasMore(false);
     } finally {
       setChildrenIsLoading(false);
@@ -128,7 +128,7 @@ export function TaskPage() {
           setTotalTasks(res.data.totalItems);
         })
         .catch(() => {
-          toast.error(<ToastContent title="Erro" subtitle="Ocorreu um erro ao carregar as tarefas." />);
+          toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao carregar as tarefas." />);
         })
         .finally(() => {
           setTasksIsLoading(false);
@@ -183,9 +183,9 @@ export function TaskPage() {
       setRefreshKey((prev) => prev + 1);
       setIsDeleteModalOpen(false);
       setTaskToDelete(null);
-      toast.success(<ToastContent title="Sucesso" subtitle="Tarefa excluída com sucesso!" />);
+      toast.success(<ToastContent title="Sucesso" description="Tarefa excluída com sucesso!" />);
     } catch (error) {
-      toast.error(<ToastContent title="Erro" subtitle="Ocorreu um erro ao excluir a tarefa." />);
+      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao excluir a tarefa." />);
     } finally {
       setIsDeleting(false);
     }

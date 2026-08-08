@@ -9,14 +9,14 @@
 
 .centralFieldsFirstRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   width: 100%;
 }
 
 .centralFieldsSecondRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   width: 100%;
 }
@@ -27,4 +27,13 @@
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+.errorMessage {
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: -15px;
+  margin-bottom: 0px;
+  font-weight: 500;
+  display: block;
 }

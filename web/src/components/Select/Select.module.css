@@ -25,7 +25,6 @@
 .trigger:focus-visible,
 .trigger:focus {
   border-color: #218f26;
-  box-shadow: 0 0 0 2px rgba(33, 143, 38, 0.2);
 }
 
 .trigger[data-placeholder] {

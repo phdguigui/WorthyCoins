@@ -65,7 +65,7 @@ export function Task({
           <span>{task.assignedChild?.name}</span>
           <span className={styles.dateContainer}>
             <Calendar size={14} />
-            {formatShortDate(task.dueDate)}
+            {task.dueDate ? formatShortDate(task.dueDate) : "No due date"}
           </span>
           <span
             className={styles.statusContainer}

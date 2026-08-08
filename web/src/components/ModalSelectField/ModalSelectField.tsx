@@ -4,13 +4,21 @@ import styles from "../Modal/ModalFields.module.css";
 
 interface ModalSelectFieldProps extends Omit<InfiniteSelectProps, "className"> {
   label: string;
+  error?: boolean | string;
 }
 
-export function ModalSelectField({ label, ...props }: ModalSelectFieldProps) {
+export function ModalSelectField({
+  label,
+  error,
+  ...props
+}: ModalSelectFieldProps) {
   return (
     <div className={styles.field}>
       <p className={styles.label}>{label}</p>
-      <InfiniteSelect className={styles.selectTrigger} {...props} />
+      <InfiniteSelect
+        className={`${styles.selectTrigger} ${error ? styles.inputError : ""}`}
+        {...props}
+      />
     </div>
   );
 }

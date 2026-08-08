@@ -1,3 +1,4 @@
+import React from "react";
 import { Coins } from "lucide-react";
 import { ModalNumberField } from "../ModalNumberField/ModalNumberField";
 import type { ModalNumberFieldProps } from "../ModalNumberField/ModalNumberField";
@@ -20,6 +21,10 @@ function CoinIcon() {
   );
 }
 
-export function ModalCoinsField(props: Omit<ModalNumberFieldProps, "icon">) {
-  return <ModalNumberField icon={<CoinIcon />} {...props} />;
-}
+export const ModalCoinsField = React.forwardRef<HTMLInputElement, Omit<ModalNumberFieldProps, "icon" | "ref">>(
+  (props, ref) => {
+    return <ModalNumberField ref={ref} icon={<CoinIcon />} {...props} />;
+  }
+);
+
+ModalCoinsField.displayName = "ModalCoinsField";
