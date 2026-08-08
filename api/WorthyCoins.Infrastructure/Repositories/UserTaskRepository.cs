@@ -1,4 +1,4 @@
-﻿using WorthyCoins.Application.Interfaces.Repositories;
+using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using WorthyCoins.Domain.Enumerators;
@@ -36,20 +36,81 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PagedResult<UserTask>> GetByParentIdAsync(int parentId, UserTaskStatusEnum? status, int? childId, DateTime? dueDate, int pageNumber = 1, int pageSize = 10)
+        public async Task<PagedResult<UserTask>> GetByParentIdAsync(
+            int parentId,
+            UserTaskStatusEnum? status,
+            int? childId,
+            DateTime? dueDate,
+            string? search = null,
+            string? dueDateSort = null,
+            string? filterType = null,
+            int pageNumber = 1,
+            int pageSize = 10)
         {
             var query = _context.UserTasks.AsNoTracking()
                 .Include(x => x.AssignedChild)
                 .Where(x => x.AssignedChild!.ParentId == parentId);
 
-            if (status.HasValue)
-                query = query.Where(x => x.Status == status.Value);
-
             if (childId.HasValue)
                 query = query.Where(x => x.AssignedChildId == childId.Value);
 
-            if (dueDate.HasValue)
-                query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == dueDate.Value.Date);
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(x => x.Title.Contains(search, StringComparison.CurrentCultureIgnoreCase));
+
+            var targetDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value.Date, DateTimeKind.Utc) : DateTime.UtcNow.Date;
+
+            if (!string.IsNullOrWhiteSpace(filterType))
+            {
+                var now = DateTime.UtcNow;
+
+                switch (filterType.ToLowerInvariant())
+                {
+                    case "today_all":
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date);
+                        query = query.OrderBy(x => x.Status).ThenBy(x => x.DueDate);
+                        break;
+
+                    case "today_pending":
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date && x.Status == UserTaskStatusEnum.Pending);
+                        query = query.OrderBy(x => x.DueDate);
+                        break;
+
+                    case "today_completed":
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Now.Date && x.Status == UserTaskStatusEnum.Completed);
+                        query = query.OrderBy(x => x.DueDate);
+                        break;
+
+                    case "all_pending":
+                        query = query.Where(x => x.Status == UserTaskStatusEnum.Pending);
+                        query = query.OrderByDescending(x => x.DueDate.HasValue).ThenBy(x => x.DueDate);
+                        break;
+
+                    case "all_completed":
+                        query = query.Where(x => x.Status == UserTaskStatusEnum.Completed);
+                        query = query.OrderByDescending(x => x.DueDate.HasValue).ThenBy(x => x.DueDate);
+                        break;
+
+                    case "overdue":
+                        query = query.Where(x => x.Status == UserTaskStatusEnum.Pending && x.DueDate.HasValue && x.DueDate.Value.Date < targetDate);
+                        query = query.OrderBy(x => x.DueDate);
+                        break;
+                }
+
+                if (!filterType.Contains("today", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    if (dueDate.HasValue)
+                        query = query.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == targetDate);
+                }
+            }
+
+            if (dueDateSort == "asc")
+            {
+                query = query.OrderByDescending(x => x.DueDate.HasValue).ThenBy(x => x.DueDate);
+            }
+            else if (dueDateSort == "desc")
+            {
+                query = query.OrderByDescending(x => x.DueDate.HasValue).ThenByDescending(x => x.DueDate);
+            }
 
             var total = await query.LongCountAsync();
 

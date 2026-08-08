@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WorthyCoins.API.Resources.Errors;
 using WorthyCoins.Application.Commons.Results;
@@ -58,10 +58,13 @@ namespace WorthyCoins.API.Controllers
             [FromQuery] UserTaskStatusEnum? status,
             [FromQuery] int? childId,
             [FromQuery] DateTime? dueDate,
+            [FromQuery] string? search,
+            [FromQuery] string? dueDateSort,
+            [FromQuery] string? filterType,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate, pageNumber, pageSize);
+            var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate, search, dueDateSort, filterType, pageNumber, pageSize);
 
             if (!svcResult.Success)
             {

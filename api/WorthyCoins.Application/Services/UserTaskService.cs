@@ -1,4 +1,4 @@
-﻿using WorthyCoins.Application.DTOs.Requests.UserTask;
+using WorthyCoins.Application.DTOs.Requests.UserTask;
 using WorthyCoins.Application.DTOs.Responses.Child;
 using WorthyCoins.Application.DTOs.Responses.UserTask;
 using WorthyCoins.Application.Interfaces;
@@ -56,12 +56,15 @@ namespace WorthyCoins.Application.Services
             UserTaskStatusEnum? status,
             int? childId,
             DateTime? dueDate,
+            string? search = null,
+            string? dueDateSort = null,
+            string? filterType = null,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var paged = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate, pageNumber, pageSize);
+                var paged = await _repository.GetByParentIdAsync(parentId, status, childId, dueDate, search, dueDateSort, filterType, pageNumber, pageSize);
 
                 var dtoItems = paged.Items.Select(MapToDto).ToList();
 
