@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +14,7 @@ namespace WorthyCoins.Application.DTOs.Requests.UserTask
         public DateTime? DueDate { get; set; }
         public int? AssignedChildId { get; set; }
         public decimal? RewardAmount { get; set; }
+        public string? Icon { get; set; }
+        public string? Color { get; set; }
     }
 }
