@@ -217,33 +217,37 @@ export function TaskPage() {
           />
         </div>
 
-        <div className={styles.dateFilter}>
-          <DatePicker
-            date={selectedDate}
-            setDate={(date) => {
-              setSelectedDate(date);
-              setPage(1);
-            }}
-            placeholder="Filter by due date"
-            locale={ptBR}
-          />
-        </div>
+        {!selectedStatusFilter.includes("today") ? (
+          <div className={styles.dateFilter}>
+            <DatePicker
+              date={selectedDate}
+              setDate={(date) => {
+                setSelectedDate(date);
+                setPage(1);
+              }}
+              placeholder="Filter by due date"
+              locale={ptBR}
+            />
+          </div>
+        ) : null}
 
-        <div className={styles.sortFilter}>
-          <InfiniteSelect
-            value={dueDateSort}
-            onValueChange={(val) => {
-              setDueDateSort(val);
-              setPage(1);
-            }}
-            placeholder="Order by due date"
-            options={[
-              { value: "all", label: "Default Order" },
-              { value: "asc", label: "Mais recente" },
-              { value: "desc", label: "Mais distante" },
-            ]}
-          />
-        </div>
+        {!selectedStatusFilter.includes("today") ? (
+          <div className={styles.sortFilter}>
+            <InfiniteSelect
+              value={dueDateSort}
+              onValueChange={(val) => {
+                setDueDateSort(val);
+                setPage(1);
+              }}
+              placeholder="Order by due date"
+              options={[
+                { value: "all", label: "Default Order" },
+                { value: "asc", label: "Mais recente" },
+                { value: "desc", label: "Mais distante" },
+              ]}
+            />
+          </div>
+        ) : null}
       </div>
       {tasksIsLoading ? (
         Array.from({ length: pageSize }).map((_, index) => (
