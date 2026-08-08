@@ -84,3 +84,12 @@ export async function updateUserTask(
   );
   return response.data;
 }
+
+export async function deleteUserTask(
+  userTaskId: number,
+): Promise<ApiResponse<void>> {
+  const response = await apiClient.delete<ApiResponse<void>>("/UserTask", {
+    params: { userTaskId },
+  });
+  return response.data;
+}

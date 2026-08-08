@@ -11,6 +11,7 @@ interface ModalProps {
   children: React.ReactNode;
   actionLabel?: string;
   onAction?: () => void;
+  footer?: React.ReactNode;
 }
 
 export function Modal({
@@ -22,6 +23,7 @@ export function Modal({
   children,
   actionLabel,
   onAction,
+  footer,
 }: ModalProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -73,15 +75,19 @@ export function Modal({
         </div>
         <div className={styles.content}>{children}</div>
         <div className={styles.footer}>
-          {actionLabel && onAction && (
-            <button
-              className={styles.actionButton}
-              onClick={onAction}
-              type="button"
-            >
-              {icon && <span className={styles.buttonIcon}>{icon}</span>}
-              <span>{actionLabel}</span>
-            </button>
+          {footer ? (
+            footer
+          ) : (
+            actionLabel && onAction && (
+              <button
+                className={styles.actionButton}
+                onClick={onAction}
+                type="button"
+              >
+                {icon && <span className={styles.buttonIcon}>{icon}</span>}
+                <span>{actionLabel}</span>
+              </button>
+            )
           )}
         </div>
       </div>

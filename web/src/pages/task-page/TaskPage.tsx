@@ -10,10 +10,11 @@ import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { SearchInput } from "../../components/SearchInput/SearchInput";
 import { type UserTask, type Child } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
-import { getTasksByParentId } from "../../api/TaskPageApi";
+import { getTasksByParentId, deleteUserTask } from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
 import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
 import { TaskModal } from "../../components/TaskModal/TaskModal";
+import { DeleteConfirmModal } from "../../components/DeleteConfirmModal/DeleteConfirmModal";
 
 export function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +23,9 @@ export function TaskPage() {
     undefined,
   );
   const [taskToEdit, setTaskToEdit] = useState<UserTask | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<UserTask | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [tasks, setTasks] = useState<UserTask[]>([]);
   const [tasksIsLoading, setTasksIsLoading] = useState(true);
@@ -163,6 +167,28 @@ export function TaskPage() {
     setIsModalOpen(true);
   };
 
+  const handleDeleteTask = (task: UserTask) => {
+    setTaskToDelete(task);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!taskToDelete || isDeleting) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteUserTask(taskToDelete.id);
+      setRefreshKey((prev) => prev + 1);
+      setIsDeleteModalOpen(false);
+      setTaskToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete task", error);
+      alert("Ocorreu um erro ao excluir a tarefa.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const selectedChildValue =
     selectedChild !== undefined ? String(selectedChild) : "all";
 
@@ -194,6 +220,17 @@ export function TaskPage() {
         onLoadMoreChildren={loadChildren}
         onTaskCreated={() => setRefreshKey((prev) => prev + 1)}
         taskToEdit={taskToEdit}
+      />
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setTaskToDelete(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="Excluir Tarefa"
+        itemName={taskToDelete?.title}
+        isSubmitting={isDeleting}
       />
       <div className={styles.filters}>
         <div className={styles.searchFilter}>
@@ -265,7 +302,12 @@ export function TaskPage() {
         ))
       ) : tasks && tasks.length > 0 ? (
         tasks.map((task) => (
-          <Task key={task.id} task={task} onEdit={() => handleEditTask(task)} />
+          <Task
+            key={task.id}
+            task={task}
+            onEdit={() => handleEditTask(task)}
+            onDelete={() => handleDeleteTask(task)}
+          />
         ))
       ) : (
         <EmptyState
