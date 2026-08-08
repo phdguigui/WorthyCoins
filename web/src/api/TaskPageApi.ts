@@ -63,3 +63,24 @@ export async function createUserTask(
   );
   return response.data;
 }
+
+export interface UpdateUserTaskRequest {
+  userTaskId: number;
+  title?: string;
+  description?: string | null;
+  dueDate?: Date | string | null;
+  assignedChildId?: number;
+  rewardAmount?: number;
+  icon?: string;
+  color?: string;
+}
+
+export async function updateUserTask(
+  request: UpdateUserTaskRequest,
+): Promise<ApiResponse<UserTask>> {
+  const response = await apiClient.put<ApiResponse<UserTask>>(
+    "/UserTask",
+    request,
+  );
+  return response.data;
+}

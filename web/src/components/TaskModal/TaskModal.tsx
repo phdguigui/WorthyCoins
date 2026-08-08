@@ -1,5 +1,5 @@
 import styles from "./TaskModal.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles } from "lucide-react";
 import { Modal } from "../Modal/Modal";
 import { ModalTextField } from "../ModalTextField/ModalTextField";
@@ -9,7 +9,8 @@ import { ModalSelectField } from "../ModalSelectField/ModalSelectField";
 import type { InfiniteSelectOption } from "../Select/InfiniteSelect";
 import { ptBR } from "date-fns/locale";
 import { TaskIconPicker } from "./TaskIconPicker";
-import { createUserTask } from "../../api/TaskPageApi";
+import { createUserTask, updateUserTask } from "../../api/TaskPageApi";
+import type { UserTask } from "../../api/types";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface TaskModalProps {
   hasMoreChildren?: boolean;
   onLoadMoreChildren?: () => void;
   onTaskCreated?: () => void;
+  taskToEdit?: UserTask | null;
 }
 
 export function TaskModal({
@@ -29,6 +31,7 @@ export function TaskModal({
   hasMoreChildren = false,
   onLoadMoreChildren,
   onTaskCreated,
+  taskToEdit = null,
 }: TaskModalProps) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -49,7 +52,23 @@ export function TaskModal({
     setSelectedColor("#10b981");
   };
 
-  const handleCreateTask = async () => {
+  useEffect(() => {
+    if (isOpen) {
+      if (taskToEdit) {
+        setTitle(taskToEdit.title);
+        setDescription(taskToEdit.description || "");
+        setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate) : undefined);
+        setRewardCoins(taskToEdit.rewardAmount);
+        setSelectedChild(String(taskToEdit.assignedChildId));
+        setSelectedIcon(taskToEdit.icon);
+        setSelectedColor(taskToEdit.color);
+      } else {
+        resetForm();
+      }
+    }
+  }, [taskToEdit, isOpen]);
+
+  const handleSaveTask = async () => {
     if (isSubmitting) return;
     if (!title.trim()) {
       alert("Please enter a quest title.");
@@ -62,21 +81,34 @@ export function TaskModal({
 
     setIsSubmitting(true);
     try {
-      await createUserTask({
-        title: title.trim(),
-        description: description.trim() || null,
-        dueDate: dueDate || null,
-        assignedChildId: Number(selectedChild),
-        rewardAmount: Number(rewardCoins),
-        icon: selectedIcon,
-        color: selectedColor,
-      });
+      if (taskToEdit) {
+        await updateUserTask({
+          userTaskId: taskToEdit.id,
+          title: title.trim(),
+          description: description.trim() || null,
+          dueDate: dueDate || null,
+          assignedChildId: Number(selectedChild),
+          rewardAmount: Number(rewardCoins),
+          icon: selectedIcon,
+          color: selectedColor,
+        });
+      } else {
+        await createUserTask({
+          title: title.trim(),
+          description: description.trim() || null,
+          dueDate: dueDate || null,
+          assignedChildId: Number(selectedChild),
+          rewardAmount: Number(rewardCoins),
+          icon: selectedIcon,
+          color: selectedColor,
+        });
+      }
       resetForm();
       onTaskCreated?.();
       onClose();
     } catch (error) {
-      console.error("Failed to create task", error);
-      alert("An error occurred while creating the task.");
+      console.error("Failed to save task", error);
+      alert("An error occurred while saving the quest.");
     } finally {
       setIsSubmitting(false);
     }
@@ -87,10 +119,10 @@ export function TaskModal({
       isOpen={isOpen}
       onClose={onClose}
       icon={<Sparkles size={20} />}
-      title="Create New Task"
-      subtitle="Build a fun challenge and reward it with WorthyCoins."
-      actionLabel={isSubmitting ? "Creating..." : "Create Task"}
-      onAction={handleCreateTask}
+      title={taskToEdit ? "Edit Quest" : "Create New Task"}
+      subtitle={taskToEdit ? "Modify this quest's details and reward." : "Build a fun challenge and reward it with WorthyCoins."}
+      actionLabel={isSubmitting ? (taskToEdit ? "Saving..." : "Creating...") : (taskToEdit ? "Save Changes" : "Create Task")}
+      onAction={handleSaveTask}
     >
       <ModalTextField
         label="QUEST TITLE"

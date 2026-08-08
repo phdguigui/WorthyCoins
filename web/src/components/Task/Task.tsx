@@ -12,7 +12,15 @@ import { getIconElement } from "../../utils/icons";
 import { formatShortDate } from "../../utils/date";
 import { getTaskIcon } from "../TaskModal/TaskIconPicker";
 
-export function Task({ task }: { task: UserTask }) {
+export function Task({
+  task,
+  onEdit,
+  onDelete,
+}: {
+  task: UserTask;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}) {
   const taskColor = task.color || "#218f26";
   const taskIconName = task.icon || "Sparkles";
   const taskBgColor =
@@ -73,7 +81,7 @@ export function Task({ task }: { task: UserTask }) {
         <span>{task.rewardAmount.toFixed(2)}</span>
       </div>
       <div className={styles.moreOptions}>
-        <MoreOptions />
+        <MoreOptions onEdit={onEdit} onDelete={onDelete} />
       </div>
     </div>
   );

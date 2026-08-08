@@ -21,6 +21,7 @@ export function TaskPage() {
   const [selectedChild, setSelectedChild] = useState<number | undefined>(
     undefined,
   );
+  const [taskToEdit, setTaskToEdit] = useState<UserTask | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [tasks, setTasks] = useState<UserTask[]>([]);
   const [tasksIsLoading, setTasksIsLoading] = useState(true);
@@ -157,6 +158,11 @@ export function TaskPage() {
     })),
   ];
 
+  const handleEditTask = (task: UserTask) => {
+    setTaskToEdit(task);
+    setIsModalOpen(true);
+  };
+
   const selectedChildValue =
     selectedChild !== undefined ? String(selectedChild) : "all";
 
@@ -175,7 +181,10 @@ export function TaskPage() {
       />
       <TaskModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setTaskToEdit(null);
+        }}
         childrenOptions={children.map((child) => ({
           value: String(child.id),
           label: child.name,
@@ -184,6 +193,7 @@ export function TaskPage() {
         hasMoreChildren={childrenHasMore}
         onLoadMoreChildren={loadChildren}
         onTaskCreated={() => setRefreshKey((prev) => prev + 1)}
+        taskToEdit={taskToEdit}
       />
       <div className={styles.filters}>
         <div className={styles.searchFilter}>
@@ -254,7 +264,9 @@ export function TaskPage() {
           <TaskSkeleton key={index} />
         ))
       ) : tasks && tasks.length > 0 ? (
-        tasks.map((task) => <Task key={task.id} task={task} />)
+        tasks.map((task) => (
+          <Task key={task.id} task={task} onEdit={() => handleEditTask(task)} />
+        ))
       ) : (
         <EmptyState
           message="Nenhuma tarefa encontrada"
