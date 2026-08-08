@@ -11,6 +11,8 @@ import { ptBR } from "date-fns/locale";
 import { TaskIconPicker } from "./TaskIconPicker";
 import { createUserTask, updateUserTask } from "../../api/TaskPageApi";
 import type { UserTask } from "../../api/types";
+import toast from "react-hot-toast";
+import { ToastContent } from "../ToastContent/ToastContent";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -57,7 +59,9 @@ export function TaskModal({
       if (taskToEdit) {
         setTitle(taskToEdit.title);
         setDescription(taskToEdit.description || "");
-        setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate) : undefined);
+        setDueDate(
+          taskToEdit.dueDate ? new Date(taskToEdit.dueDate) : undefined,
+        );
         setRewardCoins(taskToEdit.rewardAmount);
         setSelectedChild(String(taskToEdit.assignedChildId));
         setSelectedIcon(taskToEdit.icon);
@@ -71,11 +75,11 @@ export function TaskModal({
   const handleSaveTask = async () => {
     if (isSubmitting) return;
     if (!title.trim()) {
-      alert("Please enter a quest title.");
+      toast.error(<ToastContent title="Aviso" subtitle="Por favor, insira o título da tarefa." />);
       return;
     }
     if (!selectedChild) {
-      alert("Please select a child to assign the quest to.");
+      toast.error(<ToastContent title="Aviso" subtitle="Por favor, selecione uma criança." />);
       return;
     }
 
@@ -92,6 +96,7 @@ export function TaskModal({
           icon: selectedIcon,
           color: selectedColor,
         });
+        toast.success(<ToastContent title="Sucesso" subtitle="Tarefa atualizada com sucesso!" />);
       } else {
         await createUserTask({
           title: title.trim(),
@@ -102,13 +107,13 @@ export function TaskModal({
           icon: selectedIcon,
           color: selectedColor,
         });
+        toast.success(<ToastContent title="Sucesso" subtitle="Tarefa criada com sucesso!" />);
       }
       resetForm();
       onTaskCreated?.();
       onClose();
     } catch (error) {
-      console.error("Failed to save task", error);
-      alert("An error occurred while saving the quest.");
+      toast.error(<ToastContent title="Erro" subtitle="Ocorreu um erro ao salvar a tarefa." />);
     } finally {
       setIsSubmitting(false);
     }
@@ -120,8 +125,20 @@ export function TaskModal({
       onClose={onClose}
       icon={taskToEdit ? <Pencil size={20} /> : <Sparkles size={20} />}
       title={taskToEdit ? "Edit Quest" : "Create New Task"}
-      subtitle={taskToEdit ? "Modify this quest's details and reward." : "Build a fun challenge and reward it with WorthyCoins."}
-      actionLabel={isSubmitting ? (taskToEdit ? "Saving..." : "Creating...") : (taskToEdit ? "Save Changes" : "Create Task")}
+      subtitle={
+        taskToEdit
+          ? "Modify this quest's details and reward."
+          : "Build a fun challenge and reward it with WorthyCoins."
+      }
+      actionLabel={
+        isSubmitting
+          ? taskToEdit
+            ? "Saving..."
+            : "Creating..."
+          : taskToEdit
+            ? "Save Changes"
+            : "Create Task"
+      }
       onAction={handleSaveTask}
     >
       <ModalTextField
