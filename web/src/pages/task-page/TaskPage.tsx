@@ -7,15 +7,8 @@ import { TaskSkeleton } from "../../components/Task/TaskSkeleton";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
-import { CategoriesFilter } from "../../components/CategoriesFilter/CategoriesFilter";
-import {
-  UserTaskStatusEnum,
-  type UserTask,
-  type Child,
-  getUserTaskStatusLabel,
-  getUserTaskStatusIcon,
-  getUserTaskStatusColor,
-} from "../../api/types";
+import { SearchInput } from "../../components/SearchInput/SearchInput";
+import { type UserTask, type Child } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
 import { getTasksByParentId } from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
@@ -24,9 +17,7 @@ import { TaskModal } from "../../components/TaskModal/TaskModal";
 
 export function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<
-    UserTaskStatusEnum | undefined
-  >(undefined);
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState("today_all");
   const [selectedChild, setSelectedChild] = useState<number | undefined>(
     undefined,
   );
@@ -37,6 +28,11 @@ export function TaskPage() {
   const [pageSize, setPageSize] = useState(5);
   const [totalTasks, setTotalTasks] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // States for search and sorting
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [dueDateSort, setDueDateSort] = useState("all");
 
   // States for InfiniteSelect with backend API
   const [children, setChildren] = useState<Child[]>([]);
@@ -87,17 +83,38 @@ export function TaskPage() {
   }, []);
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setPage(1);
+    }, 400);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
     const userInfo = getTokenData();
 
     if (userInfo?.parentId) {
       setTasksIsLoading(true);
+      const dateFilter =
+        selectedDate ||
+        (selectedStatusFilter.startsWith("today_") ||
+        selectedStatusFilter === "overdue"
+          ? new Date()
+          : undefined);
+
       getTasksByParentId(
         userInfo.parentId,
-        selectedCategory,
+        undefined,
         selectedChild,
-        selectedDate,
+        dateFilter,
         page,
         pageSize,
+        debouncedSearchQuery,
+        dueDateSort,
+        selectedStatusFilter,
       )
         .then((res) => {
           setTasks(res.data.items);
@@ -113,29 +130,23 @@ export function TaskPage() {
       setTasksIsLoading(false);
     }
   }, [
-    selectedCategory,
+    selectedStatusFilter,
     selectedChild,
     selectedDate,
     page,
     pageSize,
+    debouncedSearchQuery,
+    dueDateSort,
     refreshKey,
   ]);
 
-  const categories = [
-    { value: undefined, label: "Today", icon: "List", color: "#218f26" },
-    ...[
-      // UserTaskStatusEnum.NotStarted,
-      // UserTaskStatusEnum.InProgress,
-      // UserTaskStatusEnum.WaitingForApproval,
-      // UserTaskStatusEnum.Overdue,
-      UserTaskStatusEnum.Completed,
-      UserTaskStatusEnum.Pending,
-    ].map((status) => ({
-      value: status,
-      label: getUserTaskStatusLabel(status),
-      icon: getUserTaskStatusIcon(status),
-      color: getUserTaskStatusColor(status),
-    })),
+  const statusOptions = [
+    { value: "today_all", label: "Today's tasks" },
+    { value: "today_pending", label: "Today's pendings" },
+    { value: "today_completed", label: "Today's completed" },
+    { value: "all_pending", label: "All pendings" },
+    { value: "all_completed", label: "All completed" },
+    { value: "overdue", label: "Overdue" },
   ];
 
   const childrenSelectOptions = [
@@ -175,14 +186,25 @@ export function TaskPage() {
         onTaskCreated={() => setRefreshKey((prev) => prev + 1)}
       />
       <div className={styles.filters}>
-        <CategoriesFilter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={(cat) => {
-            setSelectedCategory(cat);
-            setPage(1);
-          }}
-        />
+        <div className={styles.searchFilter}>
+          <SearchInput
+            placeholder="Filtrar por nome..."
+            value={searchQuery}
+            onValueChange={setSearchQuery}
+          />
+        </div>
+
+        <div className={styles.statusFilter}>
+          <InfiniteSelect
+            value={selectedStatusFilter}
+            onValueChange={(val) => {
+              setSelectedStatusFilter(val);
+              setPage(1);
+            }}
+            placeholder="Filter by status"
+            options={statusOptions}
+          />
+        </div>
         <div className={styles.childrenFilter}>
           <InfiniteSelect
             value={selectedChildValue}
@@ -204,6 +226,22 @@ export function TaskPage() {
             }}
             placeholder="Filter by due date"
             locale={ptBR}
+          />
+        </div>
+
+        <div className={styles.sortFilter}>
+          <InfiniteSelect
+            value={dueDateSort}
+            onValueChange={(val) => {
+              setDueDateSort(val);
+              setPage(1);
+            }}
+            placeholder="Order by due date"
+            options={[
+              { value: "all", label: "Default Order" },
+              { value: "asc", label: "Mais recente" },
+              { value: "desc", label: "Mais distante" },
+            ]}
           />
         </div>
       </div>

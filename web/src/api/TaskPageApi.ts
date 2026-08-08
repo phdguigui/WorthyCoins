@@ -20,19 +20,34 @@ export async function getTasksByParentId(
   parentId: number,
   status: UserTaskStatusEnum | undefined,
   childId: number | undefined,
-  dueDate: Date | undefined | null,
+  dueDate: Date | string | undefined | null,
   pageNumber = 1,
   pageSize = 10,
+  search?: string,
+  dueDateSort?: string,
+  filterType?: string,
 ): Promise<ApiResponse<PagedResult<UserTask>>> {
+  let formattedDueDate = null;
+  if (dueDate) {
+    const d = typeof dueDate === "string" ? new Date(dueDate) : dueDate;
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    formattedDueDate = `${year}-${month}-${day}`;
+  }
+
   const response = await apiClient.get<ApiResponse<PagedResult<UserTask>>>(
     `/UserTask/${parentId}`,
     {
       params: {
         status,
         childId,
-        dueDate: dueDate ?? null,
+        dueDate: formattedDueDate,
         pageNumber,
         pageSize,
+        search: search || null,
+        dueDateSort: dueDateSort && dueDateSort !== "all" ? dueDateSort : null,
+        filterType: filterType && filterType !== "all" ? filterType : null,
       },
     },
   );

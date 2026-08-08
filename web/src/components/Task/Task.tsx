@@ -5,6 +5,7 @@ import {
   getUserTaskStatusLabel,
   getUserTaskStatusIcon,
   getUserTaskStatusColor,
+  UserTaskStatusEnum,
   type UserTask,
 } from "../../api/types";
 import { getIconElement } from "../../utils/icons";
@@ -18,6 +19,23 @@ export function Task({ task }: { task: UserTask }) {
     taskColor.startsWith("#") && taskColor.length === 7
       ? `${taskColor}20`
       : taskColor;
+
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+
+  const taskDueDate = task.dueDate ? new Date(task.dueDate) : null;
+  if (taskDueDate) {
+    taskDueDate.setHours(0, 0, 0, 0);
+  }
+
+  const isOverdue =
+    task.status === UserTaskStatusEnum.Pending &&
+    taskDueDate &&
+    taskDueDate.getTime() < todayDate.getTime();
+
+  const statusLabel = isOverdue ? "Overdue" : getUserTaskStatusLabel(task.status);
+  const statusIcon = isOverdue ? "AlertTriangle" : getUserTaskStatusIcon(task.status);
+  const statusColor = isOverdue ? "#dc2626" : getUserTaskStatusColor(task.status);
 
   return (
     <div className={styles.mainContainer}>
@@ -43,10 +61,10 @@ export function Task({ task }: { task: UserTask }) {
           </span>
           <span
             className={styles.statusContainer}
-            style={{ color: getUserTaskStatusColor(task.status) }}
+            style={{ color: statusColor }}
           >
-            {getIconElement(getUserTaskStatusIcon(task.status), 14)}
-            {getUserTaskStatusLabel(task.status)}
+            {getIconElement(statusIcon, 14)}
+            {statusLabel}
           </span>
         </div>
       </div>

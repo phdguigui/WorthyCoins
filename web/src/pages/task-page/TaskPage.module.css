@@ -20,10 +20,16 @@
 }
 
 .childrenFilter,
-.dateFilter {
+.dateFilter,
+.sortFilter,
+.statusFilter {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.searchFilter {
+  width: 240px;
 }
 
 .filterLabel {
@@ -56,12 +62,18 @@
   }
 
   .childrenFilter,
-  .dateFilter {
+  .dateFilter,
+  .sortFilter,
+  .statusFilter,
+  .searchFilter {
     width: 100%;
   }
 
   .childrenFilter > *,
-  .dateFilter > * {
+  .dateFilter > *,
+  .sortFilter > *,
+  .statusFilter > *,
+  .searchFilter > * {
     width: 100% !important;
   }
 }
