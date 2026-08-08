@@ -1,6 +1,6 @@
 import styles from "./TaskModal.module.css";
 import { useState, useEffect } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Pencil } from "lucide-react";
 import { Modal } from "../Modal/Modal";
 import { ModalTextField } from "../ModalTextField/ModalTextField";
 import { ModalDatePickerField } from "../ModalDatePickerField/ModalDatePickerField";
@@ -118,7 +118,7 @@ export function TaskModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      icon={<Sparkles size={20} />}
+      icon={taskToEdit ? <Pencil size={20} /> : <Sparkles size={20} />}
       title={taskToEdit ? "Edit Quest" : "Create New Task"}
       subtitle={taskToEdit ? "Modify this quest's details and reward." : "Build a fun challenge and reward it with WorthyCoins."}
       actionLabel={isSubmitting ? (taskToEdit ? "Saving..." : "Creating...") : (taskToEdit ? "Save Changes" : "Create Task")}

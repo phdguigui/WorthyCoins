@@ -58,3 +58,23 @@
 .inputWithIcon {
   padding-left: 42px;
 }
+
+.selectTrigger {
+  width: 100% !important;
+  height: 46px !important;
+  padding: 12px 14px !important;
+  border-radius: 8px !important;
+  border: 1px solid #cbd5e1 !important;
+  font-size: 14px !important;
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+}
+
+.selectTrigger:hover {
+  border-color: #94a3b8 !important;
+}
+
+.selectTrigger:focus {
+  border-color: #258d31 !important;
+  box-shadow: 0 0 0 3px rgba(37, 141, 49, 0.15) !important;
+}

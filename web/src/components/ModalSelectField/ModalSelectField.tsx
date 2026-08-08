@@ -10,7 +10,7 @@ export function ModalSelectField({ label, ...props }: ModalSelectFieldProps) {
   return (
     <div className={styles.field}>
       <p className={styles.label}>{label}</p>
-      <InfiniteSelect className={styles.input} {...props} />
+      <InfiniteSelect className={styles.selectTrigger} {...props} />
     </div>
   );
 }
