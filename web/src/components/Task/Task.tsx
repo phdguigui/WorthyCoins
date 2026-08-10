@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MoreOptions } from "../MoreOptions/MoreOptions";
+import { Tooltip } from "../Tooltip/Tooltip";
 import styles from "./Task.module.css";
 import { Calendar, Coins, Check, X } from "lucide-react";
 import {
@@ -62,13 +63,15 @@ export function Task({
       className={styles.mainContainer}
       style={isCompleted ? { backgroundColor: "#21c45d0d" } : undefined}
     >
-      <button
-        onClick={onToggleStatus}
-        className={`${styles.checkbox} ${isCompleted ? styles.checkboxCompleted : ""}`}
-        aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
-      >
-        {isCompleted && <Check size={14} strokeWidth={3} />}
-      </button>
+      <Tooltip content={isCompleted ? "Desmarcar como concluída" : "Marcar como concluída"}>
+        <button
+          onClick={onToggleStatus}
+          className={`${styles.checkbox} ${isCompleted ? styles.checkboxCompleted : ""}`}
+          aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+        >
+          {isCompleted && <Check size={14} strokeWidth={3} />}
+        </button>
+      </Tooltip>
       <div className={styles.iconContainer}>
         <div
           className={styles.icon}
@@ -107,26 +110,28 @@ export function Task({
           </span>
         </div>
       </div>
-      <button
-        className={styles.reward}
-        onClick={onToggleStatus}
-        onMouseEnter={() => setIsRewardHovered(true)}
-        onMouseLeave={() => setIsRewardHovered(false)}
-        aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
-      >
-        {isCompleted ? (
-          isRewardHovered ? (
-            <X size={18} strokeWidth={2.5} />
-          ) : (
+      <Tooltip content={isCompleted ? "Desmarcar como concluída" : "Marcar como concluída"}>
+        <button
+          className={styles.reward}
+          onClick={onToggleStatus}
+          onMouseEnter={() => setIsRewardHovered(true)}
+          onMouseLeave={() => setIsRewardHovered(false)}
+          aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+        >
+          {isCompleted ? (
+            isRewardHovered ? (
+              <X size={18} strokeWidth={2.5} />
+            ) : (
+              <Check size={18} strokeWidth={2.5} />
+            )
+          ) : isRewardHovered ? (
             <Check size={18} strokeWidth={2.5} />
-          )
-        ) : isRewardHovered ? (
-          <Check size={18} strokeWidth={2.5} />
-        ) : (
-          <Coins size={18} strokeWidth={1.5} />
-        )}
-        <span>{task.rewardAmount.toFixed(2)}</span>
-      </button>
+          ) : (
+            <Coins size={18} strokeWidth={1.5} />
+          )}
+          <span>{task.rewardAmount.toFixed(2)}</span>
+        </button>
+      </Tooltip>
       <div className={styles.moreOptions}>
         <MoreOptions onEdit={onEdit} onDelete={onDelete} />
       </div>
