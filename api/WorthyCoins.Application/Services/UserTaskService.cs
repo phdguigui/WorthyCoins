@@ -6,16 +6,29 @@ using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using WorthyCoins.Domain.Enumerators;
 using WorthyCoins.Application.Commons.Results;
+using WorthyCoins.Application.Commons.Errors;
+
+using Microsoft.Extensions.Localization;
 
 namespace WorthyCoins.Application.Services
 {
     public class UserTaskService : IUserTaskService
     {
         private readonly IUserTaskRepository _repository;
+        private readonly IChildRepository _childRepository;
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IStringLocalizer _localizer;
 
-        public UserTaskService(IUserTaskRepository repository)
+        public UserTaskService(
+            IUserTaskRepository repository,
+            IChildRepository childRepository,
+            ITransactionRepository transactionRepository,
+            IStringLocalizerFactory localizerFactory)
         {
             _repository = repository;
+            _childRepository = childRepository;
+            _transactionRepository = transactionRepository;
+            _localizer = localizerFactory.Create("WorthyCoins.API.Resources.Errors.Error", "WorthyCoins.API");
         }
 
         public async Task<Result<UserTaskResponseDto>> CreateUserTaskAsync(CreateUserTaskRequestDto request)
@@ -93,6 +106,9 @@ namespace WorthyCoins.Application.Services
                 if (userTask == null)
                     return Result<UserTaskResponseDto>.Fail("USER_TASK_NOT_FOUND");
 
+                if (userTask.Status == UserTaskStatusEnum.Completed && request.RewardAmount.HasValue && request.RewardAmount.Value != userTask.RewardAmount)
+                    return Result<UserTaskResponseDto>.Fail(ErrorCodes.CompletedTaskRewardCannotBeModified);
+
                 if (!string.IsNullOrWhiteSpace(request.Title))
                     userTask.Title = request.Title;
 
@@ -113,6 +129,53 @@ namespace WorthyCoins.Application.Services
 
                 if (!string.IsNullOrWhiteSpace(request.Color))
                     userTask.Color = request.Color;
+
+                if (request.Status.HasValue && request.Status.Value != userTask.Status)
+                {
+                    var child = await _childRepository.GetByIdAsync(userTask.AssignedChildId);
+                    if (child != null)
+                    {
+                        var newStatus = request.Status.Value;
+                        var reward = userTask.RewardAmount;
+
+                        if (newStatus == UserTaskStatusEnum.Completed)
+                        {
+                            child.TotalCoins += reward;
+                            await _childRepository.UpdateAsync(child);
+
+                            var description = _localizer["TASK_COMPLETED_DESC", userTask.Title].Value;
+
+                            var transaction = new Transaction
+                            {
+                                TransactionType = TransactionTypeEnum.TaskCompleted,
+                                ChildId = child.Id,
+                                Amount = reward,
+                                TransactionDate = DateTime.UtcNow,
+                                Description = description,
+                                Child = child
+                            };
+                            await _transactionRepository.AddAsync(transaction);
+                        }
+                        else if (newStatus == UserTaskStatusEnum.Pending)
+                        {
+                            child.TotalCoins -= reward;
+                            await _childRepository.UpdateAsync(child);
+
+                            var description = _localizer["TASK_REOPENED_DESC", userTask.Title].Value;
+
+                            var transaction = new Transaction
+                            {
+                                TransactionType = TransactionTypeEnum.TaskCompleted,
+                                ChildId = child.Id,
+                                Amount = -reward,
+                                TransactionDate = DateTime.UtcNow,
+                                Description = description,
+                                Child = child
+                            };
+                            await _transactionRepository.AddAsync(transaction);
+                        }
+                    }
+                }
 
                 if (request.Status.HasValue)
                     userTask.Status = request.Status.Value;

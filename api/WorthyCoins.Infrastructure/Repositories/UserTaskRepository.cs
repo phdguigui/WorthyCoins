@@ -55,7 +55,7 @@ namespace WorthyCoins.Infrastructure.Repositories
                 query = query.Where(x => x.AssignedChildId == childId.Value);
 
             if (!string.IsNullOrWhiteSpace(search))
-                query = query.Where(x => x.Title.Contains(search, StringComparison.CurrentCultureIgnoreCase));
+                query = query.Where(x => x.Title.ToLower().Contains(search.ToLower()));
 
             var targetDate = dueDate.HasValue ? DateTime.SpecifyKind(dueDate.Value.Date, DateTimeKind.Utc) : DateTime.UtcNow.Date;
 

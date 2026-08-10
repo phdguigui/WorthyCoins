@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -208,5 +208,14 @@
   <data name="CHILDREN_NOT_FOUND" xml:space="preserve">
     <value>No children found.</value>
     <comment>No children found for the given parent</comment>
+  </data>
+  <data name="COMPLETED_TASK_REWARD_CANNOT_BE_MODIFIED" xml:space="preserve">
+    <value>The reward of a completed task cannot be modified.</value>
+  </data>
+  <data name="TASK_COMPLETED_DESC" xml:space="preserve">
+    <value>Quest '{0}' completed.</value>
+  </data>
+  <data name="TASK_REOPENED_DESC" xml:space="preserve">
+    <value>Quest '{0}' reopened.</value>
   </data>
 </root>

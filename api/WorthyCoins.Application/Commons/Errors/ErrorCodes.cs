@@ -1,4 +1,4 @@
-﻿namespace WorthyCoins.Application.Commons.Errors
+namespace WorthyCoins.Application.Commons.Errors
 {
     public static class ErrorCodes
     {
@@ -15,5 +15,6 @@
         public const string ConfirmPasswordMissing = "CONFIRM_PASSWORD_MISSING";
         public const string PasswordsDoNotMatch = "PASSWORDS_DO_NOT_MATCH";
         public const string EmailAlreadyExists = "EMAIL_ALREADY_EXISTS";
+        public const string CompletedTaskRewardCannotBeModified = "COMPLETED_TASK_REWARD_CANNOT_BE_MODIFIED";
     }
 }

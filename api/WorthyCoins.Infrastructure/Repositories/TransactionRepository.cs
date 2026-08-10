@@ -1,4 +1,4 @@
-﻿using WorthyCoins.Application.Interfaces.Repositories;
+using WorthyCoins.Application.Interfaces.Repositories;
 using WorthyCoins.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +20,13 @@ namespace WorthyCoins.Infrastructure.Repositories
                 .Include(x => x.Child)
                 .Where(x => x.Child.ParentId == parentId)
                 .ToListAsync();
+        }
+
+        public async Task<Transaction> AddAsync(Transaction entity)
+        {
+            await _context.Transactions.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }

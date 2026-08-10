@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -185,5 +185,14 @@
   </data>
   <data name="CHILDREN_NOT_FOUND" xml:space="preserve">
     <value>Nenhuma criança encontrada.</value>
+  </data>
+  <data name="COMPLETED_TASK_REWARD_CANNOT_BE_MODIFIED" xml:space="preserve">
+    <value>A recompensa de uma tarefa concluída não pode ser modificada.</value>
+  </data>
+  <data name="TASK_COMPLETED_DESC" xml:space="preserve">
+    <value>Tarefa '{0}' concluída.</value>
+  </data>
+  <data name="TASK_REOPENED_DESC" xml:space="preserve">
+    <value>Tarefa '{0}' reaberta.</value>
   </data>
 </root>
