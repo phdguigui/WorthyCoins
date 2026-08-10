@@ -2,11 +2,15 @@ import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
 
 interface TooltipProps {
-  content: string;
+  content?: string;
   children: ReactNode;
 }
 
 export function Tooltip({ content, children }: TooltipProps) {
+  if (!content) {
+    return <>{children}</>;
+  }
+
   return (
     <div className={styles.tooltipWrapper}>
       {children}

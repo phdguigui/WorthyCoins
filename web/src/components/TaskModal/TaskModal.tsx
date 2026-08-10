@@ -1,5 +1,6 @@
 import styles from "./TaskModal.module.css";
 import { useState, useEffect } from "react";
+import { Tooltip } from "../Tooltip/Tooltip";
 import { Sparkles, Pencil } from "lucide-react";
 import { Modal } from "../Modal/Modal";
 import { ModalTextField } from "../ModalTextField/ModalTextField";
@@ -10,7 +11,7 @@ import type { InfiniteSelectOption } from "../Select/InfiniteSelect";
 import { ptBR } from "date-fns/locale";
 import { TaskIconPicker } from "./TaskIconPicker";
 import { createUserTask, updateUserTask } from "../../api/TaskPageApi";
-import type { UserTask } from "../../api/types";
+import { type UserTask, UserTaskStatusEnum } from "../../api/types";
 import toast from "react-hot-toast";
 import { ToastContent } from "../Toast/ToastContent";
 import { useForm } from "react-hook-form";
@@ -202,11 +203,20 @@ export function TaskModal({
       <div className={styles.centralFields}>
         <div className={styles.centralFieldsFirstRow}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <ModalCoinsField
-              label="WORTHYCOINS REWARD"
-              {...register("rewardCoins")}
-              error={!!errors.rewardCoins}
-            />
+            <Tooltip
+              content={
+                taskToEdit?.status === UserTaskStatusEnum.Completed
+                  ? "Valor já creditado e não pode ser editado."
+                  : undefined
+              }
+            >
+              <ModalCoinsField
+                label="WORTHYCOINS REWARD"
+                {...register("rewardCoins")}
+                error={!!errors.rewardCoins}
+                disabled={taskToEdit?.status === UserTaskStatusEnum.Completed}
+              />
+            </Tooltip>
             {errors.rewardCoins && (
               <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
                 {errors.rewardCoins.message}

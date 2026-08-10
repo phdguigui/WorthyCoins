@@ -37,6 +37,23 @@
   border-color: #258d31;
 }
 
+.input:disabled {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.input:disabled:hover {
+  background-color: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.input:disabled + .inputIcon {
+  opacity: 0.6;
+  filter: grayscale(60%);
+}
+
 .inputWrapper {
   position: relative;
   width: 100%;
