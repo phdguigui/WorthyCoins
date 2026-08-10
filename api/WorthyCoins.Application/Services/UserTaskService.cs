@@ -114,6 +114,9 @@ namespace WorthyCoins.Application.Services
                 if (!string.IsNullOrWhiteSpace(request.Color))
                     userTask.Color = request.Color;
 
+                if (request.Status.HasValue)
+                    userTask.Status = request.Status.Value;
+
                 userTask = await _repository.UpdateAsync(userTask);
 
                 return Result<UserTaskResponseDto>.Ok(MapToDto(userTask));

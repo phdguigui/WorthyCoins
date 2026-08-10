@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using WorthyCoins.Domain.Enumerators;
+
 namespace WorthyCoins.Application.DTOs.Requests.UserTask
 {
     public class UpdateUserTaskRequestDto
@@ -16,5 +18,6 @@ namespace WorthyCoins.Application.DTOs.Requests.UserTask
         public decimal? RewardAmount { get; set; }
         public string? Icon { get; set; }
         public string? Color { get; set; }
+        public UserTaskStatusEnum? Status { get; set; }
     }
 }
