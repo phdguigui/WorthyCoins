@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { MoreOptions } from "../MoreOptions/MoreOptions";
 import styles from "./Task.module.css";
-import { Calendar, Coins, Check } from "lucide-react";
+import { Calendar, Coins, Check, X } from "lucide-react";
 import {
   getUserTaskStatusLabel,
   getUserTaskStatusIcon,
@@ -23,6 +24,7 @@ export function Task({
   onDelete?: () => void;
   onToggleStatus?: () => void;
 }) {
+  const [isRewardHovered, setIsRewardHovered] = useState(false);
   const isCompleted = task.status === UserTaskStatusEnum.Completed;
   const taskColor = isCompleted ? "#21c45d" : task.color || "#218f26";
   const taskIconName = task.icon || "Sparkles";
@@ -105,10 +107,26 @@ export function Task({
           </span>
         </div>
       </div>
-      <div className={styles.reward}>
-        <Coins size={18} strokeWidth={1.5} />
+      <button
+        className={styles.reward}
+        onClick={onToggleStatus}
+        onMouseEnter={() => setIsRewardHovered(true)}
+        onMouseLeave={() => setIsRewardHovered(false)}
+        aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+      >
+        {isCompleted ? (
+          isRewardHovered ? (
+            <X size={18} strokeWidth={2.5} />
+          ) : (
+            <Check size={18} strokeWidth={2.5} />
+          )
+        ) : isRewardHovered ? (
+          <Check size={18} strokeWidth={2.5} />
+        ) : (
+          <Coins size={18} strokeWidth={1.5} />
+        )}
         <span>{task.rewardAmount.toFixed(2)}</span>
-      </div>
+      </button>
       <div className={styles.moreOptions}>
         <MoreOptions onEdit={onEdit} onDelete={onDelete} />
       </div>

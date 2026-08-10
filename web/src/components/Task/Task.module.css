@@ -99,6 +99,13 @@
   color: #612d05;
   font-weight: bold;
   font-size: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.reward:hover {
+  background-color: #f5b91b;
 }
 
 .moreOptions {
@@ -124,12 +131,7 @@
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite ease-in-out;
 }
@@ -229,5 +231,3 @@
     right: 16px;
   }
 }
-
-
