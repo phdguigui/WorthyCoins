@@ -21,10 +21,12 @@ export function Task({
   onEdit?: () => void;
   onDelete?: () => void;
 }) {
-  const taskColor = task.color || "#218f26";
+  const isCompleted = task.status === UserTaskStatusEnum.Completed;
+  const taskColor = isCompleted ? "#21c45d" : task.color || "#218f26";
   const taskIconName = task.icon || "Sparkles";
-  const taskBgColor =
-    taskColor.startsWith("#") && taskColor.length === 7
+  const taskBgColor = isCompleted
+    ? "#21c45d26"
+    : taskColor.startsWith("#") && taskColor.length === 7
       ? `${taskColor}20`
       : taskColor;
 
@@ -41,12 +43,21 @@ export function Task({
     taskDueDate &&
     taskDueDate.getTime() < todayDate.getTime();
 
-  const statusLabel = isOverdue ? "Overdue" : getUserTaskStatusLabel(task.status);
-  const statusIcon = isOverdue ? "AlertTriangle" : getUserTaskStatusIcon(task.status);
-  const statusColor = isOverdue ? "#dc2626" : getUserTaskStatusColor(task.status);
+  const statusLabel = isOverdue
+    ? "Overdue"
+    : getUserTaskStatusLabel(task.status);
+  const statusIcon = isOverdue
+    ? "AlertTriangle"
+    : getUserTaskStatusIcon(task.status);
+  const statusColor = isOverdue
+    ? "#dc2626"
+    : getUserTaskStatusColor(task.status);
 
   return (
-    <div className={styles.mainContainer}>
+    <div
+      className={styles.mainContainer}
+      style={isCompleted ? { backgroundColor: "#21c45d0d" } : undefined}
+    >
       <div className={styles.iconContainer}>
         <div
           className={styles.icon}
@@ -59,7 +70,16 @@ export function Task({
         </div>
       </div>
       <div className={styles.content}>
-        <p className={styles.taskName}>{task.title}</p>
+        <p
+          className={styles.taskName}
+          style={
+            isCompleted
+              ? { textDecoration: "line-through", color: "#65758b" }
+              : undefined
+          }
+        >
+          {task.title}
+        </p>
         <p className={styles.taskDescription}>{task.description}</p>
         <div className={styles.furtherInformations}>
           <span>{task.assignedChild?.name}</span>
