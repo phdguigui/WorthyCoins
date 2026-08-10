@@ -8,9 +8,9 @@ import { EmptyState } from "../../components/EmptyState/EmptyState";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { SearchInput } from "../../components/SearchInput/SearchInput";
-import { type UserTask, type Child } from "../../api/types";
+import { type UserTask, type Child, UserTaskStatusEnum } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
-import { getTasksByParentId, deleteUserTask } from "../../api/TaskPageApi";
+import { getTasksByParentId, deleteUserTask, updateUserTask } from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
 import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
 import { TaskModal } from "../../components/TaskModal/TaskModal";
@@ -169,6 +169,38 @@ export function TaskPage() {
     setIsModalOpen(true);
   };
 
+  const handleToggleStatus = async (task: UserTask) => {
+    try {
+      const newStatus = task.status === UserTaskStatusEnum.Completed
+        ? UserTaskStatusEnum.Pending
+        : UserTaskStatusEnum.Completed;
+
+      await updateUserTask({
+        userTaskId: task.id,
+        status: newStatus,
+      });
+
+      setRefreshKey((prev) => prev + 1);
+      toast.success(
+        <ToastContent
+          title="Sucesso"
+          description={
+            newStatus === UserTaskStatusEnum.Completed
+              ? "Tarefa concluída!"
+              : "Tarefa reaberta!"
+          }
+        />
+      );
+    } catch (error) {
+      toast.error(
+        <ToastContent
+          title="Erro"
+          description="Ocorreu um erro ao atualizar o status da tarefa."
+        />
+      );
+    }
+  };
+
   const handleDeleteTask = (task: UserTask) => {
     setTaskToDelete(task);
     setIsDeleteModalOpen(true);
@@ -309,6 +341,7 @@ export function TaskPage() {
             task={task}
             onEdit={() => handleEditTask(task)}
             onDelete={() => handleDeleteTask(task)}
+            onToggleStatus={() => handleToggleStatus(task)}
           />
         ))
       ) : (

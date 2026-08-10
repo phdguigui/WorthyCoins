@@ -73,6 +73,7 @@ export interface UpdateUserTaskRequest {
   rewardAmount?: number;
   icon?: string;
   color?: string;
+  status?: UserTaskStatusEnum;
 }
 
 export async function updateUserTask(

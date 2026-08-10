@@ -1,6 +1,6 @@
 import { MoreOptions } from "../MoreOptions/MoreOptions";
 import styles from "./Task.module.css";
-import { Calendar, Coins } from "lucide-react";
+import { Calendar, Coins, Check } from "lucide-react";
 import {
   getUserTaskStatusLabel,
   getUserTaskStatusIcon,
@@ -16,10 +16,12 @@ export function Task({
   task,
   onEdit,
   onDelete,
+  onToggleStatus,
 }: {
   task: UserTask;
   onEdit?: () => void;
   onDelete?: () => void;
+  onToggleStatus?: () => void;
 }) {
   const isCompleted = task.status === UserTaskStatusEnum.Completed;
   const taskColor = isCompleted ? "#21c45d" : task.color || "#218f26";
@@ -58,6 +60,13 @@ export function Task({
       className={styles.mainContainer}
       style={isCompleted ? { backgroundColor: "#21c45d0d" } : undefined}
     >
+      <button
+        onClick={onToggleStatus}
+        className={`${styles.checkbox} ${isCompleted ? styles.checkboxCompleted : ""}`}
+        aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+      >
+        {isCompleted && <Check size={14} strokeWidth={3} />}
+      </button>
       <div className={styles.iconContainer}>
         <div
           className={styles.icon}

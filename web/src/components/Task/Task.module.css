@@ -14,6 +14,32 @@
     0 12px 24px #00000008;
 }
 
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.checkbox:hover {
+  border-color: #21c45d;
+}
+
+.checkboxCompleted {
+  border-color: #21c45d;
+  background-color: #21c45d;
+  color: #fff;
+}
+
 .iconContainer {
   display: flex;
   align-items: center;
