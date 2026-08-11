@@ -8,6 +8,7 @@ import {
   SelectItem,
 } from "../Select/Select";
 import styles from "./Pagination.module.css";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
   currentPage: number;
@@ -27,6 +28,7 @@ export function Pagination({
   pageSizeOptions = [5, 10, 20, 50],
 }: PaginationProps) {
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const { t } = useTranslation();
 
   // Safeguard: if page is out of bounds
   React.useEffect(() => {
@@ -99,8 +101,9 @@ export function Pagination({
     <div className={styles.container}>
       <div className={styles.leftSection}>
         <span>
-          Mostrando <strong>{startItem}</strong> - <strong>{endItem}</strong> de{" "}
-          <strong>{totalItems}</strong> itens
+          {t("pagination.showing")} <strong>{startItem}</strong> {t("pagination.to")}{" "}
+          <strong>{endItem}</strong> {t("pagination.of")} <strong>{totalItems}</strong>{" "}
+          {t("pagination.items")}
         </span>
       </div>
 
@@ -109,7 +112,7 @@ export function Pagination({
           onClick={handlePrev}
           disabled={currentPage === 1}
           className={styles.chevronButton}
-          aria-label="Página anterior"
+          aria-label={t("pagination.previous")}
         >
           <ChevronLeft size={18} />
         </button>
@@ -141,14 +144,14 @@ export function Pagination({
           onClick={handleNext}
           disabled={currentPage === totalPages}
           className={styles.chevronButton}
-          aria-label="Próxima página"
+          aria-label={t("pagination.next")}
         >
           <ChevronRight size={18} />
         </button>
       </div>
 
       <div className={styles.rightSection}>
-        <span className={styles.pageSizeLabel}>Itens por página:</span>
+        <span className={styles.pageSizeLabel}>{t("pagination.itemsPerPage")}</span>
         <div className={styles.pageSizeSelect}>
           <Select
             value={String(pageSize)}

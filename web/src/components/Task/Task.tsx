@@ -13,6 +13,7 @@ import {
 import { getIconElement } from "../../utils/icons";
 import { formatShortDate } from "../../utils/date";
 import { getTaskIcon } from "../TaskModal/TaskIconPicker";
+import { useTranslation } from "react-i18next";
 
 export function Task({
   task,
@@ -25,6 +26,7 @@ export function Task({
   onDelete?: () => void;
   onToggleStatus?: () => void;
 }) {
+  const { t } = useTranslation();
   const [isRewardHovered, setIsRewardHovered] = useState(false);
   const isCompleted = task.status === UserTaskStatusEnum.Completed;
   const taskColor = isCompleted ? "#21c45d" : task.color || "#218f26";
@@ -49,7 +51,7 @@ export function Task({
     taskDueDate.getTime() < todayDate.getTime();
 
   const statusLabel = isOverdue
-    ? "Overdue"
+    ? t("task.overdue")
     : getUserTaskStatusLabel(task.status);
   const statusIcon = isOverdue
     ? "AlertTriangle"
@@ -63,11 +65,11 @@ export function Task({
       className={styles.mainContainer}
       style={isCompleted ? { backgroundColor: "#21c45d0d" } : undefined}
     >
-      <Tooltip content={isCompleted ? "Desmarcar como concluída" : "Marcar como concluída"}>
+      <Tooltip content={isCompleted ? t("task.markPending") : t("task.markCompleted")}>
         <button
           onClick={onToggleStatus}
           className={`${styles.checkbox} ${isCompleted ? styles.checkboxCompleted : ""}`}
-          aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+          aria-label={isCompleted ? t("task.ariaMarkPending") : t("task.ariaMarkCompleted")}
         >
           {isCompleted && <Check size={14} strokeWidth={3} />}
         </button>
@@ -99,7 +101,7 @@ export function Task({
           <span>{task.assignedChild?.name}</span>
           <span className={styles.dateContainer}>
             <Calendar size={14} />
-            {task.dueDate ? formatShortDate(task.dueDate) : "No due date"}
+            {task.dueDate ? formatShortDate(task.dueDate) : t("task.noDueDate")}
           </span>
           <span
             className={styles.statusContainer}
@@ -110,13 +112,13 @@ export function Task({
           </span>
         </div>
       </div>
-      <Tooltip content={isCompleted ? "Desmarcar como concluída" : "Marcar como concluída"}>
+      <Tooltip content={isCompleted ? t("task.markPending") : t("task.markCompleted")}>
         <button
           className={styles.reward}
           onClick={onToggleStatus}
           onMouseEnter={() => setIsRewardHovered(true)}
           onMouseLeave={() => setIsRewardHovered(false)}
-          aria-label={isCompleted ? "Mark task as pending" : "Mark task as completed"}
+          aria-label={isCompleted ? t("task.ariaMarkPending") : t("task.ariaMarkCompleted")}
         >
           {isCompleted ? (
             isRewardHovered ? (

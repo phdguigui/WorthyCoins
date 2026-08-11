@@ -8,7 +8,7 @@ import { ModalDatePickerField } from "../ModalDatePickerField/ModalDatePickerFie
 import { ModalCoinsField } from "../ModalCoinsField/ModalCoinsField";
 import { ModalSelectField } from "../ModalSelectField/ModalSelectField";
 import type { InfiniteSelectOption } from "../Select/InfiniteSelect";
-import { ptBR } from "date-fns/locale";
+import { ptBR, enUS } from "date-fns/locale";
 import { TaskIconPicker } from "./TaskIconPicker";
 import { createUserTask, updateUserTask } from "../../api/TaskPageApi";
 import { type UserTask, UserTaskStatusEnum } from "../../api/types";
@@ -17,6 +17,7 @@ import { ToastContent } from "../Toast/ToastContent";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -29,40 +30,6 @@ interface TaskModalProps {
   taskToEdit?: UserTask | null;
 }
 
-const taskSchema = z.object({
-  title: z
-    .string()
-    .min(1, "O título é obrigatório.")
-    .max(150, "O título deve ter no máximo 150 caracteres."),
-  description: z
-    .string()
-    .max(500, "A descrição deve ter no máximo 500 caracteres.")
-    .optional()
-    .or(z.literal("")),
-  rewardCoins: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-      message: "A recompensa deve ser um número não negativo.",
-    }),
-  selectedChild: z
-    .string()
-    .min(1, "A atribuição é obrigatória."),
-  dueDate: z
-    .date()
-    .nullable()
-    .optional(),
-  selectedIcon: z
-    .string()
-    .min(1, "O ícone é obrigatório.")
-    .max(100),
-  selectedColor: z
-    .string()
-    .min(1, "A cor é obrigatória.")
-    .max(100),
-});
-
-type TaskFormData = z.infer<typeof taskSchema>;
-
 export function TaskModal({
   isOpen,
   onClose,
@@ -73,7 +40,31 @@ export function TaskModal({
   onTaskCreated,
   taskToEdit = null,
 }: TaskModalProps) {
+  const { t, i18n } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const taskSchema = z.object({
+    title: z
+      .string()
+      .min(1, t("taskModal.validation.titleRequired"))
+      .max(150, t("taskModal.validation.titleMax")),
+    description: z
+      .string()
+      .max(500, t("taskModal.validation.descriptionMax"))
+      .optional()
+      .or(z.literal("")),
+    rewardCoins: z
+      .string()
+      .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+        message: t("taskModal.validation.rewardNumber"),
+      }),
+    selectedChild: z.string().min(1, t("taskModal.validation.assignRequired")),
+    dueDate: z.date().nullable().optional(),
+    selectedIcon: z.string().min(1, t("taskModal.validation.iconRequired")).max(100),
+    selectedColor: z.string().min(1, t("taskModal.validation.colorRequired")).max(100),
+  });
+
+  type TaskFormData = z.infer<typeof taskSchema>;
 
   const {
     register,
@@ -140,7 +131,12 @@ export function TaskModal({
           icon: data.selectedIcon,
           color: data.selectedColor,
         });
-        toast.success(<ToastContent title="Sucesso" description="Tarefa atualizada com sucesso!" />);
+        toast.success(
+          <ToastContent
+            title={t("tasks.success")}
+            description={t("taskModal.successUpdated")}
+          />,
+        );
       } else {
         await createUserTask({
           title: data.title.trim(),
@@ -151,12 +147,22 @@ export function TaskModal({
           icon: data.selectedIcon,
           color: data.selectedColor,
         });
-        toast.success(<ToastContent title="Sucesso" description="Tarefa criada com sucesso!" />);
+        toast.success(
+          <ToastContent
+            title={t("tasks.success")}
+            description={t("taskModal.successCreated")}
+          />,
+        );
       }
       onTaskCreated?.();
       onClose();
     } catch (error) {
-      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao salvar a tarefa." />);
+      toast.error(
+        <ToastContent
+          title={t("tasks.error")}
+          description={t("taskModal.errorSaving")}
+        />,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -179,38 +185,44 @@ export function TaskModal({
       isOpen={isOpen}
       onClose={onClose}
       icon={taskToEdit ? <Pencil size={20} /> : <Sparkles size={20} />}
-      title={taskToEdit ? "Edit Quest" : "Create New Task"}
+      title={taskToEdit ? t("taskModal.editTitle") : t("taskModal.createTitle")}
       subtitle={
         taskToEdit
-          ? "Modify this quest's details and reward."
-          : "Build a fun challenge and reward it with WorthyCoins."
+          ? t("taskModal.editSubtitle")
+          : t("taskModal.createSubtitle")
       }
       actionLabel={
         isSubmitting
           ? taskToEdit
-            ? "Saving..."
-            : "Creating..."
+            ? t("taskModal.saving")
+            : t("taskModal.creating")
           : taskToEdit
-            ? "Save Changes"
-            : "Create Task"
+            ? t("taskModal.saveChanges")
+            : t("taskModal.createTask")
       }
       onAction={handleSubmit(onSubmit)}
     >
       <ModalTextField
-        label="QUEST TITLE"
-        placeholder="e.g. Clean room"
+        label={t("taskModal.taskTitleLabel")}
+        placeholder={t("taskModal.taskTitlePlaceholder")}
         {...register("title")}
         error={!!errors.title}
       />
-      {errors.title && <span className={styles.errorMessage}>{errors.title.message}</span>}
+      {errors.title && (
+        <span className={styles.errorMessage}>{errors.title.message}</span>
+      )}
 
       <ModalTextField
-        label="WHAT NEEDS TO BE DONE"
-        placeholder="Tidy up toys, make the bed, vacuum the floor..."
+        label={t("taskModal.descriptionLabel")}
+        placeholder={t("taskModal.descriptionPlaceholder")}
         {...register("description")}
         error={!!errors.description}
       />
-      {errors.description && <span className={styles.errorMessage}>{errors.description.message}</span>}
+      {errors.description && (
+        <span className={styles.errorMessage}>
+          {errors.description.message}
+        </span>
+      )}
 
       <div className={styles.centralFields}>
         <div className={styles.centralFieldsFirstRow}>
@@ -218,29 +230,34 @@ export function TaskModal({
             <Tooltip
               content={
                 taskToEdit?.status === UserTaskStatusEnum.Completed
-                  ? "Valor já creditado e não pode ser editado."
+                  ? t("taskModal.rewardTooltip")
                   : undefined
               }
             >
               <ModalCoinsField
-                label="WORTHYCOINS REWARD"
+                label={t("taskModal.rewardLabel")}
                 {...register("rewardCoins")}
                 error={!!errors.rewardCoins}
                 disabled={taskToEdit?.status === UserTaskStatusEnum.Completed}
               />
             </Tooltip>
             {errors.rewardCoins && (
-              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+              <span
+                className={styles.errorMessage}
+                style={{ marginTop: "4px" }}
+              >
                 {errors.rewardCoins.message}
               </span>
             )}
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <ModalSelectField
-              label="ASSIGN TO"
-              placeholder="Select a child"
+              label={t("taskModal.assignLabel")}
+              placeholder={t("taskModal.selectChildPlaceholder")}
               value={selectedChild}
-              onValueChange={(val) => setValue("selectedChild", val, { shouldValidate: true })}
+              onValueChange={(val) =>
+                setValue("selectedChild", val, { shouldValidate: true })
+              }
               options={selectOptions}
               isLoading={isLoadingChildren}
               hasMore={hasMoreChildren}
@@ -248,7 +265,10 @@ export function TaskModal({
               error={!!errors.selectedChild}
             />
             {errors.selectedChild && (
-              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+              <span
+                className={styles.errorMessage}
+                style={{ marginTop: "4px" }}
+              >
                 {errors.selectedChild.message}
               </span>
             )}
@@ -257,15 +277,20 @@ export function TaskModal({
         <div className={styles.centralFieldsSecondRow}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <ModalDatePickerField
-              label="DUE DATE"
+              label={t("taskModal.dueDateLabel")}
               date={dueDate}
-              setDate={(date) => setValue("dueDate", date || null, { shouldValidate: true })}
-              placeholder="Select a due date"
-              locale={ptBR}
+              setDate={(date) =>
+                setValue("dueDate", date || null, { shouldValidate: true })
+              }
+              placeholder={t("taskModal.selectDatePlaceholder")}
+              locale={i18n.language === "en" ? enUS : ptBR}
               error={!!errors.dueDate}
             />
             {errors.dueDate && (
-              <span className={styles.errorMessage} style={{ marginTop: "4px" }}>
+              <span
+                className={styles.errorMessage}
+                style={{ marginTop: "4px" }}
+              >
                 {errors.dueDate.message}
               </span>
             )}
@@ -274,12 +299,24 @@ export function TaskModal({
       </div>
       <TaskIconPicker
         value={selectedIcon}
-        onChange={(icon) => setValue("selectedIcon", icon, { shouldValidate: true })}
+        onChange={(icon) =>
+          setValue("selectedIcon", icon, { shouldValidate: true })
+        }
         color={selectedColor}
-        onChangeColor={(color) => setValue("selectedColor", color, { shouldValidate: true })}
+        onChangeColor={(color) =>
+          setValue("selectedColor", color, { shouldValidate: true })
+        }
       />
-      {errors.selectedIcon && <span className={styles.errorMessage}>{errors.selectedIcon.message}</span>}
-      {errors.selectedColor && <span className={styles.errorMessage}>{errors.selectedColor.message}</span>}
+      {errors.selectedIcon && (
+        <span className={styles.errorMessage}>
+          {errors.selectedIcon.message}
+        </span>
+      )}
+      {errors.selectedColor && (
+        <span className={styles.errorMessage}>
+          {errors.selectedColor.message}
+        </span>
+      )}
     </Modal>
   );
 }

@@ -1,5 +1,6 @@
 import styles from "./TaskIconPicker.module.css";
 import styleModalField from "../Modal/ModalFields.module.css";
+import { useTranslation } from "react-i18next";
 import {
   BookOpen,
   BrushCleaning,
@@ -76,6 +77,7 @@ export function TaskIconPicker({
   color,
   onChangeColor,
 }: TaskIconPickerProps) {
+  const { t } = useTranslation();
   const selectedBgColor =
     color.startsWith("#") && color.length === 7 ? `${color}40` : color;
   const unselectedBgColor =
@@ -83,7 +85,7 @@ export function TaskIconPicker({
 
   return (
     <div className={styles.iconPicker}>
-      <p className={styleModalField.label}>CHOOSE AN ICON & COLOR</p>
+      <p className={styleModalField.label}>{t("taskModal.chooseIconAndColor")}</p>
       <div className={styles.pickerContainer}>
         <div className={styles.colorPickerWrapper}>
           <HexColorPicker color={color} onChange={onChangeColor} />

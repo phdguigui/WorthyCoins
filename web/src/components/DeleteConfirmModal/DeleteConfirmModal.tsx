@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 import { Modal } from "../Modal/Modal";
 import styles from "./DeleteConfirmModal.module.css";
+import { useTranslation } from "react-i18next";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ export function DeleteConfirmModal({
   itemName,
   isSubmitting = false,
 }: DeleteConfirmModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -33,7 +36,7 @@ export function DeleteConfirmModal({
             onClick={onClose}
             disabled={isSubmitting}
           >
-            Cancelar
+            {t("deleteModal.cancel")}
           </button>
           <button
             type="button"
@@ -41,16 +44,16 @@ export function DeleteConfirmModal({
             onClick={onConfirm}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Excluindo..." : "Confirmar Exclusão"}
+            {isSubmitting ? t("deleteModal.deleting") : t("deleteModal.confirm")}
           </button>
         </>
       }
     >
       <div className={styles.container}>
         <p className={styles.warningText}>
-          Deseja realmente excluir{" "}
-          {itemName ? <strong>"{itemName}"</strong> : "este item"}? Esta ação
-          não poderá ser desfeita.
+          {t("deleteModal.warningText")}{" "}
+          {itemName ? <strong>"{itemName}"</strong> : t("deleteModal.thisItem")}
+          ? {t("deleteModal.actionUndone")}
         </p>
       </div>
     </Modal>

@@ -8,34 +8,34 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { ToastContent } from "../../components/Toast/ToastContent";
-
-const registerSchema = z
-  .object({
-    firstName: z.string().trim().min(1, "First name is required"),
-    lastName: z.string().trim().min(1, "Last name is required"),
-    email: z.email("Invalid email address"),
-    password: z
-      .string()
-      .trim()
-      .min(6, "Password must be at least 6 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/[0-9]/, "Password must contain at least one number")
-      .regex(
-        /[^a-zA-Z0-9]/,
-        "Password must contain at least one special character",
-      ),
-    confirmPassword: z.string().trim().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterInput = z.infer<typeof registerSchema>;
+import { useTranslation } from "react-i18next";
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const registerSchema = z
+    .object({
+      firstName: z.string().trim().min(1, t("register.validation.firstNameRequired")),
+      lastName: z.string().trim().min(1, t("register.validation.lastNameRequired")),
+      email: z.string().email(t("register.validation.invalidEmail")),
+      password: z
+        .string()
+        .trim()
+        .min(6, t("register.validation.passwordLength"))
+        .regex(/[A-Z]/, t("register.validation.passwordUppercase"))
+        .regex(/[a-z]/, t("register.validation.passwordLowercase"))
+        .regex(/[0-9]/, t("register.validation.passwordNumber"))
+        .regex(/[^a-zA-Z0-9]/, t("register.validation.passwordSpecial")),
+      confirmPassword: z.string().trim().min(1, t("register.validation.confirmPasswordRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("register.validation.passwordsMustMatch"),
+      path: ["confirmPassword"],
+    });
+
+  type RegisterInput = z.infer<typeof registerSchema>;
+
   const {
     register,
     handleSubmit,
@@ -66,9 +66,9 @@ export function RegisterPage() {
       navigate("/");
     } catch (e: any) {
       const errorMessage =
-        e?.message || "Registration failed. Please try again.";
+        e?.message || t("register.errorDefault");
       toast.error(
-        <ToastContent title="Erro no Cadastro" description={errorMessage} />,
+        <ToastContent title={t("register.errorTitle")} description={errorMessage} />,
       );
 
       if (e?.errorCode === "EMAIL_ALREADY_EXISTS") {
@@ -76,7 +76,7 @@ export function RegisterPage() {
           "email",
           {
             type: "manual",
-            message: "Email already registered.",
+            message: t("register.emailAlreadyRegistered"),
           },
           { shouldFocus: true },
         );
@@ -89,12 +89,12 @@ export function RegisterPage() {
     <div className={styles.formContainer}>
       <div className={styles.logoContainer}>
         <img className={styles.logo} src="/logo.png" alt="logo" />
-        <p>Register</p>
+        <p>{t("register.title")}</p>
       </div>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formGroup}>
           <TextInput
-            label="First Name"
+            label={t("register.firstNameLabel")}
             id="first-name"
             error={errors.firstName?.message}
             required
@@ -103,7 +103,7 @@ export function RegisterPage() {
         </div>
         <div className={styles.formGroup}>
           <TextInput
-            label="Last Name"
+            label={t("register.lastNameLabel")}
             id="last-name"
             error={errors.lastName?.message}
             required
@@ -112,7 +112,7 @@ export function RegisterPage() {
         </div>
         <div className={styles.formGroup}>
           <TextInput
-            label="Email"
+            label={t("register.emailLabel")}
             id="email"
             error={
               errors.email?.message ? (
@@ -123,7 +123,7 @@ export function RegisterPage() {
                       to={`/login?email=${watch("email")}`}
                       className={styles.loginInsteadLink}
                     >
-                      Login instead.
+                      {t("register.loginInstead")}
                     </Link>
                   )}
                 </span>
@@ -135,7 +135,7 @@ export function RegisterPage() {
         </div>
         <div className={styles.formGroup}>
           <PasswordInput
-            label="Password"
+            label={t("register.passwordLabel")}
             id="password"
             error={errors.password?.message}
             required
@@ -144,7 +144,7 @@ export function RegisterPage() {
         </div>
         <div className={styles.formGroup}>
           <PasswordInput
-            label="Confirm password"
+            label={t("register.confirmPasswordLabel")}
             id="confirm-password"
             error={errors.confirmPassword?.message}
             required
@@ -153,13 +153,14 @@ export function RegisterPage() {
         </div>
         <div className={styles.formGroup}>
           <button className={styles.submitButton} type="submit">
-            Register
+            {t("register.button")}
           </button>
         </div>
       </form>
       <div>
         <p>
-          Already have an account? <Link to="/login">Login here</Link>
+          {t("register.alreadyHaveAccount")}{" "}
+          <Link to="/login">{t("register.loginHere")}</Link>
         </p>
       </div>
     </div>

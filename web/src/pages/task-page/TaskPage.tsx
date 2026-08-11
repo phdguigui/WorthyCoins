@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./TaskPage.module.css";
 import { DatePicker } from "../../components/DatePicker/DatePicker";
-import { ptBR } from "date-fns/locale";
+import { ptBR, enUS } from "date-fns/locale";
 import { Task } from "../../components/Task/Task";
 import { TaskSkeleton } from "../../components/Task/TaskSkeleton";
 import { EmptyState } from "../../components/EmptyState/EmptyState";
@@ -10,15 +10,21 @@ import { HeaderPage } from "../../components/HeaderPage/HeaderPage";
 import { SearchInput } from "../../components/SearchInput/SearchInput";
 import { type UserTask, type Child, UserTaskStatusEnum } from "../../api/types";
 import { getTokenData } from "../../utils/auth";
-import { getTasksByParentId, deleteUserTask, updateUserTask } from "../../api/TaskPageApi";
+import {
+  getTasksByParentId,
+  deleteUserTask,
+  updateUserTask,
+} from "../../api/TaskPageApi";
 import { getChildrenByParentId } from "../../api/ChildApi";
 import { InfiniteSelect } from "../../components/Select/InfiniteSelect";
 import { TaskModal } from "../../components/TaskModal/TaskModal";
 import { DeleteConfirmModal } from "../../components/DeleteConfirmModal/DeleteConfirmModal";
 import toast from "react-hot-toast";
 import { ToastContent } from "../../components/Toast/ToastContent";
+import { useTranslation } from "react-i18next";
 
 export function TaskPage() {
+  const { t, i18n } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("today_all");
   const [selectedChild, setSelectedChild] = useState<number | undefined>(
@@ -57,10 +63,7 @@ export function TaskPage() {
     isLoadingRef.current = true;
     setChildrenIsLoading(true);
     try {
-      const res = await getChildrenByParentId(
-        childrenPage,
-        10,
-      );
+      const res = await getChildrenByParentId(childrenPage, 10);
       if (res.success && res.data) {
         const { items, totalItems } = res.data;
         setChildren((prev) => {
@@ -76,7 +79,12 @@ export function TaskPage() {
         setChildrenHasMore(false);
       }
     } catch (error) {
-      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao carregar a lista de crianças." />);
+      toast.error(
+        <ToastContent
+          title={t("tasks.error")}
+          description={t("tasks.errorLoadingChildren")}
+        />,
+      );
       setChildrenHasMore(false);
     } finally {
       setChildrenIsLoading(false);
@@ -126,7 +134,12 @@ export function TaskPage() {
           setTotalTasks(res.data.totalItems);
         })
         .catch(() => {
-          toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao carregar as tarefas." />);
+          toast.error(
+            <ToastContent
+              title={t("tasks.error")}
+              description={t("tasks.errorLoadingTasks")}
+            />,
+          );
         })
         .finally(() => {
           setTasksIsLoading(false);
@@ -146,16 +159,16 @@ export function TaskPage() {
   ]);
 
   const statusOptions = [
-    { value: "today_all", label: "Today's tasks" },
-    { value: "today_pending", label: "Today's pendings" },
-    { value: "today_completed", label: "Today's completed" },
-    { value: "all_pending", label: "All pendings" },
-    { value: "all_completed", label: "All completed" },
-    { value: "overdue", label: "Overdue" },
+    { value: "today_all", label: t("tasks.statusOptions.today_all") },
+    { value: "today_pending", label: t("tasks.statusOptions.today_pending") },
+    { value: "today_completed", label: t("tasks.statusOptions.today_completed") },
+    { value: "all_pending", label: t("tasks.statusOptions.all_pending") },
+    { value: "all_completed", label: t("tasks.statusOptions.all_completed") },
+    { value: "overdue", label: t("tasks.statusOptions.overdue") },
   ];
 
   const childrenSelectOptions = [
-    { value: "all", label: "All Children" },
+    { value: "all", label: t("tasks.allChildren") },
     ...children.map((child) => ({
       value: String(child.id),
       label: child.name,
@@ -169,9 +182,10 @@ export function TaskPage() {
 
   const handleToggleStatus = async (task: UserTask) => {
     try {
-      const newStatus = task.status === UserTaskStatusEnum.Completed
-        ? UserTaskStatusEnum.Pending
-        : UserTaskStatusEnum.Completed;
+      const newStatus =
+        task.status === UserTaskStatusEnum.Completed
+          ? UserTaskStatusEnum.Pending
+          : UserTaskStatusEnum.Completed;
 
       await updateUserTask({
         userTaskId: task.id,
@@ -181,20 +195,20 @@ export function TaskPage() {
       setRefreshKey((prev) => prev + 1);
       toast.success(
         <ToastContent
-          title="Sucesso"
+          title={t("tasks.success")}
           description={
             newStatus === UserTaskStatusEnum.Completed
-              ? "Tarefa concluída!"
-              : "Tarefa reaberta!"
+              ? t("tasks.successTaskCompleted")
+              : t("tasks.successTaskReopened")
           }
-        />
+        />,
       );
     } catch (error) {
       toast.error(
         <ToastContent
-          title="Erro"
-          description="Ocorreu um erro ao atualizar o status da tarefa."
-        />
+          title={t("tasks.error")}
+          description={t("tasks.errorUpdatingStatus")}
+        />,
       );
     }
   };
@@ -213,9 +227,19 @@ export function TaskPage() {
       setRefreshKey((prev) => prev + 1);
       setIsDeleteModalOpen(false);
       setTaskToDelete(null);
-      toast.success(<ToastContent title="Sucesso" description="Tarefa excluída com sucesso!" />);
+      toast.success(
+        <ToastContent
+          title={t("tasks.success")}
+          description={t("tasks.successTaskDeleted")}
+        />,
+      );
     } catch (error) {
-      toast.error(<ToastContent title="Erro" description="Ocorreu um erro ao excluir a tarefa." />);
+      toast.error(
+        <ToastContent
+          title={t("tasks.error")}
+          description={t("tasks.errorDeletingTask")}
+        />,
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -232,9 +256,9 @@ export function TaskPage() {
   return (
     <div className={styles.mainContainer}>
       <HeaderPage
-        title="Quest Board"
-        description="Create and manage tasks for your children."
-        buttonText="+ New Task"
+        title={t("tasks.title")}
+        description={t("tasks.description")}
+        buttonText={t("tasks.newTaskBtn")}
         buttonAction={() => setIsModalOpen(true)}
       />
       <TaskModal
@@ -260,14 +284,14 @@ export function TaskPage() {
           setTaskToDelete(null);
         }}
         onConfirm={handleConfirmDelete}
-        title="Excluir Tarefa"
+        title={t("tasks.deleteModalTitle")}
         itemName={taskToDelete?.title}
         isSubmitting={isDeleting}
       />
       <div className={styles.filters}>
         <div className={styles.searchFilter}>
           <SearchInput
-            placeholder="Filtrar por nome..."
+            placeholder={t("tasks.filterPlaceholder")}
             value={searchQuery}
             onValueChange={setSearchQuery}
           />
@@ -280,7 +304,7 @@ export function TaskPage() {
               setSelectedStatusFilter(val);
               setPage(1);
             }}
-            placeholder="Filter by status"
+            placeholder={t("tasks.statusFilterPlaceholder")}
             options={statusOptions}
           />
         </div>
@@ -288,7 +312,7 @@ export function TaskPage() {
           <InfiniteSelect
             value={selectedChildValue}
             onValueChange={handleChildChange}
-            placeholder="Select a child"
+            placeholder={t("tasks.childFilterPlaceholder")}
             options={childrenSelectOptions}
             isLoading={childrenIsLoading}
             hasMore={childrenHasMore}
@@ -304,8 +328,8 @@ export function TaskPage() {
                 setSelectedDate(date);
                 setPage(1);
               }}
-              placeholder="Filter by due date"
-              locale={ptBR}
+              placeholder={t("tasks.dateFilterPlaceholder")}
+              locale={i18n.language === "en" ? enUS : ptBR}
             />
           </div>
         ) : null}
@@ -318,11 +342,11 @@ export function TaskPage() {
                 setDueDateSort(val);
                 setPage(1);
               }}
-              placeholder="Order by due date"
+              placeholder={t("tasks.sortFilterPlaceholder")}
               options={[
-                { value: "all", label: "Default Order" },
-                { value: "asc", label: "Mais recente" },
-                { value: "desc", label: "Mais distante" },
+                { value: "all", label: t("tasks.defaultOrder") },
+                { value: "asc", label: t("tasks.newest") },
+                { value: "desc", label: t("tasks.oldest") },
               ]}
             />
           </div>
@@ -344,8 +368,8 @@ export function TaskPage() {
         ))
       ) : (
         <EmptyState
-          message="Nenhuma tarefa encontrada"
-          description="Tente ajustar os filtros ou criar uma nova tarefa para começar."
+          message={t("tasks.noTasks")}
+          description={t("tasks.noTasksDesc")}
         />
       )}
       {!tasksIsLoading && tasks && tasks.length > 0 && (

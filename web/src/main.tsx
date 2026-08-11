@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import "./i18n";
 import { LoginPage } from "./pages/login-page/LoginPage.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RegisterPage } from "./pages/register-page/RegisterPage.tsx";

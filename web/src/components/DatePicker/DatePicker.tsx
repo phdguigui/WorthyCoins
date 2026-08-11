@@ -5,6 +5,7 @@ import { Calendar as CalendarIcon, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover/Popover";
 import { Calendar } from "../Calendar/Calendar";
 import styles from "./DatePicker.module.css";
+import { useTranslation } from "react-i18next";
 
 interface DatePickerProps {
   date?: Date | undefined;
@@ -17,16 +18,19 @@ interface DatePickerProps {
 export function DatePicker({
   date,
   setDate,
-  placeholder = "Pick a date",
+  placeholder,
   locale,
   className = "",
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   const handleSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     setOpen(false);
   };
+
+  const displayPlaceholder = placeholder || t("datepicker.placeholder");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,7 +39,7 @@ export function DatePicker({
           className={`${styles.trigger} ${!date ? styles.placeholder : ""} ${className}`}
         >
           <CalendarIcon className={styles.icon} size={16} />
-          <span>{date ? format(date, "PPP", { locale }) : placeholder}</span>
+          <span>{date ? format(date, "PPP", { locale }) : displayPlaceholder}</span>
           {date && (
             <span
               className={styles.clearButton}
@@ -43,7 +47,7 @@ export function DatePicker({
                 e.stopPropagation();
                 setDate(undefined);
               }}
-              title="Limpar data"
+              title={t("datepicker.clear")}
             >
               <X size={14} />
             </span>

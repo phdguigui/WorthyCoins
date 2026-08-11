@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import styles from "./Modal.module.css";
+import { useTranslation } from "react-i18next";
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export function Modal({
 }: ModalProps) {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isOpen) {
@@ -64,7 +66,7 @@ export function Modal({
         <button
           className={styles.closeButton}
           onClick={onClose}
-          aria-label="Close modal"
+          aria-label={t("common.closeModal")}
         >
           <X size={20} />
         </button>

@@ -8,18 +8,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { ToastContent } from "../../components/Toast/ToastContent";
-
-const loginSchema = z.object({
-  email: z.email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
-});
-
-type LoginInput = z.infer<typeof loginSchema>;
+import { useTranslation } from "react-i18next";
 
 export function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const emailParam = searchParams.get("email") || "";
+  const { t } = useTranslation();
+
+  const loginSchema = z.object({
+    email: z.string().email(t("login.invalidEmail")),
+    password: z.string().min(1, t("login.passwordRequired")),
+  });
+
+  type LoginInput = z.infer<typeof loginSchema>;
 
   const {
     register,
@@ -46,9 +48,9 @@ export function LoginPage() {
       }
       navigate("/");
     } catch (e: any) {
-      const errorMessage = e?.message || "Login failed. Please try again.";
+      const errorMessage = e?.message || t("login.errorDefault");
       toast.error(
-        <ToastContent title="Erro no Login" description={errorMessage} />,
+        <ToastContent title={t("login.errorTitle")} description={errorMessage} />,
       );
     }
   };
@@ -57,12 +59,12 @@ export function LoginPage() {
     <div className={styles.formContainer}>
       <div className={styles.logoContainer}>
         <img className={styles.logo} src="/logo.png" alt="logo" />
-        <p>Login</p>
+        <p>{t("login.title")}</p>
       </div>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formGroup}>
           <TextInput
-            label="Email"
+            label={t("login.emailLabel")}
             id="email"
             error={errors.email?.message}
             required
@@ -71,7 +73,7 @@ export function LoginPage() {
         </div>
         <div className={styles.formGroup}>
           <PasswordInput
-            label="Password"
+            label={t("login.passwordLabel")}
             id="password"
             error={errors.password?.message}
             required
@@ -80,13 +82,14 @@ export function LoginPage() {
         </div>
         <div className={styles.formGroup}>
           <button className={styles.submitButton} type="submit">
-            Login
+            {t("login.button")}
           </button>
         </div>
       </form>
       <div>
         <p>
-          Don't have an account? <Link to="/register">Register here</Link>
+          {t("login.dontHaveAccount")}{" "}
+          <Link to="/register">{t("login.registerHere")}</Link>
         </p>
       </div>
     </div>

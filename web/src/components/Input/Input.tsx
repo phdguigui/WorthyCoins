@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import "./Input.css";
+import { useTranslation } from "react-i18next";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -33,11 +34,12 @@ TextInput.displayName = "TextInput";
 
 export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
   ({ label, id, error, required, ...props }, ref) => {
+    const { t } = useTranslation();
     return (
       <>
         {label && (
           <label htmlFor={id}>
-            {label ?? "Password"}
+            {label ?? t("login.passwordLabel")}
             {required && <span className="required-asterisk">*</span>}
           </label>
         )}

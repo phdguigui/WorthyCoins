@@ -8,12 +8,14 @@ import {
   Settings,
   Bell,
   DoorOpen,
+  Globe,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
 import { getTokenData } from "../../utils/auth";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export function Sidebar() {
   const [firstName, setFirstName] = useState<string>("");
@@ -23,6 +25,7 @@ export function Sidebar() {
   const [hasImageError, setHasImageError] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const userInfo = getTokenData();
@@ -49,6 +52,12 @@ export function Sidebar() {
     navigate("/login");
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "pt" : "en";
+    i18n.changeLanguage(newLang);
+    localStorage.setItem("language", newLang);
+  };
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.topSection}>
@@ -60,12 +69,12 @@ export function Sidebar() {
             width={35}
             height={35}
           />
-          <span>WorthyCoins</span>
+          <span>{t("sidebar.logoTitle")}</span>
         </div>
         <div className={styles.savingsContainer}>
           <div className={styles.totalWorthyCoinsContainer}>
             <div className={styles.totalWorthyCoinsHeader}>
-              <span className={styles.totalWorthyCoinsLabel}>Total</span>
+              <span className={styles.totalWorthyCoinsLabel}>{t("sidebar.total")}</span>
               <div className={styles.savingsIcon}>
                 <Coins size={20} strokeWidth={1.5} />
               </div>
@@ -85,32 +94,38 @@ export function Sidebar() {
           onClick={() => navigate("/")}
         >
           <Home size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Início</span>
+          <span className={styles.label}>{t("sidebar.home")}</span>
         </div>
         <div
           className={`${styles.navItem} ${location.pathname === "/tasks" ? styles.active : ""}`}
           onClick={() => navigate("/tasks")}
         >
           <ListChecks size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Tarefas</span>
+          <span className={styles.label}>{t("sidebar.tasks")}</span>
         </div>
         <div className={styles.navItem}>
           <Baby size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Crianças</span>
+          <span className={styles.label}>{t("sidebar.children")}</span>
         </div>
         <div className={styles.navItem}>
           <Gift size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Prêmios</span>
+          <span className={styles.label}>{t("sidebar.rewards")}</span>
         </div>
       </div>
       <div className={styles.footer}>
+        <div className={styles.navItem} onClick={toggleLanguage}>
+          <Globe size={20} strokeWidth={1.8} />
+          <span className={styles.label}>
+            {i18n.language === "en" ? "Português" : "English"}
+          </span>
+        </div>
         <div className={styles.navItem}>
           <Settings size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Configurações</span>
+          <span className={styles.label}>{t("sidebar.settings")}</span>
         </div>
         <div className={styles.navItem}>
           <Bell size={20} strokeWidth={1.8} />
-          <span className={styles.label}>Notificações</span>
+          <span className={styles.label}>{t("sidebar.notifications")}</span>
         </div>
         <div
           className={styles.userSection}
@@ -136,12 +151,12 @@ export function Sidebar() {
               <span className={styles.userName}>
                 {firstName} {lastName}
               </span>
-              <span className={styles.viewProfile}>Ver perfil</span>
+              <span className={styles.viewProfile}>{t("sidebar.viewProfile")}</span>
             </div>
             <button
               className={styles.logoutButton}
               onClick={handleLogout}
-              title="Sair"
+              title={t("sidebar.logoutTitle")}
             >
               <DoorOpen size={16} strokeWidth={1.8} />
             </button>

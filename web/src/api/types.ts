@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 export interface ApiResponse<T> {
   data: T;
   errorCode: string | null;
@@ -53,11 +55,11 @@ export function getUserTaskStatusLabel(status: UserTaskStatusEnum): string {
     // case UserTaskStatusEnum.Canceled:
     //   return "Canceled";
     case UserTaskStatusEnum.Pending:
-      return "Pending";
+      return i18n.t("tasks.pending");
     case UserTaskStatusEnum.Completed:
-      return "Completed";
+      return i18n.t("tasks.completed");
     default:
-      return "Unknown";
+      return i18n.t("tasks.unknown");
   }
 }
 
