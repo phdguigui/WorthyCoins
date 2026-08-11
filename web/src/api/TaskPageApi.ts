@@ -17,7 +17,6 @@ export interface CreateUserTaskRequest {
 }
 
 export async function getTasksByParentId(
-  parentId: number,
   status: UserTaskStatusEnum | undefined,
   childId: number | undefined,
   dueDate: Date | string | undefined | null,
@@ -37,7 +36,7 @@ export async function getTasksByParentId(
   }
 
   const response = await apiClient.get<ApiResponse<PagedResult<UserTask>>>(
-    `/UserTask/${parentId}`,
+    `/UserTask`,
     {
       params: {
         status,

@@ -58,7 +58,6 @@ export function TaskPage() {
     setChildrenIsLoading(true);
     try {
       const res = await getChildrenByParentId(
-        userInfo.parentId,
         childrenPage,
         10,
       );
@@ -113,7 +112,6 @@ export function TaskPage() {
           : undefined);
 
       getTasksByParentId(
-        userInfo.parentId,
         undefined,
         selectedChild,
         dateFilter,

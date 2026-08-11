@@ -2,7 +2,6 @@ import apiClient from "./apiClient";
 import type { ApiResponse, Child, PagedResult } from "./types";
 
 export async function getChildrenByParentId(
-  parentId: number,
   pageNumber = 1,
   pageSize = 10,
 ): Promise<ApiResponse<PagedResult<Child>>> {
@@ -10,7 +9,6 @@ export async function getChildrenByParentId(
     "/Child/get-by-parent-id",
     {
       params: {
-        parentId,
         pageNumber,
         pageSize,
       },
