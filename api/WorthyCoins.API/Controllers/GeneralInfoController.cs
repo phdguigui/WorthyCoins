@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WorthyCoins.API.Resources.Errors;
 using WorthyCoins.Application.Interfaces;
@@ -7,6 +8,7 @@ namespace WorthyCoins.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class GeneralInfoController(IGeneralInfoService generalInfoService, IStringLocalizer<Error> localizer) : ControllerBase
     {
         private readonly IGeneralInfoService _generalInfoService = generalInfoService;

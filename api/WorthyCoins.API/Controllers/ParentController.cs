@@ -1,4 +1,5 @@
-﻿using WorthyCoins.Application.DTOs.Requests.Parent;
+using Microsoft.AspNetCore.Authorization;
+using WorthyCoins.Application.DTOs.Requests.Parent;
 using WorthyCoins.Application.DTOs.Responses.Parent;
 using WorthyCoins.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ namespace WorthyCoins.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ParentController : ControllerBase
     {
         private readonly IParentService _service;
@@ -31,8 +33,14 @@ namespace WorthyCoins.API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] int parentId)
+        public async Task<IActionResult> Delete()
         {
+            var parentIdClaim = User.FindFirst("parentId")?.Value;
+            if (string.IsNullOrEmpty(parentIdClaim) || !int.TryParse(parentIdClaim, out var parentId))
+            {
+                return Unauthorized();
+            }
+
             await _service.DeleteParentAsync(parentId);
             return Ok();
         }

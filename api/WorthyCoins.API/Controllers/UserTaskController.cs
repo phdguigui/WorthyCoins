@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using WorthyCoins.API.Resources.Errors;
@@ -11,6 +12,7 @@ namespace WorthyCoins.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UserTaskController : ControllerBase
     {
         private readonly IUserTaskService _service;
@@ -52,9 +54,7 @@ namespace WorthyCoins.API.Controllers
         }
 
         [HttpGet]
-        [Route("{parentId}")]
         public async Task<ActionResult> GetByParent(
-            [FromRoute] int parentId,
             [FromQuery] UserTaskStatusEnum? status,
             [FromQuery] int? childId,
             [FromQuery] DateTime? dueDate,
@@ -64,6 +64,12 @@ namespace WorthyCoins.API.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
+            var parentIdClaim = User.FindFirst("parentId")?.Value;
+            if (string.IsNullOrEmpty(parentIdClaim) || !int.TryParse(parentIdClaim, out var parentId))
+            {
+                return Unauthorized();
+            }
+
             var svcResult = await _service.GetByParentId(parentId, status, childId, dueDate, search, dueDateSort, filterType, pageNumber, pageSize);
 
             if (!svcResult.Success)

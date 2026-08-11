@@ -33,7 +33,8 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var key = Encoding.UTF8.GetBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+        var privateKey = builder.Configuration["Jwt:PrivateKey"];
+        var key = Encoding.ASCII.GetBytes(privateKey);
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
