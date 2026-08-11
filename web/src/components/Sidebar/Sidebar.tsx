@@ -8,7 +8,6 @@ import {
   Settings,
   Bell,
   DoorOpen,
-  Globe,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 import { getSidebarInformation } from "../../api/GeneralInformationApi";
@@ -25,7 +24,7 @@ export function Sidebar() {
   const [hasImageError, setHasImageError] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const userInfo = getTokenData();
@@ -50,12 +49,6 @@ export function Sidebar() {
     e.stopPropagation();
     Cookies.remove("token");
     navigate("/login");
-  };
-
-  const toggleLanguage = () => {
-    const newLang = i18n.language === "en" ? "pt" : "en";
-    i18n.changeLanguage(newLang);
-    localStorage.setItem("language", newLang);
   };
 
   return (
@@ -113,12 +106,6 @@ export function Sidebar() {
         </div>
       </div>
       <div className={styles.footer}>
-        <div className={styles.navItem} onClick={toggleLanguage}>
-          <Globe size={20} strokeWidth={1.8} />
-          <span className={styles.label}>
-            {i18n.language === "en" ? "Português" : "English"}
-          </span>
-        </div>
         <div className={styles.navItem}>
           <Settings size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.settings")}</span>

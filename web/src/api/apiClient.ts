@@ -14,6 +14,12 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const language = navigator.language;
+    if (language) {
+      config.headers["Accept-Language"] = language;
+    }
+
     return config;
   },
   (error) => {

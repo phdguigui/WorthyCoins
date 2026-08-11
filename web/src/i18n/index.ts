@@ -3,13 +3,11 @@ import { initReactI18next } from "react-i18next";
 import enTranslations from "./locales/en.json";
 import ptTranslations from "./locales/pt.json";
 
-const savedLanguage = localStorage.getItem("language");
 const browserLanguage = navigator.language.split("-")[0];
 const defaultLanguage =
-  savedLanguage ||
-  (browserLanguage === "en" || browserLanguage === "pt"
+  browserLanguage === "en" || browserLanguage === "pt"
     ? browserLanguage
-    : "pt");
+    : "pt";
 
 i18n.use(initReactI18next).init({
   resources: {

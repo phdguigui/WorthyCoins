@@ -26,7 +26,7 @@ export function Task({
   onDelete?: () => void;
   onToggleStatus?: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isRewardHovered, setIsRewardHovered] = useState(false);
   const isCompleted = task.status === UserTaskStatusEnum.Completed;
   const taskColor = isCompleted ? "#21c45d" : task.color || "#218f26";
@@ -101,7 +101,7 @@ export function Task({
           <span>{task.assignedChild?.name}</span>
           <span className={styles.dateContainer}>
             <Calendar size={14} />
-            {task.dueDate ? formatShortDate(task.dueDate) : t("task.noDueDate")}
+            {task.dueDate ? formatShortDate(task.dueDate, i18n.language) : t("task.noDueDate")}
           </span>
           <span
             className={styles.statusContainer}
