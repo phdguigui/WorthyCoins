@@ -162,6 +162,18 @@ export function TaskModal({
     }
   };
 
+  const selectOptions = [...childrenOptions];
+  if (taskToEdit && taskToEdit.assignedChild) {
+    const childIdStr = String(taskToEdit.assignedChildId);
+    const exists = selectOptions.some((opt) => opt.value === childIdStr);
+    if (!exists) {
+      selectOptions.unshift({
+        value: childIdStr,
+        label: taskToEdit.assignedChild.name,
+      });
+    }
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -229,7 +241,7 @@ export function TaskModal({
               placeholder="Select a child"
               value={selectedChild}
               onValueChange={(val) => setValue("selectedChild", val, { shouldValidate: true })}
-              options={childrenOptions}
+              options={selectOptions}
               isLoading={isLoadingChildren}
               hasMore={hasMoreChildren}
               onLoadMore={onLoadMoreChildren}
