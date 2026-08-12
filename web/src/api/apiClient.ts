@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://localhost:7016/api",
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://worthycoins-api.onrender.com/api" : "https://localhost:7016/api"),
   headers: {
     "Content-Type": "application/json",
   },
