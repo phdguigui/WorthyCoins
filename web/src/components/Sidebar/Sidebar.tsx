@@ -96,21 +96,33 @@ export function Sidebar() {
           <ListChecks size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.tasks")}</span>
         </div>
-        <div className={styles.navItem}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/children" ? styles.active : ""}`}
+          onClick={() => navigate("/children")}
+        >
           <Baby size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.children")}</span>
         </div>
-        <div className={styles.navItem}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/rewards" ? styles.active : ""}`}
+          onClick={() => navigate("/rewards")}
+        >
           <Gift size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.rewards")}</span>
         </div>
       </div>
       <div className={styles.footer}>
-        <div className={styles.navItem}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/settings" ? styles.active : ""}`}
+          onClick={() => navigate("/settings")}
+        >
           <Settings size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.settings")}</span>
         </div>
-        <div className={styles.navItem}>
+        <div
+          className={`${styles.navItem} ${location.pathname === "/notifications" ? styles.active : ""}`}
+          onClick={() => navigate("/notifications")}
+        >
           <Bell size={20} strokeWidth={1.8} />
           <span className={styles.label}>{t("sidebar.notifications")}</span>
         </div>

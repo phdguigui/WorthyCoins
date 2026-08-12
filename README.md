@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  Available in: <a href="https://worthycoins.onrender.com/">worthycoins.onrender.com</a>
+  Available at: <a href="https://worthycoins.onrender.com/">worthycoins.onrender.com</a>
 </p>
 
 > [!WARNING]

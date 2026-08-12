@@ -160,5 +160,10 @@
       "confirmPasswordRequired": "Please confirm your password",
       "passwordsMustMatch": "Passwords do not match"
     }
+  },
+  "underConstruction": {
+    "title": "Page Under Construction",
+    "description": "We are working to bring you this page. Please check back later!",
+    "backHome": "Back to Home"
   }
 }

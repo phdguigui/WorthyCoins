@@ -160,5 +160,10 @@
       "confirmPasswordRequired": "Por favor, confirme sua senha",
       "passwordsMustMatch": "As senhas não coincidem"
     }
+  },
+  "underConstruction": {
+    "title": "Página em Construção",
+    "description": "Estamos trabalhando para trazer esta página para você. Por favor, volte mais tarde!",
+    "backHome": "Voltar para o Início"
   }
 }
