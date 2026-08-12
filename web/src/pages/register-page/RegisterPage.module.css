@@ -2,9 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   flex-direction: column;
   gap: 30px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .logoContainer {
@@ -23,7 +25,8 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  width: 25%;
+  width: 100%;
+  max-width: 450px;
   background-color: #f8f9fa;
   border: 1px solid #e2e8f0;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.06);
@@ -58,12 +61,18 @@
   font-size: 15px;
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
   background-color: #27a02d;
 }
 
-.submitButton:active {
+.submitButton:active:not(:disabled) {
   background-color: #218f26;
+}
+
+.submitButton:disabled {
+  background-color: #79d67d;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .loginInsteadLink {

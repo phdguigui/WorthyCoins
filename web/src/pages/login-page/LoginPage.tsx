@@ -26,7 +26,7 @@ export function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -81,8 +81,8 @@ export function LoginPage() {
           />
         </div>
         <div className={styles.formGroup}>
-          <button className={styles.submitButton} type="submit">
-            {t("login.button")}
+          <button className={styles.submitButton} type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t("login.loggingIn") : t("login.button")}
           </button>
         </div>
       </form>

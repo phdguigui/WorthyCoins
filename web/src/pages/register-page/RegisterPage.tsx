@@ -41,7 +41,7 @@ export function RegisterPage() {
     handleSubmit,
     setError,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
   });
@@ -152,8 +152,8 @@ export function RegisterPage() {
           />
         </div>
         <div className={styles.formGroup}>
-          <button className={styles.submitButton} type="submit">
-            {t("register.button")}
+          <button className={styles.submitButton} type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t("register.registering") : t("register.button")}
           </button>
         </div>
       </form>
