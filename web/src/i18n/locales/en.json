@@ -66,6 +66,41 @@
       "overdue": "Overdue"
     }
   },
+  "children": {
+    "title": "Children",
+    "description": "Register and manage your children's profiles and their coin balances.",
+    "newChildBtn": "+ New Child",
+    "noChildren": "No children found",
+    "noChildrenDesc": "Add a child profile to start assigning tasks and rewards.",
+    "errorLoading": "An error occurred while loading the list of children.",
+    "errorDeleting": "An error occurred while deleting the child profile.",
+    "successDeleted": "Child profile deleted successfully!",
+    "deleteModalTitle": "Delete Child",
+    "coinsLabel": "coins",
+    "birthDateLabel": "Birth date:"
+  },
+  "childModal": {
+    "editTitle": "Edit Child",
+    "createTitle": "Register New Child",
+    "editSubtitle": "Modify the child's profile details.",
+    "createSubtitle": "Register a child profile to manage their tasks and coins earned.",
+    "saving": "Saving...",
+    "creating": "Registering...",
+    "saveChanges": "Save Changes",
+    "createChild": "Register Child",
+    "nameLabel": "Child's Name",
+    "namePlaceholder": "e.g., Peter",
+    "birthDateLabel": "Date of Birth",
+    "birthDatePlaceholder": "Select date of birth",
+    "successUpdated": "Child profile updated successfully!",
+    "successCreated": "Child profile registered successfully!",
+    "errorSaving": "An error occurred while saving the child's profile details.",
+    "validation": {
+      "nameRequired": "Name is required.",
+      "nameMax": "Name must be at most 100 characters.",
+      "birthDateRequired": "Date of birth is required."
+    }
+  },
   "deleteModal": {
     "cancel": "Cancel",
     "deleting": "Deleting...",

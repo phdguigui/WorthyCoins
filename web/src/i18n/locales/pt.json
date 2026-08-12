@@ -66,6 +66,41 @@
       "overdue": "Atrasadas"
     }
   },
+  "children": {
+    "title": "Crianças",
+    "description": "Cadastre e gerencie os perfis de suas crianças e seus saldos de moedas.",
+    "newChildBtn": "+ Nova Criança",
+    "noChildren": "Nenhuma criança encontrada",
+    "noChildrenDesc": "Cadastre uma criança para começar a atribuir tarefas e recompensas.",
+    "errorLoading": "Ocorreu um erro ao carregar a lista de crianças.",
+    "errorDeleting": "Ocorreu um erro ao excluir a criança.",
+    "successDeleted": "Criança excluída com sucesso!",
+    "deleteModalTitle": "Excluir Criança",
+    "coinsLabel": "moedas",
+    "birthDateLabel": "Nascimento:"
+  },
+  "childModal": {
+    "editTitle": "Editar Criança",
+    "createTitle": "Cadastrar Nova Criança",
+    "editSubtitle": "Modifique as informações do perfil da criança.",
+    "createSubtitle": "Cadastre uma criança para gerenciar suas tarefas e moedas ganhas.",
+    "saving": "Salvando...",
+    "creating": "Cadastrando...",
+    "saveChanges": "Salvar Alterações",
+    "createChild": "Cadastrar Criança",
+    "nameLabel": "Nome da Criança",
+    "namePlaceholder": "Ex: Pedro",
+    "birthDateLabel": "Data de Nascimento",
+    "birthDatePlaceholder": "Selecione a data de nascimento",
+    "successUpdated": "Criança atualizada com sucesso!",
+    "successCreated": "Criança cadastrada com sucesso!",
+    "errorSaving": "Ocorreu um erro ao salvar os dados da criança.",
+    "validation": {
+      "nameRequired": "O nome é obrigatório.",
+      "nameMax": "O nome deve ter no máximo 100 caracteres.",
+      "birthDateRequired": "A data de nascimento é obrigatória."
+    }
+  },
   "deleteModal": {
     "cancel": "Cancelar",
     "deleting": "Excluindo...",
