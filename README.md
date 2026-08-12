@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="./web/public/hero-illustration.png" alt="WorthyCoins Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
-</p>
-
-<p align="center">
   <img src="./web/public/logo.png" alt="WorthyCoins Logo" width="120" style="margin-bottom: 10px;" />
 </p>
 
@@ -60,53 +56,6 @@ Focused on high aesthetic quality and family/child usability, WorthyCoins featur
 
 ---
 
-## 🛠️ System Architecture
-
-WorthyCoins is designed with a modern, decoupled client-server architecture, utilizing a Single Page Application (SPA) frontend and a secure .NET 10 API backend layer.
-
-```mermaid
-graph TB
-    subgraph Client ["Client-Side Application (React 19 + Vite)"]
-        subgraph UI ["User Interface Layer"]
-            Pages["Pages: Login, Register, Home, Tasks"]
-            Components["UI Components: Custom Modals, Selects, DatePicker, Radix UI"]
-            Forms["Form Validation: React Hook Form + Zod"]
-        end
-        
-        subgraph Core ["Logic & State Layer"]
-            AuthUtil["Auth Helper: JWT decode & js-cookie"]
-            API_Client["API Layer: Axios Client & Endpoints"]
-            i18n["i18next: en/pt Locales"]
-        end
-    end
-
-    subgraph Backend_Server ["Backend API (.NET 10 Web API)"]
-        Controllers["Controllers: Tasks, Children, Parents"]
-        Application["Application Layer: Commands, Queries, DTOs"]
-        Infrastructure["Infrastructure Layer: EF Core & Database Context"]
-    end
-
-    subgraph BaaS [Cloud Services]
-        S_Auth["Supabase Auth Services"]
-        S_DB[("PostgreSQL Database")]
-    end
-
-    %% Interactions
-    Pages --> Components
-    Forms --> Pages
-    Pages --> API_Client
-    API_Client --> AuthUtil
-    
-    %% API requests to backend
-    AuthUtil -.->|JWT Session| S_Auth
-    API_Client ===>|Authenticated HTTP Requests| Controllers
-    Controllers --> Application
-    Application --> Infrastructure
-    Infrastructure ===>|Database Queries & Updates| S_DB
-```
-
----
-
 ## 💻 Tech Stack
 
 ### Web Frontend (`/web`)
@@ -146,10 +95,12 @@ npm install
 npm run dev
 ```
 
----
 
 > [!IMPORTANT]
 > Make sure to have the [.NET 10 SDK](https://dotnet.microsoft.com/download) and [Node.js](https://nodejs.org) installed on your system.
 
 ---
-<p align="center">Made with ❤️ to inspire the next generation.</p>
+Created and developed by [Guilherme Siedschlag](https://github.com/phdguigui)
+<p align="center">
+  <img src="./web/public/hero-illustration.png" alt="WorthyCoins Banner" width="25%" style="border-radius: 12px; margin-bottom: 20px;" />
+</p>
