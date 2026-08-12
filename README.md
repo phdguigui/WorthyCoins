@@ -2,7 +2,7 @@
   <img src="./web/public/logo.png" alt="WorthyCoins Logo" width="120" style="margin-bottom: 10px;" />
 </p>
 
-<h1 align="center">✨ WorthyCoins ✨</h1>
+<h1 align="center">✨<a href="https://worthycoins.onrender.com/"> WorthyCoins </a>✨</h1>
 
 <p align="center">
   <strong>Transforming daily chores into valuable achievements! A gamified habit and task management platform for parents and children.</strong>
@@ -17,6 +17,13 @@
   <img src="https://img.shields.io/badge/Supabase-Backend-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
 </p>
 
+<p align="center">
+  Available in: <a href="https://worthycoins.onrender.com/">worthycoins.onrender.com</a>
+</p>
+
+> [!WARNING]
+> This project is currently in active development. Please do **not** use real personal or sensitive data (like real passwords or real personal information).
+
 ---
 
 ## 🌟 About WorthyCoins
@@ -26,6 +33,7 @@
 Through a dynamic reward system, parents can create custom tasks (such as homework, making the bed, or brushing teeth) and set a reward value in **WorthyCoins** (virtual coins). As children complete tasks and parents approve them, coins accumulate in their digital piggy bank, promoting early financial literacy and daily gamification.
 
 The project is split into two major components:
+
 - 💻 **Web Client (`/web`):** A responsive React 19 single-page application built with TypeScript, Vite, and Radix UI.
 - ⚙️ **Backend API (`/api`):** A high-performance Web API built using C# and .NET 10 with Entity Framework Core and PostgreSQL.
 
@@ -34,12 +42,14 @@ The project is split into two major components:
 ## 🚀 Key Features
 
 ### 📋 For Parents
+
 - **Tailored Task Creation:** Define titles, detailed descriptions, due dates, and coin values.
 - **Visual Customization:** Choose thematic colors and icons for each task using an interactive color picker and icon selector.
 - **Child Management:** Set up individual profiles for each child to track their progress independently.
 - **Advanced Filters & Search:** Search and filter tasks by child, status (pending, completed, overdue), due date, or sort them by urgency.
 
 ### 🪙 For Kids
+
 - **Digital Piggy Bank:** Instant view of total accumulated coins.
 - **Fun Achievements:** A clear sense of progress as coins are credited upon successfully completing responsibilities.
 - **Friendly Interface:** Smooth design utilizing the rounded _Quicksand_ font, providing a delightful and accessible user experience for children.
@@ -49,6 +59,7 @@ The project is split into two major components:
 ## 🎨 Design & Visual Experience
 
 Focused on high aesthetic quality and family/child usability, WorthyCoins features:
+
 - ✨ **Harmonious & Dynamic Colors:** Soft blues, purples, and golden tones that inspire productivity and fun.
 - 🧩 **Radix UI Components:** Fluid, high-performance custom popovers and selects.
 - ⚡ **Skeleton Loaders:** Sleek loading animations with a shimmer effect while tasks are fetched.
@@ -59,23 +70,27 @@ Focused on high aesthetic quality and family/child usability, WorthyCoins featur
 ## 💻 Tech Stack
 
 ### Web Frontend (`/web`)
-* **React 19 & TypeScript 5.9:** Core UI library and type-safety.
-* **Vite & Radix UI:** Ultra-fast bundling and accessible headless components.
-* **i18next & Lucide React:** Localization engine and modern vector icons.
-* **React Hook Form + Zod:** Dynamic schema validation and form handling.
+
+- **React 19 & TypeScript 5.9:** Core UI library and type-safety.
+- **Vite & Radix UI:** Ultra-fast bundling and accessible headless components.
+- **i18next & Lucide React:** Localization engine and modern vector icons.
+- **React Hook Form + Zod:** Dynamic schema validation and form handling.
 
 ### API Backend (`/api`)
-* **.NET 10.0 Web API:** High-performance RESTful APIs.
-* **C# 14:** Modern programming language.
-* **Entity Framework (EF) Core:** Object-Relational Mapper (ORM) for Postgres.
-* **PostgreSQL:** Reliable relational database.
+
+- **.NET 10.0 Web API:** High-performance RESTful APIs.
+- **C# 14:** Modern programming language.
+- **Entity Framework (EF) Core:** Object-Relational Mapper (ORM) for Postgres.
+- **PostgreSQL:** Reliable relational database.
 
 ---
 
 ## ⚙️ Running Locally
 
 ### 1. Backend Setup (`/api`)
+
 Go to the API folder and run database migrations:
+
 ```bash
 cd api
 dotnet ef database update -p WorthyCoins.Infrastructure --startup-project WorthyCoins.API
@@ -83,24 +98,29 @@ dotnet run --project WorthyCoins.API
 ```
 
 ### 2. Frontend Setup (`/web`)
+
 Create a `.env` file in `/web` (based on `/web/.env.example`):
+
 ```env
 VITE_SUPABASE_URL=your_supabase_url_here
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
+
 Install dependencies and run:
+
 ```bash
 cd web
 npm install
 npm run dev
 ```
 
-
 > [!IMPORTANT]
 > Make sure to have the [.NET 10 SDK](https://dotnet.microsoft.com/download) and [Node.js](https://nodejs.org) installed on your system.
 
 ---
+
 Created and developed by [Guilherme Siedschlag](https://github.com/phdguigui)
+
 <p align="center">
   <img src="./web/public/hero-illustration.png" alt="WorthyCoins Banner" width="25%" style="border-radius: 12px; margin-bottom: 20px;" />
 </p>
