@@ -143,10 +143,12 @@ export function ChildrenPage() {
             />
           ))
         ) : (
-          <EmptyState
-            message={t("children.noChildren")}
-            description={t("children.noChildrenDesc")}
-          />
+          <div className={styles.emptyStateContainer}>
+            <EmptyState
+              message={t("children.noChildren")}
+              description={t("children.noChildrenDesc")}
+            />
+          </div>
         )}
       </div>
 
