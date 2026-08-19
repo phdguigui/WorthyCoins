@@ -23,6 +23,14 @@ namespace WorthyCoins.Infrastructure.Configurations
                 .IsRequired()
                 .HasColumnType("numeric(10,2)")
                 .HasDefaultValue(0);
+
+            builder.Property(x => x.Icon)
+                .HasMaxLength(100)
+                .HasDefaultValue("");
+
+            builder.Property(x => x.Color)
+                .HasMaxLength(100)
+                .HasDefaultValue("");
         }
     }
 }

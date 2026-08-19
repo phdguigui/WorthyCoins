@@ -213,7 +213,9 @@ namespace WorthyCoins.Application.Services
                 Id = entity.AssignedChildId,
                 Name = entity.AssignedChild?.Name!,
                 DateOfBirth = entity.AssignedChild?.DateOfBirth,
-                TotalCoins = entity.AssignedChild?.TotalCoins ?? 0
+                TotalCoins = entity.AssignedChild?.TotalCoins ?? 0,
+                Icon = entity.AssignedChild?.Icon!,
+                Color = entity.AssignedChild?.Color!
             };
 
             return new UserTaskResponseDto

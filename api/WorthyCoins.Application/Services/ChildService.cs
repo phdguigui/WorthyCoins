@@ -23,7 +23,9 @@ namespace WorthyCoins.Application.Services
                 Name = request.Name,
                 DateOfBirth = request.DateOfBirth,
                 TotalCoins = 0,
-                ParentId = request.ParentId
+                ParentId = request.ParentId,
+                Icon = request.Icon,
+                Color = request.Color
             };
 
             var child = await _repository.AddAsync(entity);
@@ -33,7 +35,9 @@ namespace WorthyCoins.Application.Services
                 Id = child.Id,
                 Name = child.Name,
                 DateOfBirth = child.DateOfBirth,
-                TotalCoins = child.TotalCoins
+                TotalCoins = child.TotalCoins,
+                Icon = child.Icon,
+                Color = child.Color
             });
         }
 
@@ -51,7 +55,9 @@ namespace WorthyCoins.Application.Services
                     Id = child.Id,
                     Name = child.Name,
                     DateOfBirth = child.DateOfBirth,
-                    TotalCoins = child.TotalCoins
+                    TotalCoins = child.TotalCoins,
+                    Icon = child.Icon,
+                    Color = child.Color
                 });
             }
             catch (Exception)
@@ -74,7 +80,9 @@ namespace WorthyCoins.Application.Services
                     Id = c.Id,
                     Name = c.Name,
                     DateOfBirth = c.DateOfBirth,
-                    TotalCoins = c.TotalCoins
+                    TotalCoins = c.TotalCoins,
+                    Icon = c.Icon,
+                    Color = c.Color
                 }).ToList();
 
                 var resultPaged = new PagedResult<ChildResponseDto>
@@ -109,6 +117,12 @@ namespace WorthyCoins.Application.Services
                 if (request.DateOfBirth != child.DateOfBirth)
                     child.DateOfBirth = request.DateOfBirth;
 
+                if (!string.IsNullOrWhiteSpace(request.Icon))
+                    child.Icon = request.Icon;
+
+                if (!string.IsNullOrWhiteSpace(request.Color))
+                    child.Color = request.Color;
+
                 child = await _repository.UpdateAsync(child);
 
                 var response = new ChildResponseDto
@@ -116,6 +130,9 @@ namespace WorthyCoins.Application.Services
                     Id = child.Id,
                     Name = child.Name,
                     DateOfBirth = child.DateOfBirth,
+                    TotalCoins = child.TotalCoins,
+                    Icon = child.Icon,
+                    Color = child.Color
                 };
 
                 return Result<ChildResponseDto>.Ok(response);

@@ -6,5 +6,7 @@
         public required string Name { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public decimal TotalCoins { get; set; }
+        public required string Icon { get; set; }
+        public required string Color { get; set; }
     }
 }
